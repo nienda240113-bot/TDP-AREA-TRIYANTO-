@@ -18,8 +18,6 @@
         .row-group > div { flex: 1; }
         button { background-color: #16a34a; color: white; padding: 0.75rem 1rem; border: none; border-radius: 0.65rem; cursor: pointer; width: 100%; font-weight: 600; font-size: 0.9rem; transition: background-color 0.2s, transform 0.1s; box-shadow: 0 4px 6px -1px rgba(22, 163, 74, 0.2); }
         button:hover { background-color: #15803d; }
-        .btn-blue { background-color: #2563eb; }
-        .btn-blue:hover { background-color: #1d4ed8; }
         pre { background: #ffffff; color: #000000 !important; font-weight: 700 !important; padding: 1rem; border-radius: 0.75rem; white-space: pre-wrap; font-family: monospace; font-size: 0.8rem; border: 1px solid #334155; }
         .loading { display: none; text-align: center; color: #d97706; font-weight: 600; font-size: 0.85rem; margin-top: 0.5rem; }
         .table-input { width: 100%; border-collapse: collapse; margin-bottom: 0.5rem; font-size: 0.8rem; }
