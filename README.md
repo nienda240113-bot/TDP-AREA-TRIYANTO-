@@ -189,13 +189,13 @@
 
         <fieldset>
             <legend>CATEGORY (Rupiah Sales)</legend>
-            <label>1. Toys (NS):</label><input type="text" id="cat1" value="0" oninput="muatPreviewOtomatis()">
-            <label>2. HBPL (NS):</label><input type="text" id="cat2" value="0" oninput="muatPreviewOtomatis()">
+            <label>1. Toys (NS):</label><input type="text" id="cat1" value="0">
+            <label>2. HBPL (NS):</label><input type="text" id="cat2" value="0">
         </fieldset>
 
         <fieldset>
             <legend>E-COMMERCE</legend>
-            <label>Fee Base (Rp):</label><input type="text" id="feeBase" value="0" oninput="muatPreviewOtomatis()">
+            <label>Fee Base (Rp):</label><input type="text" id="feeBase" value="0">
         </fieldset>
 
         <button onclick="processData('single')">Generate & Simpan Semua ke Cloud</button>
@@ -238,14 +238,12 @@
                 document.getElementById('formRekapArea').style.display = 'none';
                 document.getElementById('shift').style.display = 'block';
                 document.getElementById('labelShift').style.display = 'block';
-                muatPreviewOtomatis();
             } else {
                 document.getElementById('singleStoreSection').style.display = 'none';
                 document.getElementById('formPerToko').style.display = 'none';
                 document.getElementById('formRekapArea').style.display = 'block';
                 document.getElementById('shift').style.display = 'none';
                 document.getElementById('labelShift').style.display = 'none';
-                document.getElementById('outputResult').innerText = "Silakan klik tombol 'Tarik Data & Generate Rekap 20 Toko' di atas.";
             }
         }
 
@@ -382,18 +380,13 @@
                 const p = t > 0 ? Math.round((a / t) * 100) + '%' : '0%';
                 document.getElementById('psm' + i + '_p').value = p;
             }
-
-            muatPreviewOtomatis();
         }
 
         function getVal(id) {
             return document.getElementById(id) ? document.getElementById(id).value : '';
         }
 
-        function muatPreviewOtomatis() {
-            const mode = document.getElementById('modeReport').value;
-            if (mode !== 'single') return;
-
+        function processData(type) {
             const periodeRaw = getVal('periode');
             const periode = formatDateID(periodeRaw);
             const wh = getVal('wh');
@@ -403,6 +396,9 @@
             const storeVal = getVal('selectStore').split('|');
             const kodeToko = storeVal[0];
             const namaToko = storeVal[1];
+            const shift = getVal('shift');
+            const jenisLaporan = "Laporan Per Toko (Shift)";
+            const shiftInfo = "Shift " + shift;
 
             const f1 = `${getVal('fokus1_t')}/${getVal('fokus1_s')}/${document.getElementById('fokus1_p').value}`;
             const f2 = `${getVal('fokus2_t')}/${getVal('fokus2_s')}/${document.getElementById('fokus2_p').value}`;
@@ -450,20 +446,6 @@
                        `Terimakasih`;
 
             document.getElementById('outputResult').innerText = text;
-        }
-
-        function processData(type) {
-            muatPreviewOtomatis();
-            const periodeRaw = getVal('periode');
-            const periode = formatDateID(periodeRaw);
-            const storeVal = getVal('selectStore').split('|');
-            const kodeToko = storeVal[0];
-            const namaToko = storeVal[1];
-            const shift = getVal('shift');
-            const jenisLaporan = "Laporan Per Toko (Shift)";
-            const shiftInfo = "Shift " + shift;
-            const text = document.getElementById('outputResult').innerText;
-
             document.getElementById('loadingStatus').style.display = 'block';
 
             let payload = {
