@@ -44,7 +44,9 @@
             <option value="rekap">2. Rekap Gabungan 20 Toko Area</option>
         </select>
 
-        <div class="row-group">
+        <button class="btn-purple" onclick="simpanTargetDanItemDefault()">💾 Simpan Target & Nama Item Default Periode Ini</button>
+
+        <div class="row-group" style="margin-top: 8px;">
             <div>
                 <label for="periode">Periode:</label>
                 <input type="date" id="periode" onchange="hitungOtomatisSingle()">
@@ -119,7 +121,7 @@
         </fieldset>
 
         <fieldset>
-            <legend>FOKUS CABANG</legend>
+            <legend>FOKUS CABANG (Target bisa diubah & disimpan)</legend>
             <table class="table-input">
                 <thead>
                     <tr>
@@ -148,12 +150,11 @@
         </fieldset>
 
         <fieldset>
-            <legend>PSM (Product Sales Mission)</legend>
-            <button class="btn-purple" onclick="simpanDaftarPsm()">💾 Simpan Daftar Nama Item PSM</button>
+            <legend>PSM (Product Sales Mission - Nama & Target bisa diubah)</legend>
             <table class="table-input">
                 <thead>
                     <tr>
-                        <th style="width: 40%;">Nama Item PSM (Bisa Diedit)</th>
+                        <th style="width: 40%;">Nama Item PSM</th>
                         <th style="width: 20%;">Target</th>
                         <th style="width: 20%;">Actual</th>
                         <th style="width: 20%;">%</th>
@@ -296,24 +297,40 @@
             return Math.round(num).toLocaleString('id-ID');
         }
 
-        // Simpan nama-nama item PSM ke LocalStorage
-        function simpanDaftarPsm() {
-            const psmNames = {};
+        // Simpan Nama Item dan Target Default ke LocalStorage
+        function simpanTargetDanItemDefault() {
+            const defaultConfig = {
+                fokus1_t: document.getElementById('fokus1_t').value,
+                fokus2_t: document.getElementById('fokus2_t').value,
+                fokus3_t: document.getElementById('fokus3_t').value,
+                fokus4_t: document.getElementById('fokus4_t').value,
+            };
+
             for (let i = 1; i <= 9; i++) {
-                psmNames['psm' + i] = document.getElementById('psm' + i + '_name').value;
+                defaultConfig['psm' + i + '_name'] = document.getElementById('psm' + i + '_name').value;
+                defaultConfig['psm' + i + '_t'] = document.getElementById('psm' + i + '_t').value;
             }
-            localStorage.setItem('daftar_nama_psm', JSON.stringify(psmNames));
-            alert("Daftar nama item PSM berhasil disimpan! Nama ini akan tetap tersimpan saat Anda membuka ulang halaman.");
+
+            localStorage.setItem('config_default_periode', JSON.stringify(defaultConfig));
+            alert("Berhasil! Target Fokus Cabang, Nama Item PSM, dan Target PSM telah disimpan sebagai default baru untuk periode ini.");
         }
 
-        // Muat nama-nama item PSM tersimpan saat halaman dimuat
-        function muatDaftarPsm() {
-            const savedPsm = localStorage.getItem('daftar_nama_psm');
-            if (savedPsm) {
-                const psmNames = JSON.parse(savedPsm);
+        // Muat Data Default Tersimpan saat Halaman Dimuat
+        function muatTargetDanItemDefault() {
+            const savedConfig = localStorage.getItem('config_default_periode');
+            if (savedConfig) {
+                const cfg = JSON.parse(savedConfig);
+                if (cfg.fokus1_t !== undefined) document.getElementById('fokus1_t').value = cfg.fokus1_t;
+                if (cfg.fokus2_t !== undefined) document.getElementById('fokus2_t').value = cfg.fokus2_t;
+                if (cfg.fokus3_t !== undefined) document.getElementById('fokus3_t').value = cfg.fokus3_t;
+                if (cfg.fokus4_t !== undefined) document.getElementById('fokus4_t').value = cfg.fokus4_t;
+
                 for (let i = 1; i <= 9; i++) {
-                    if (psmNames['psm' + i] !== undefined) {
-                        document.getElementById('psm' + i + '_name').value = psmNames['psm' + i];
+                    if (cfg['psm' + i + '_name'] !== undefined) {
+                        document.getElementById('psm' + i + '_name').value = cfg['psm' + i + '_name'];
+                    }
+                    if (cfg['psm' + i + '_t'] !== undefined) {
+                        document.getElementById('psm' + i + '_t').value = cfg['psm' + i + '_t'];
                     }
                 }
             }
@@ -325,18 +342,22 @@
             const targetMtd = selectedOption.getAttribute('data-target') || '0';
             
             document.getElementById('revTargetMtd').value = formatNum(parseInt(targetMtd, 10));
-            
             document.getElementById('revActual').value = '0';
-            document.getElementById('fokus1_t').value = '0'; document.getElementById('fokus1_s').value = '0';
-            document.getElementById('fokus2_t').value = '0'; document.getElementById('fokus2_s').value = '0';
-            document.getElementById('fokus3_t').value = '0'; document.getElementById('fokus3_s').value = '0';
-            document.getElementById('fokus4_t').value = '0'; document.getElementById('fokus4_s').value = '0';
             document.getElementById('memberNew').value = '0';
             document.getElementById('memberStruk').value = '0';
             document.getElementById('totalStruk').value = '0';
             document.getElementById('cat1').value = '0';
             document.getElementById('cat2').value = '0';
             document.getElementById('feeBase').value = '0';
+
+            // Reset sales aktual fokus & psm ke 0 saja tanpa merusak target tersimpan
+            document.getElementById('fokus1_s').value = '0';
+            document.getElementById('fokus2_s').value = '0';
+            document.getElementById('fokus3_s').value = '0';
+            document.getElementById('fokus4_s').value = '0';
+            for (let i = 1; i <= 9; i++) {
+                document.getElementById('psm' + i + '_a').value = '0';
+            }
 
             hitungOtomatisSingle();
         }
@@ -630,7 +651,7 @@
         }
 
         window.onload = function() {
-            muatDaftarPsm(); // Muat nama item PSM tersimpan saat halaman dibuka
+            muatTargetDanItemDefault(); // Muat target & item tersimpan saat halaman dibuka
             gantiPilihanToko(); // Set target awal sesuai toko pertama
         };
     </script>
