@@ -44,12 +44,12 @@
             <option value="rekap">2. Rekap Gabungan 20 Toko Area</option>
         </select>
 
-        <button class="btn-purple" onclick="simpanDataTokoAktif(); alert('Berhasil! Data toko untuk tanggal ini telah disimpan.');">💾 Simpan Data Toko Ini</button>
+        <button class="btn-purple" onclick="simpanDataTokoAktif(); alert('Berhasil! Revenue, Target MTD, Fokus Cabang & PSM untuk toko ini telah disimpan secara khusus.');">💾 Simpan Data Toko Ini</button>
 
         <div class="row-group" style="margin-top: 8px;">
             <div>
                 <label for="periode">Periode:</label>
-                <input type="date" id="periode" onchange="gantiTanggalReport()">
+                <input type="date" id="periode" onchange="hitungOtomatisSingle()">
             </div>
             <div>
                 <label for="shift" id="labelShift">Shift:</label>
@@ -101,7 +101,7 @@
     <!-- INPUT DETAIL PER TOKO -->
     <div class="card" id="formPerToko">
         <fieldset>
-            <legend>💰 REVENUE (Net Sales - Target MTD & Actual)</legend>
+            <legend>💰 REVENUE (Net Sales - Target MTD & Actual Unik per Toko)</legend>
             <div class="row-group">
                 <div><label>Time Factor (%):</label><input type="text" id="revTimeFactor" value="6,66%" oninput="hitungOtomatisSingle()"></div>
                 <div><label>Actual (Rp):</label><input type="text" id="revActual" value="0" oninput="hitungOtomatisSingle()"></div>
@@ -121,7 +121,7 @@
         </fieldset>
 
         <fieldset>
-            <legend>FOKUS CABANG</legend>
+            <legend>FOKUS CABANG (Target Unik per Toko)</legend>
             <table class="table-input">
                 <thead>
                     <tr>
@@ -150,7 +150,7 @@
         </fieldset>
 
         <fieldset>
-            <legend>PSM</legend>
+            <legend>PSM (Nama & Target Unik per Toko)</legend>
             <table class="table-input">
                 <thead>
                     <tr>
@@ -297,27 +297,372 @@
             return Math.round(num).toLocaleString('id-ID');
         }
 
-        // Fungsi yang dipanggil saat tanggal diubah: memuat ulang data sesuai tanggal & toko aktif
-        function gantiTanggalReport() {
-            gantiPilihanToko();
-            hitungOtomatisSingle();
-        }
-
-        // Muat Data Toko Berdasarkan Kombinasi Tanggal dan Toko Aktif
+        // Muat Data Toko (Target MTD, Actual, Fokus, PSM, dll) Secara Spesifik Saat Toko Dipilih
         function gantiPilihanToko() {
             const select = document.getElementById('selectStore');
             const selectedOption = select.options[select.selectedIndex];
             const storeKey = select.value;
-            const tglVal = document.getElementById('periode').value;
             const defaultTargetMtd = selectedOption.getAttribute('data-target') || '0';
             
-            // Kunci penyimpanan dibedakan berdasarkan Tanggal + Toko agar tiap tanggal punya data aktual sendiri
-            const storageKey = 'toko_' + tglVal + '_' + storeKey;
-            const savedData = localStorage.getItem(storageKey);
+            const savedData = localStorage.getItem('toko_' + storeKey);
             
             if (savedData) {
                 const d = JSON.parse(savedData);
+                // Target MTD & Actual tersimpan unik per toko
                 document.getElementById('revTargetMtd').value = formatNum(d.targetMtd !== undefined ? d.targetMtd : parseInt(defaultTargetMtd, 10));
                 document.getElementById('revActual').value = formatNum(d.actual || 0);
 
- 
+                // Fokus Cabang Toko Ini
+                document.getElementById('fokus1_t').value = d.f1_t || 0;
+                document.getElementById('fokus1_s').value = d.f1_s || 0;
+                document.getElementById('fokus2_t').value = d.f2_t || 0;
+                document.getElementById('fokus2_s').value = d.f2_s || 0;
+                document.getElementById('fokus3_t').value = d.f3_t || 0;
+                document.getElementById('fokus3_s').value = d.f3_s || 0;
+                document.getElementById('fokus4_t').value = d.f4_t || 0;
+                document.getElementById('fokus4_s').value = d.f4_s || 0;
+
+                // Nama & Target PSM Toko Ini
+                for (let i = 1; i <= 9; i++) {
+                    if (d['psm' + i + '_name'] !== undefined) document.getElementById('psm' + i + '_name').value = d['psm' + i + '_name'];
+                    if (d['psm' + i + '_t'] !== undefined) document.getElementById('psm' + i + '_t').value = d['psm' + i + '_t'];
+                    document.getElementById('psm' + i + '_a').value = d['psm' + i + '_a'] || 0;
+                }
+
+                document.getElementById('memberNew').value = d.mNew || 0;
+                document.getElementById('memberStruk').value = d.mStruk || 0;
+                document.getElementById('totalStruk').value = d.tStruk || 0;
+                document.getElementById('cat1').value = d.cat1 || 0;
+                document.getElementById('cat2').value = d.cat2 || 0;
+                document.getElementById('feeBase').value = d.feeBase || 0;
+            } else {
+                // Jika belum pernah disimpan, pakai default data HTML
+                document.getElementById('revTargetMtd').value = formatNum(parseInt(defaultTargetMtd, 10));
+                document.getElementById('revActual').value = '0';
+                document.getElementById('memberNew').value = '0';
+                document.getElementById('memberStruk').value = '0';
+                document.getElementById('totalStruk').value = '0';
+                document.getElementById('cat1').value = '0';
+                document.getElementById('cat2').value = '0';
+                document.getElementById('feeBase').value = '0';
+
+                document.getElementById('fokus1_t').value = '0'; document.getElementById('fokus1_s').value = '0';
+                document.getElementById('fokus2_t').value = '0'; document.getElementById('fokus2_s').value = '0';
+                document.getElementById('fokus3_t').value = '0'; document.getElementById('fokus3_s').value = '0';
+                document.getElementById('fokus4_t').value = '0'; document.getElementById('fokus4_s').value = '0';
+
+                for (let i = 1; i <= 9; i++) {
+                    document.getElementById('psm' + i + '_t').value = '0';
+                    document.getElementById('psm' + i + '_a').value = '0';
+                }
+            }
+
+            hitungOtomatisSingle();
+        }
+
+        function hitungOtomatisSingle() {
+            const tglVal = document.getElementById('periode').value;
+            let hariKe = 2;
+            if (tglVal) {
+                const parts = tglVal.split('-');
+                if (parts.length === 3) hariKe = parseInt(parts[2], 10) || 1;
+            }
+
+            const tfPersenInput = parseNum(document.getElementById('revTimeFactor').value);
+            const targetMtd = parseNum(document.getElementById('revTargetMtd').value);
+            const actual = parseNum(document.getElementById('revActual').value);
+
+            const multiplierTf = (tfPersenInput / 100) * hariKe;
+            const targetTf = Math.round(targetMtd * multiplierTf);
+
+            const achMtd = targetMtd > 0 ? ((actual / targetMtd) * 100).toFixed(1).replace('.', ',') + '%' : '0%';
+            const achTf = targetTf > 0 ? ((actual / targetTf) * 100).toFixed(1).replace('.', ',') + '%' : '0%';
+            
+            const gapTarget = targetMtd - actual;
+            const gapTf = targetTf - actual;
+
+            document.getElementById('revTargetTf').value = formatNum(targetTf);
+            document.getElementById('revAchMtd').value = achMtd;
+            document.getElementById('revAchTf').value = achTf;
+            document.getElementById('revGapTarget').value = formatNum(gapTarget);
+            document.getElementById('revGapTf').value = formatNum(gapTf);
+        }
+
+        // Menyimpan SEMUA data termasuk Target MTD, Actual, Fokus, dan PSM spesifik ke toko aktif
+        function simpanDataTokoAktif() {
+            const storeKey = document.getElementById('selectStore').value;
+            let existingData = localStorage.getItem('toko_' + storeKey);
+            let d = existingData ? JSON.parse(existingData) : {};
+
+            d.targetMtd = parseNum(document.getElementById('revTargetMtd').value);
+            d.targetTf = parseNum(document.getElementById('revTargetTf').value);
+            d.actual = parseNum(document.getElementById('revActual').value);
+            
+            d.f1_t = parseNum(document.getElementById('fokus1_t').value);
+            d.f1_s = parseNum(document.getElementById('fokus1_s').value);
+            d.f2_t = parseNum(document.getElementById('fokus2_t').value);
+            d.f2_s = parseNum(document.getElementById('fokus2_s').value);
+            d.f3_t = parseNum(document.getElementById('fokus3_t').value);
+            d.f3_s = parseNum(document.getElementById('fokus3_s').value);
+            d.f4_t = parseNum(document.getElementById('fokus4_t').value);
+            d.f4_s = parseNum(document.getElementById('fokus4_s').value);
+
+            let totalPsmT = 0, totalPsmA = 0;
+            for (let i = 1; i <= 9; i++) {
+                d['psm' + i + '_name'] = document.getElementById('psm' + i + '_name').value;
+                d['psm' + i + '_t'] = parseNum(document.getElementById('psm' + i + '_t').value);
+                d['psm' + i + '_a'] = parseNum(document.getElementById('psm' + i + '_a').value);
+                
+                totalPsmT += d['psm' + i + '_t'];
+                totalPsmA += d['psm' + i + '_a'];
+            }
+            d.psm_t = totalPsmT;
+            d.psm_a = totalPsmA;
+
+            d.mNew = parseNum(document.getElementById('memberNew').value);
+            d.mStruk = parseNum(document.getElementById('memberStruk').value);
+            d.tStruk = parseNum(document.getElementById('totalStruk').value);
+
+            d.cat1 = parseNum(document.getElementById('cat1').value);
+            d.cat2 = parseNum(document.getElementById('cat2').value);
+            d.feeBase = parseNum(document.getElementById('feeBase').value);
+
+            localStorage.setItem('toko_' + storeKey, JSON.stringify(d));
+        }
+
+        function hitungRekapOtomatis() {
+            let totTargetMtd = 0, totTargetTf = 0, totActual = 0;
+            let f1_t = 0, f1_s = 0, f2_t = 0, f2_s = 0, f3_t = 0, f3_s = 0, f4_t = 0, f4_s = 0;
+            let psm_t = 0, psm_a = 0;
+            let mNew = 0, mStruk = 0, tStruk = 0;
+            let cat1 = 0, cat2 = 0, feeBase = 0;
+            let countTersimpan = 0;
+
+            const selectOptions = document.getElementById('selectStore').options;
+            for (let i = 0; i < selectOptions.length; i++) {
+                const key = 'toko_' + selectOptions[i].value;
+                const saved = localStorage.getItem(key);
+                if (saved) {
+                    countTersimpan++;
+                    const d = JSON.parse(saved);
+                    totTargetMtd += (d.targetMtd || 0);
+                    totTargetTf += (d.targetTf || 0);
+                    totActual += (d.actual || 0);
+                    f1_t += (d.f1_t || 0); f1_s += (d.f1_s || 0);
+                    f2_t += (d.f2_t || 0); f2_s += (d.f2_s || 0);
+                    f3_t += (d.f3_t || 0); f3_s += (d.f3_s || 0);
+                    f4_t += (d.f4_t || 0); f4_s += (d.f4_s || 0);
+                    psm_t += (d.psm_t || 0); psm_a += (d.psm_a || 0);
+                    mNew += (d.mNew || 0); mStruk += (d.mStruk || 0); tStruk += (d.tStruk || 0);
+                    cat1 += (d.cat1 || 0); cat2 += (d.cat2 || 0); feeBase += (d.feeBase || 0);
+                }
+            }
+
+            if (countTersimpan === 0) {
+                alert("Belum ada data toko yang disimpan! Silakan isi dan klik 'Generate & Simpan Data Toko' minimal untuk beberapa toko terlebih dahulu.");
+                return;
+            }
+
+            const achMtd = totTargetMtd > 0 ? ((totActual / totTargetMtd) * 100).toFixed(1).replace('.', ',') + '%' : '0%';
+            const achTf = totTargetTf > 0 ? ((totActual / totTargetTf) * 100).toFixed(1).replace('.', ',') + '%' : '0%';
+            const gapTarget = totTargetMtd - totActual;
+            const gapTf = totTargetTf - totActual;
+
+            document.getElementById('rekTargetMtd').value = formatNum(totTargetMtd);
+            document.getElementById('rekTargetTf').value = formatNum(totTargetTf);
+            document.getElementById('rekActual').value = formatNum(totActual);
+            document.getElementById('rekAchMtd').value = achMtd;
+            document.getElementById('rekAchTf').value = achTf;
+            document.getElementById('rekGapTarget').value = formatNum(gapTarget);
+            document.getElementById('rekGapTf').value = formatNum(gapTf);
+
+            document.getElementById('rfokus1').value = `${f1_t}/${f1_s}/${f1_t > 0 ? Math.round((f1_s/f1_t)*100) : 0}%`;
+            document.getElementById('rfokus2').value = `${f2_t}/${f2_s}/${f2_t > 0 ? Math.round((f2_s/f2_t)*100) : 0}%`;
+            document.getElementById('rfokus3').value = `${f3_t}/${f3_s}/${f3_t > 0 ? Math.round((f3_s/f3_t)*100) : 0}%`;
+            document.getElementById('rfokus4').value = `${f4_t}/${f4_s}/${f4_t > 0 ? Math.round((f4_s/f4_t)*100) : 0}%`;
+            document.getElementById('rfokus5').value = `${psm_t}/${psm_a}/${psm_t > 0 ? Math.round((psm_a/psm_t)*100) : 0}%`;
+
+            document.getElementById('rmemberNew').value = `${mNew}/0/0%`;
+            document.getElementById('rmemberStruk').value = `${tStruk}/${mStruk}/${tStruk > 0 ? Math.round((mStruk/tStruk)*100) : 0}%`;
+
+            document.getElementById('rcat1').value = `${cat1}/0/0%`;
+            document.getElementById('rcat2').value = `${cat2}/0/0%`;
+
+            document.getElementById('rFeeBase').value = formatNum(feeBase);
+
+            alert(`Berhasil merangkum data dari ${countTersimpan} toko yang sudah diisi!`);
+        }
+
+        function getVal(id) {
+            return document.getElementById(id) ? document.getElementById(id).value : '';
+        }
+
+        function processData(type) {
+            const periodeRaw = getVal('periode');
+            const periode = formatDateID(periodeRaw);
+            const wh = getVal('wh');
+            const am = getVal('am');
+            const ac = getVal('ac');
+            
+            let text = "";
+            let jenisLaporan = "";
+            let kodeToko = "-";
+            let namaToko = "-";
+            let shiftInfo = "-";
+
+            if (type === 'single') {
+                simpanDataTokoAktif();
+                const shift = getVal('shift');
+                const storeVal = getVal('selectStore').split('|');
+                kodeToko = storeVal[0];
+                namaToko = storeVal[1];
+                jenisLaporan = "Laporan Per Toko (Shift)";
+                shiftInfo = "Shift " + shift;
+
+                const f1 = `${getVal('fokus1_t')}/${getVal('fokus1_s')}/${getVal('fokus1_p')}`;
+                const f2 = `${getVal('fokus2_t')}/${getVal('fokus2_s')}/${getVal('fokus2_p')}`;
+                const f3 = `${getVal('fokus3_t')}/${getVal('fokus3_s')}/${getVal('fokus3_p')}`;
+                const f4 = `${getVal('fokus4_t')}/${getVal('fokus4_s')}/${getVal('fokus4_p')}`;
+
+                let psmListText = "";
+                for (let i = 1; i <= 8; i++) {
+                    const nameItem = getVal('psm' + i + '_name').toUpperCase();
+                    const pItem = `${getVal('psm' + i + '_t')} - ${getVal('psm' + i + '_a')} - ${getVal('psm' + i + '_p')}`;
+                    psmListText += `${i}. ${nameItem}: ${pItem}\n`;
+                }
+                
+                const p9NameVal = getVal('psm9_name');
+                if (p9NameVal) {
+                    psmListText += `9. ${p9NameVal.toUpperCase()}: ${getVal('psm9_t')} - ${getVal('psm9_a')} - ${getVal('psm9_p')}\n`;
+                }
+                psmListText = psmListText.trimEnd();
+
+                const mNew = getVal('memberNew');
+                const mStruk = getVal('memberStruk');
+                const tStruk = getVal('totalStruk');
+                const mPersen = Math.round((mStruk/(tStruk||1))*100);
+
+                text = `*REPORT SALES SHIFT ${shift}*\n` +
+                       `PERIODE : ${periode}\n` +
+                       `WH : ${wh}\n` +
+                       `AM : ${am}\n` +
+                       `AC : ${ac}\n` +
+                       `KD Toko : ${kodeToko}\n` +
+                       `Nama Toko : ${namaToko}\n` +
+                       `Shift : ${shift}\n` +
+                       `======================\n` +
+                       `*REVENUE*\n` +
+                       `1. NET SALES\n` +
+                       `- Time factor : ${getVal('revTimeFactor')}\n` +
+                       `- TARGET  MTD : ${getVal('revTargetMtd')}\n` +
+                       `- Target Time Factor: ${getVal('revTargetTf')}\n` +
+                       `- ACTUAL : ${getVal('revActual')}\n` +
+                       `- ACHIVE MTD : ${getVal('revAchMtd')}\n` +
+                       `- AChieved Time Factor : ${getVal('revAchTf')}\n` +
+                       `- GAP TO TARGET : ${getVal('revGapTarget')}\n` +
+                       `- GAP To Time Factor: ${getVal('revGapTf')}\n` +
+                       `*FOKUS CABANG*\n` +
+                       `======================\n` +
+                       ` TARGET/SALES/\tACV%\n` +
+                       `1. TEBUS MURAH (QTY REDEEM)\t: ${f1}\n` +
+                       `2. SERBA GRATIS (PAKET)\t: ${f2}\n` +
+                       `3. SUEGER\t: ${f3}\n` +
+                       `4. PROMO CEBAN\t: ${f4}\n` +
+                       `*MEMBER*\n` +
+                       `1. Actual NEW MEMBER : ${mNew}/0/0%\n` +
+                       `2. Konstribusi struk Member : ${tStruk}/${mStruk}/${mPersen}%\n` +
+                       `======================\n` +
+                       `*PSM*\n` +
+                       `(In Qty).( Target - actual - %)\n` +
+                       psmListText + `\n` +
+                       `======================\n` +
+                       `*CATEGORY*\t(Rupiah)\n` +
+                       `( Sales )\n` +
+                       `1. TOYS (NS): ${getVal('cat1')}\n` +
+                       `2. HBPL (NS): ${getVal('cat2')}\n` +
+                       `======================\n` +
+                       `*E-COMMERCE*\n` +
+                       `1. FEE BASE (RP)\t: ${getVal('feeBase')}\n` +
+                       `Terimakasih`;
+            } else {
+                jenisLaporan = "Rekap Gabungan 20 Toko Area";
+                shiftInfo = "All Area";
+
+                text = `*REPORT SALES*\n` +
+                       `PERIODE : ${periode}\n` +
+                       `WH : ${wh}\n` +
+                       `AM : ${am}\n` +
+                       `AC  : ${ac}\n` +
+                       `======================\n` +
+                       `*REVENUE*\n` +
+                       `1. NET SALES\t\n` +
+                       `- Time factor : ${getVal('rekTimeFactor')}\n` +
+                       `- TARGET  MTD : ${getVal('rekTargetMtd')}\n` +
+                       `- Target Time Factor : ${getVal('rekTargetTf')}\n` +
+                       `- ACTUAL : ${getVal('rekActual')}\n` +
+                       `- ACHIVE MTD :${getVal('rekAchMtd')}\n` +
+                       `- Achieved Time Factor :${getVal('rekAchTf')}\n` +
+                       `- GAP TO TARGET : ${getVal('rekGapTarget')}\n` +
+                       `- GAP To Time Factor : ${getVal('rekGapTf')}\n` +
+                       `======================\n` +
+                       `*FOKUS CABANG*\n` +
+                       `\tTARGET/SALES/\tACV%\n` +
+                       `1. \tTEBUS MURAH (QTY REDEEM) : ${getVal('rfokus1')}\n` +
+                       `2. \tSERBA GRATIS (PAKET) : ${getVal('rfokus2')}\n` +
+                       `3. SEUUGER : ${getVal('rfokus3')}\n` +
+                       `4. PROMO CEBAN : ${getVal('rfokus4')}\n` +
+                       `5. PSM : ${getVal('rfokus5')}\n` +
+                       `*MEMBER*\n` +
+                       `1. \tActual NEW MEMBER :\t${getVal('rmemberNew')}\n` +
+                       `2. \tKonstribusi struk Member \t: ( Struk MEMBER : Total struk :${getVal('rmemberStruk')}\n` +
+                       `*CATEGORY*\t(Rupiah)\n` +
+                       `( Sales )\n` +
+                       `1. \tTOYS (NS)\t : ${getVal('rcat1')}\n` +
+                       `2. TELUR : ${getVal('rcat2')}\n` +
+                       `======================\n` +
+                       `*E-COMMERCE*\n` +
+                       `1. \tFEE BASE (RP)\t : ${getVal('rFeeBase')}\n` +
+                       `Terimakasih`;
+            }
+
+            document.getElementById('outputResult').innerText = text;
+            document.getElementById('loadingStatus').style.display = 'block';
+
+            const payload = {
+                jenisLaporan: jenisLaporan,
+                kodeToko: kodeToko,
+                namaToko: namaToko,
+                periode: periode,
+                shiftInfo: shiftInfo,
+                hasilText: text
+            };
+
+            fetch(WEB_APP_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            })
+            .then(() => {
+                document.getElementById('loadingStatus').style.display = 'none';
+                alert("Report berhasil digenerate dan data otomatis tersimpan aman di Cloud Google Sheets!");
+            })
+            .catch((error) => {
+                document.getElementById('loadingStatus').style.display = 'none';
+                alert("Gagal mengirim ke cloud: " + error);
+            });
+        }
+
+        function copyResult() {
+            const text = document.getElementById('outputResult').innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                alert('Teks format WhatsApp berhasil disalin!');
+            });
+        }
+
+        window.onload = function() {
+            gantiPilihanToko(); // Muat data awal toko pertama saat halaman dibuka
+        };
+    </script>
+</body>
+</html>
