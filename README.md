@@ -100,19 +100,19 @@
             <legend>💰 REVENUE (Net Sales)</legend>
             <div class="row-group">
                 <div><label>Time Factor (%):</label><input type="text" id="revTimeFactor" value="10.0%" oninput="hitungOtomatisSingle()"></div>
-                <div><label>Actual (Rp):</label><input type="text" id="revActual" value="10.774.704" oninput="hitungOtomatisSingle()"></div>
+                <div><label>Actual (Rp):</label><input type="text" id="revActual" value="0" oninput="hitungOtomatisSingle()"></div>
             </div>
             <div class="row-group">
-                <div><label>Target MTD (Rp):</label><input type="text" id="revTargetMtd" value="329.236.885" oninput="hitungOtomatisSingle()"></div>
-                <div><label>Target TF (Rp) - Auto:</label><input type="text" id="revTargetTf" value="32.923.689" readonly style="background-color: #e9ecef;"></div>
+                <div><label>Target MTD (Rp):</label><input type="text" id="revTargetMtd" value="0" oninput="hitungOtomatisSingle()"></div>
+                <div><label>Target TF (Rp) - Auto:</label><input type="text" id="revTargetTf" value="0" readonly style="background-color: #e9ecef;"></div>
             </div>
             <div class="row-group">
-                <div><label>Ach MTD (%):</label><input type="text" id="revAchMtd" value="3.27%" readonly style="background-color: #e9ecef;"></div>
-                <div><label>Ach TF (%):</label><input type="text" id="revAchTf" value="32.73%" readonly style="background-color: #e9ecef;"></div>
+                <div><label>Ach MTD (%):</label><input type="text" id="revAchMtd" value="0%" readonly style="background-color: #e9ecef;"></div>
+                <div><label>Ach TF (%):</label><input type="text" id="revAchTf" value="0%" readonly style="background-color: #e9ecef;"></div>
             </div>
             <div class="row-group">
-                <div><label>GAP to Target (Rp):</label><input type="text" id="revGapTarget" value="318.462.181" readonly style="background-color: #e9ecef;"></div>
-                <div><label>GAP to TF (Rp):</label><input type="text" id="revGapTf" value="22.148.985" readonly style="background-color: #e9ecef;"></div>
+                <div><label>GAP to Target (Rp):</label><input type="text" id="revGapTarget" value="0" readonly style="background-color: #e9ecef;"></div>
+                <div><label>GAP to TF (Rp):</label><input type="text" id="revGapTf" value="0" readonly style="background-color: #e9ecef;"></div>
             </div>
         </fieldset>
 
@@ -128,10 +128,10 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr><td>TEBUS MURAH</td><td><input type="text" id="fokus1_t" value="23"></td><td><input type="text" id="fokus1_s" value="30"></td><td><input type="text" id="fokus1_p" value="130%"></td></tr>
-                    <tr><td>SERBA GRATIS</td><td><input type="text" id="fokus2_t" value="14"></td><td><input type="text" id="fokus2_s" value="6"></td><td><input type="text" id="fokus2_p" value="43%"></td></tr>
-                    <tr><td>SUEUGEER</td><td><input type="text" id="fokus3_t" value="68"></td><td><input type="text" id="fokus3_s" value="19"></td><td><input type="text" id="fokus3_p" value="28%"></td></tr>
-                    <tr><td>PROMO CEBAN</td><td><input type="text" id="fokus4_t" value="278"></td><td><input type="text" id="fokus4_s" value="0"></td><td><input type="text" id="fokus4_p" value="0%"></td></tr>
+                    <tr><td>TEBUS MURAH</td><td><input type="text" id="fokus1_t" value="0"></td><td><input type="text" id="fokus1_s" value="0"></td><td><input type="text" id="fokus1_p" value="0%"></td></tr>
+                    <tr><td>SERBA GRATIS</td><td><input type="text" id="fokus2_t" value="0"></td><td><input type="text" id="fokus2_s" value="0"></td><td><input type="text" id="fokus2_p" value="0%"></td></tr>
+                    <tr><td>SUEUGEER</td><td><input type="text" id="fokus3_t" value="0"></td><td><input type="text" id="fokus3_s" value="0"></td><td><input type="text" id="fokus3_p" value="0%"></td></tr>
+                    <tr><td>PROMO CEBAN</td><td><input type="text" id="fokus4_t" value="0"></td><td><input type="text" id="fokus4_s" value="0"></td><td><input type="text" id="fokus4_p" value="0%"></td></tr>
                 </tbody>
             </table>
         </fieldset>
@@ -139,9 +139,9 @@
         <fieldset>
             <legend>MEMBER & STRUK</legend>
             <div class="row-group">
-                <div><label>Actual New Member:</label><input type="text" id="memberNew" value="2"></div>
-                <div><label>Struk Member:</label><input type="text" id="memberStruk" value="123"></div>
-                <div><label>Total Struk:</label><input type="text" id="totalStruk" value="279"></div>
+                <div><label>Actual New Member:</label><input type="text" id="memberNew" value="0"></div>
+                <div><label>Struk Member:</label><input type="text" id="memberStruk" value="0"></div>
+                <div><label>Total Struk:</label><input type="text" id="totalStruk" value="0"></div>
             </div>
         </fieldset>
 
@@ -157,14 +157,14 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr><td>Bango</td><td><input type="text" id="psm1_t" value="22"></td><td><input type="text" id="psm1_a" value="1"></td><td><input type="text" id="psm1_p" value="5%"></td></tr>
-                    <tr><td>Daia</td><td><input type="text" id="psm2_t" value="52"></td><td><input type="text" id="psm2_a" value="4"></td><td><input type="text" id="psm2_p" value="8%"></td></tr>
-                    <tr><td>Enaak</td><td><input type="text" id="psm3_t" value="39"></td><td><input type="text" id="psm3_a" value="0"></td><td><input type="text" id="psm3_p" value="0%"></td></tr>
-                    <tr><td>Garnier</td><td><input type="text" id="psm4_t" value="31"></td><td><input type="text" id="psm4_a" value="1"></td><td><input type="text" id="psm4_p" value="3%"></td></tr>
-                    <tr><td>Le mineral</td><td><input type="text" id="psm5_t" value="265"></td><td><input type="text" id="psm5_a" value="15"></td><td><input type="text" id="psm5_p" value="6%"></td></tr>
-                    <tr><td>Lifebuoy</td><td><input type="text" id="psm6_t" value="24"></td><td><input type="text" id="psm6_a" value="2"></td><td><input type="text" id="psm6_p" value="8%"></td></tr>
-                    <tr><td>Nipis madu</td><td><input type="text" id="psm7_t" value="139"></td><td><input type="text" id="psm7_a" value="7"></td><td><input type="text" id="psm7_p" value="5%"></td></tr>
-                    <tr><td>Taro</td><td><input type="text" id="psm8_t" value="59"></td><td><input type="text" id="psm8_a" value="4"></td><td><input type="text" id="psm8_p" value="7%"></td></tr>
+                    <tr><td>Bango</td><td><input type="text" id="psm1_t" value="0"></td><td><input type="text" id="psm1_a" value="0"></td><td><input type="text" id="psm1_p" value="0%"></td></tr>
+                    <tr><td>Daia</td><td><input type="text" id="psm2_t" value="0"></td><td><input type="text" id="psm2_a" value="0"></td><td><input type="text" id="psm2_p" value="0%"></td></tr>
+                    <tr><td>Enaak</td><td><input type="text" id="psm3_t" value="0"></td><td><input type="text" id="psm3_a" value="0"></td><td><input type="text" id="psm3_p" value="0%"></td></tr>
+                    <tr><td>Garnier</td><td><input type="text" id="psm4_t" value="0"></td><td><input type="text" id="psm4_a" value="0"></td><td><input type="text" id="psm4_p" value="0%"></td></tr>
+                    <tr><td>Le mineral</td><td><input type="text" id="psm5_t" value="0"></td><td><input type="text" id="psm5_a" value="0"></td><td><input type="text" id="psm5_p" value="0%"></td></tr>
+                    <tr><td>Lifebuoy</td><td><input type="text" id="psm6_t" value="0"></td><td><input type="text" id="psm6_a" value="0"></td><td><input type="text" id="psm6_p" value="0%"></td></tr>
+                    <tr><td>Nipis madu</td><td><input type="text" id="psm7_t" value="0"></td><td><input type="text" id="psm7_a" value="0"></td><td><input type="text" id="psm7_p" value="0%"></td></tr>
+                    <tr><td>Taro</td><td><input type="text" id="psm8_t" value="0"></td><td><input type="text" id="psm8_a" value="0"></td><td><input type="text" id="psm8_p" value="0%"></td></tr>
                     <tr>
                         <td><input type="text" id="psm9_name" placeholder="Item Lainnya..." style="text-align: left;"></td>
                         <td><input type="text" id="psm9_t" value="0"></td>
@@ -183,7 +183,7 @@
 
         <fieldset>
             <legend>E-COMMERCE</legend>
-            <label>Fee Base (Rp):</label><input type="text" id="feeBase" value="250.000">
+            <label>Fee Base (Rp):</label><input type="text" id="feeBase" value="0">
         </fieldset>
 
         <button onclick="processData('single')">Generate & Simpan Data Toko</button>
