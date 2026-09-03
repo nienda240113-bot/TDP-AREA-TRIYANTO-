@@ -44,12 +44,12 @@
             <option value="rekap">2. Rekap Gabungan 20 Toko Area</option>
         </select>
 
-        <button class="btn-purple" onclick="simpanTargetDanItemDefault()">💾 Simpan Target & Nama Item Default Periode Ini</button>
+        <button class="btn-purple" onclick="simpanDataTokoAktif(); alert('Berhasil! Data toko untuk tanggal ini telah disimpan.');">💾 Simpan Data Toko Ini</button>
 
         <div class="row-group" style="margin-top: 8px;">
             <div>
                 <label for="periode">Periode:</label>
-                <input type="date" id="periode" onchange="hitungOtomatisSingle()">
+                <input type="date" id="periode" onchange="gantiTanggalReport()">
             </div>
             <div>
                 <label for="shift" id="labelShift">Shift:</label>
@@ -101,7 +101,7 @@
     <!-- INPUT DETAIL PER TOKO -->
     <div class="card" id="formPerToko">
         <fieldset>
-            <legend>💰 REVENUE (Net Sales)</legend>
+            <legend>💰 REVENUE (Net Sales - Target MTD & Actual)</legend>
             <div class="row-group">
                 <div><label>Time Factor (%):</label><input type="text" id="revTimeFactor" value="6,66%" oninput="hitungOtomatisSingle()"></div>
                 <div><label>Actual (Rp):</label><input type="text" id="revActual" value="0" oninput="hitungOtomatisSingle()"></div>
@@ -121,7 +121,7 @@
         </fieldset>
 
         <fieldset>
-            <legend>FOKUS CABANG (Target bisa diubah & disimpan)</legend>
+            <legend>FOKUS CABANG</legend>
             <table class="table-input">
                 <thead>
                     <tr>
@@ -150,7 +150,7 @@
         </fieldset>
 
         <fieldset>
-            <legend>PSM (Product Sales Mission - Nama & Target bisa diubah)</legend>
+            <legend>PSM</legend>
             <table class="table-input">
                 <thead>
                     <tr>
@@ -297,363 +297,27 @@
             return Math.round(num).toLocaleString('id-ID');
         }
 
-        // Simpan Nama Item dan Target Default ke LocalStorage
-        function simpanTargetDanItemDefault() {
-            const defaultConfig = {
-                fokus1_t: document.getElementById('fokus1_t').value,
-                fokus2_t: document.getElementById('fokus2_t').value,
-                fokus3_t: document.getElementById('fokus3_t').value,
-                fokus4_t: document.getElementById('fokus4_t').value,
-            };
-
-            for (let i = 1; i <= 9; i++) {
-                defaultConfig['psm' + i + '_name'] = document.getElementById('psm' + i + '_name').value;
-                defaultConfig['psm' + i + '_t'] = document.getElementById('psm' + i + '_t').value;
-            }
-
-            localStorage.setItem('config_default_periode', JSON.stringify(defaultConfig));
-            alert("Berhasil! Target Fokus Cabang, Nama Item PSM, dan Target PSM telah disimpan sebagai default baru untuk periode ini.");
-        }
-
-        // Muat Data Default Tersimpan saat Halaman Dimuat
-        function muatTargetDanItemDefault() {
-            const savedConfig = localStorage.getItem('config_default_periode');
-            if (savedConfig) {
-                const cfg = JSON.parse(savedConfig);
-                if (cfg.fokus1_t !== undefined) document.getElementById('fokus1_t').value = cfg.fokus1_t;
-                if (cfg.fokus2_t !== undefined) document.getElementById('fokus2_t').value = cfg.fokus2_t;
-                if (cfg.fokus3_t !== undefined) document.getElementById('fokus3_t').value = cfg.fokus3_t;
-                if (cfg.fokus4_t !== undefined) document.getElementById('fokus4_t').value = cfg.fokus4_t;
-
-                for (let i = 1; i <= 9; i++) {
-                    if (cfg['psm' + i + '_name'] !== undefined) {
-                        document.getElementById('psm' + i + '_name').value = cfg['psm' + i + '_name'];
-                    }
-                    if (cfg['psm' + i + '_t'] !== undefined) {
-                        document.getElementById('psm' + i + '_t').value = cfg['psm' + i + '_t'];
-                    }
-                }
-            }
-        }
-
-        function gantiPilihanToko() {
-            const select = document.getElementById('selectStore');
-            const selectedOption = select.options[select.selectedIndex];
-            const targetMtd = selectedOption.getAttribute('data-target') || '0';
-            
-            document.getElementById('revTargetMtd').value = formatNum(parseInt(targetMtd, 10));
-            document.getElementById('revActual').value = '0';
-            document.getElementById('memberNew').value = '0';
-            document.getElementById('memberStruk').value = '0';
-            document.getElementById('totalStruk').value = '0';
-            document.getElementById('cat1').value = '0';
-            document.getElementById('cat2').value = '0';
-            document.getElementById('feeBase').value = '0';
-
-            // Reset sales aktual fokus & psm ke 0 saja tanpa merusak target tersimpan
-            document.getElementById('fokus1_s').value = '0';
-            document.getElementById('fokus2_s').value = '0';
-            document.getElementById('fokus3_s').value = '0';
-            document.getElementById('fokus4_s').value = '0';
-            for (let i = 1; i <= 9; i++) {
-                document.getElementById('psm' + i + '_a').value = '0';
-            }
-
+        // Fungsi yang dipanggil saat tanggal diubah: memuat ulang data sesuai tanggal & toko aktif
+        function gantiTanggalReport() {
+            gantiPilihanToko();
             hitungOtomatisSingle();
         }
 
-        function hitungOtomatisSingle() {
+        // Muat Data Toko Berdasarkan Kombinasi Tanggal dan Toko Aktif
+        function gantiPilihanToko() {
+            const select = document.getElementById('selectStore');
+            const selectedOption = select.options[select.selectedIndex];
+            const storeKey = select.value;
             const tglVal = document.getElementById('periode').value;
-            let hariKe = 2;
-            if (tglVal) {
-                const parts = tglVal.split('-');
-                if (parts.length === 3) hariKe = parseInt(parts[2], 10) || 1;
-            }
-
-            const tfPersenInput = parseNum(document.getElementById('revTimeFactor').value);
-            const targetMtd = parseNum(document.getElementById('revTargetMtd').value);
-            const actual = parseNum(document.getElementById('revActual').value);
-
-            const multiplierTf = (tfPersenInput / 100) * hariKe;
-            const targetTf = Math.round(targetMtd * multiplierTf);
-
-            const achMtd = targetMtd > 0 ? ((actual / targetMtd) * 100).toFixed(1).replace('.', ',') + '%' : '0%';
-            const achTf = targetTf > 0 ? ((actual / targetTf) * 100).toFixed(1).replace('.', ',') + '%' : '0%';
+            const defaultTargetMtd = selectedOption.getAttribute('data-target') || '0';
             
-            const gapTarget = targetMtd - actual;
-            const gapTf = targetTf - actual;
-
-            document.getElementById('revTargetTf').value = formatNum(targetTf);
-            document.getElementById('revAchMtd').value = achMtd;
-            document.getElementById('revAchTf').value = achTf;
-            document.getElementById('revGapTarget').value = formatNum(gapTarget);
-            document.getElementById('revGapTf').value = formatNum(gapTf);
-        }
-
-        function simpanDataTokoAktif() {
-            const storeKey = document.getElementById('selectStore').value;
-            const dataToko = {
-                targetMtd: parseNum(document.getElementById('revTargetMtd').value),
-                targetTf: parseNum(document.getElementById('revTargetTf').value),
-                actual: parseNum(document.getElementById('revActual').value),
-                
-                f1_t: parseNum(document.getElementById('fokus1_t').value),
-                f1_s: parseNum(document.getElementById('fokus1_s').value),
-                f2_t: parseNum(document.getElementById('fokus2_t').value),
-                f2_s: parseNum(document.getElementById('fokus2_s').value),
-                f3_t: parseNum(document.getElementById('fokus3_t').value),
-                f3_s: parseNum(document.getElementById('fokus3_s').value),
-                f4_t: parseNum(document.getElementById('fokus4_t').value),
-                f4_s: parseNum(document.getElementById('fokus4_s').value),
-
-                psm_t: (parseNum(document.getElementById('psm1_t').value) + parseNum(document.getElementById('psm2_t').value) + parseNum(document.getElementById('psm3_t').value) + parseNum(document.getElementById('psm4_t').value) + parseNum(document.getElementById('psm5_t').value) + parseNum(document.getElementById('psm6_t').value) + parseNum(document.getElementById('psm7_t').value) + parseNum(document.getElementById('psm8_t').value) + parseNum(document.getElementById('psm9_t').value)),
-                psm_a: (parseNum(document.getElementById('psm1_a').value) + parseNum(document.getElementById('psm2_a').value) + parseNum(document.getElementById('psm3_a').value) + parseNum(document.getElementById('psm4_a').value) + parseNum(document.getElementById('psm5_a').value) + parseNum(document.getElementById('psm6_a').value) + parseNum(document.getElementById('psm7_a').value) + parseNum(document.getElementById('psm8_a').value) + parseNum(document.getElementById('psm9_a').value)),
-
-                mNew: parseNum(document.getElementById('memberNew').value),
-                mStruk: parseNum(document.getElementById('memberStruk').value),
-                tStruk: parseNum(document.getElementById('totalStruk').value),
-
-                cat1: parseNum(document.getElementById('cat1').value),
-                cat2: parseNum(document.getElementById('cat2').value),
-                feeBase: parseNum(document.getElementById('feeBase').value)
-            };
-            localStorage.setItem('toko_' + storeKey, JSON.stringify(dataToko));
-        }
-
-        function hitungRekapOtomatis() {
-            let totTargetMtd = 0, totTargetTf = 0, totActual = 0;
-            let f1_t = 0, f1_s = 0, f2_t = 0, f2_s = 0, f3_t = 0, f3_s = 0, f4_t = 0, f4_s = 0;
-            let psm_t = 0, psm_a = 0;
-            let mNew = 0, mStruk = 0, tStruk = 0;
-            let cat1 = 0, cat2 = 0, feeBase = 0;
-            let countTersimpan = 0;
-
-            const selectOptions = document.getElementById('selectStore').options;
-            for (let i = 0; i < selectOptions.length; i++) {
-                const key = 'toko_' + selectOptions[i].value;
-                const saved = localStorage.getItem(key);
-                if (saved) {
-                    countTersimpan++;
-                    const d = JSON.parse(saved);
-                    totTargetMtd += d.targetMtd;
-                    totTargetTf += d.targetTf;
-                    totActual += d.actual;
-                    f1_t += d.f1_t; f1_s += d.f1_s;
-                    f2_t += d.f2_t; f2_s += d.f2_s;
-                    f3_t += d.f3_t; f3_s += d.f3_s;
-                    f4_t += d.f4_t; f4_s += d.f4_s;
-                    psm_t += d.psm_t; psm_a += d.psm_a;
-                    mNew += d.mNew; mStruk += d.mStruk; tStruk += d.tStruk;
-                    cat1 += d.cat1; cat2 += d.cat2; feeBase += d.feeBase;
-                }
-            }
-
-            if (countTersimpan === 0) {
-                alert("Belum ada data toko yang disimpan! Silakan isi dan klik 'Generate & Simpan Data Toko' minimal untuk beberapa toko terlebih dahulu.");
-                return;
-            }
-
-            const achMtd = totTargetMtd > 0 ? ((totActual / totTargetMtd) * 100).toFixed(1).replace('.', ',') + '%' : '0%';
-            const achTf = totTargetTf > 0 ? ((totActual / totTargetTf) * 100).toFixed(1).replace('.', ',') + '%' : '0%';
-            const gapTarget = totTargetMtd - totActual;
-            const gapTf = totTargetTf - totActual;
-
-            document.getElementById('rekTargetMtd').value = formatNum(totTargetMtd);
-            document.getElementById('rekTargetTf').value = formatNum(totTargetTf);
-            document.getElementById('rekActual').value = formatNum(totActual);
-            document.getElementById('rekAchMtd').value = achMtd;
-            document.getElementById('rekAchTf').value = achTf;
-            document.getElementById('rekGapTarget').value = formatNum(gapTarget);
-            document.getElementById('rekGapTf').value = formatNum(gapTf);
-
-            document.getElementById('rfokus1').value = `${f1_t}/${f1_s}/${f1_t > 0 ? Math.round((f1_s/f1_t)*100) : 0}%`;
-            document.getElementById('rfokus2').value = `${f2_t}/${f2_s}/${f2_t > 0 ? Math.round((f2_s/f2_t)*100) : 0}%`;
-            document.getElementById('rfokus3').value = `${f3_t}/${f3_s}/${f3_t > 0 ? Math.round((f3_s/f3_t)*100) : 0}%`;
-            document.getElementById('rfokus4').value = `${f4_t}/${f4_s}/${f4_t > 0 ? Math.round((f4_s/f4_t)*100) : 0}%`;
-            document.getElementById('rfokus5').value = `${psm_t}/${psm_a}/${psm_t > 0 ? Math.round((psm_a/psm_t)*100) : 0}%`;
-
-            document.getElementById('rmemberNew').value = `${mNew}/0/0%`;
-            document.getElementById('rmemberStruk').value = `${tStruk}/${mStruk}/${tStruk > 0 ? Math.round((mStruk/tStruk)*100) : 0}%`;
-
-            document.getElementById('rcat1').value = `${cat1}/0/0%`;
-            document.getElementById('rcat2').value = `${cat2}/0/0%`;
-
-            document.getElementById('rFeeBase').value = formatNum(feeBase);
-
-            alert(`Berhasil merangkum data dari ${countTersimpan} toko yang sudah diisi!`);
-        }
-
-        function getVal(id) {
-            return document.getElementById(id) ? document.getElementById(id).value : '';
-        }
-
-        function processData(type) {
-            const periodeRaw = getVal('periode');
-            const periode = formatDateID(periodeRaw);
-            const wh = getVal('wh');
-            const am = getVal('am');
-            const ac = getVal('ac');
+            // Kunci penyimpanan dibedakan berdasarkan Tanggal + Toko agar tiap tanggal punya data aktual sendiri
+            const storageKey = 'toko_' + tglVal + '_' + storeKey;
+            const savedData = localStorage.getItem(storageKey);
             
-            let text = "";
-            let jenisLaporan = "";
-            let kodeToko = "-";
-            let namaToko = "-";
-            let shiftInfo = "-";
+            if (savedData) {
+                const d = JSON.parse(savedData);
+                document.getElementById('revTargetMtd').value = formatNum(d.targetMtd !== undefined ? d.targetMtd : parseInt(defaultTargetMtd, 10));
+                document.getElementById('revActual').value = formatNum(d.actual || 0);
 
-            if (type === 'single') {
-                simpanDataTokoAktif();
-                const shift = getVal('shift');
-                const storeVal = getVal('selectStore').split('|');
-                kodeToko = storeVal[0];
-                namaToko = storeVal[1];
-                jenisLaporan = "Laporan Per Toko (Shift)";
-                shiftInfo = "Shift " + shift;
-
-                const f1 = `${getVal('fokus1_t')}/${getVal('fokus1_s')}/${getVal('fokus1_p')}`;
-                const f2 = `${getVal('fokus2_t')}/${getVal('fokus2_s')}/${getVal('fokus2_p')}`;
-                const f3 = `${getVal('fokus3_t')}/${getVal('fokus3_s')}/${getVal('fokus3_p')}`;
-                const f4 = `${getVal('fokus4_t')}/${getVal('fokus4_s')}/${getVal('fokus4_p')}`;
-
-                let psmListText = "";
-                for (let i = 1; i <= 8; i++) {
-                    const nameItem = getVal('psm' + i + '_name').toUpperCase();
-                    const pItem = `${getVal('psm' + i + '_t')} - ${getVal('psm' + i + '_a')} - ${getVal('psm' + i + '_p')}`;
-                    psmListText += `${i}. ${nameItem}: ${pItem}\n`;
-                }
-                
-                const p9NameVal = getVal('psm9_name');
-                if (p9NameVal) {
-                    psmListText += `9. ${p9NameVal.toUpperCase()}: ${getVal('psm9_t')} - ${getVal('psm9_a')} - ${getVal('psm9_p')}\n`;
-                }
-                psmListText = psmListText.trimEnd();
-
-                const mNew = getVal('memberNew');
-                const mStruk = getVal('memberStruk');
-                const tStruk = getVal('totalStruk');
-                const mPersen = Math.round((mStruk/(tStruk||1))*100);
-
-                text = `*REPORT SALES SHIFT ${shift}*\n` +
-                       `PERIODE : ${periode}\n` +
-                       `WH : ${wh}\n` +
-                       `AM : ${am}\n` +
-                       `AC : ${ac}\n` +
-                       `KD Toko : ${kodeToko}\n` +
-                       `Nama Toko : ${namaToko}\n` +
-                       `Shift : ${shift}\n` +
-                       `======================\n` +
-                       `*REVENUE*\n` +
-                       `1. NET SALES\n` +
-                       `- Time factor : ${getVal('revTimeFactor')}\n` +
-                       `- TARGET  MTD : ${getVal('revTargetMtd')}\n` +
-                       `- Target Time Factor: ${getVal('revTargetTf')}\n` +
-                       `- ACTUAL : ${getVal('revActual')}\n` +
-                       `- ACHIVE MTD : ${getVal('revAchMtd')}\n` +
-                       `- AChieved Time Factor : ${getVal('revAchTf')}\n` +
-                       `- GAP TO TARGET : ${getVal('revGapTarget')}\n` +
-                       `- GAP To Time Factor: ${getVal('revGapTf')}\n` +
-                       `*FOKUS CABANG*\n` +
-                       `======================\n` +
-                       ` TARGET/SALES/\tACV%\n` +
-                       `1. TEBUS MURAH (QTY REDEEM)\t: ${f1}\n` +
-                       `2. SERBA GRATIS (PAKET)\t: ${f2}\n` +
-                       `3. SUEGER\t: ${f3}\n` +
-                       `4. PROMO CEBAN\t: ${f4}\n` +
-                       `*MEMBER*\n` +
-                       `1. Actual NEW MEMBER : ${mNew}/0/0%\n` +
-                       `2. Konstribusi struk Member : ${tStruk}/${mStruk}/${mPersen}%\n` +
-                       `======================\n` +
-                       `*PSM*\n` +
-                       `(In Qty).( Target - actual - %)\n` +
-                       psmListText + `\n` +
-                       `======================\n` +
-                       `*CATEGORY*\t(Rupiah)\n` +
-                       `( Sales )\n` +
-                       `1. TOYS (NS): ${getVal('cat1')}\n` +
-                       `2. HBPL (NS): ${getVal('cat2')}\n` +
-                       `======================\n` +
-                       `*E-COMMERCE*\n` +
-                       `1. FEE BASE (RP)\t: ${getVal('feeBase')}\n` +
-                       `Terimakasih`;
-            } else {
-                jenisLaporan = "Rekap Gabungan 20 Toko Area";
-                shiftInfo = "All Area";
-
-                text = `*REPORT SALES*\n` +
-                       `PERIODE : ${periode}\n` +
-                       `WH : ${wh}\n` +
-                       `AM : ${am}\n` +
-                       `AC  : ${ac}\n` +
-                       `======================\n` +
-                       `*REVENUE*\n` +
-                       `1. NET SALES\t\n` +
-                       `- Time factor : ${getVal('rekTimeFactor')}\n` +
-                       `- TARGET  MTD : ${getVal('rekTargetMtd')}\n` +
-                       `- Target Time Factor : ${getVal('rekTargetTf')}\n` +
-                       `- ACTUAL : ${getVal('rekActual')}\n` +
-                       `- ACHIVE MTD :${getVal('rekAchMtd')}\n` +
-                       `- Achieved Time Factor :${getVal('rekAchTf')}\n` +
-                       `- GAP TO TARGET : ${getVal('rekGapTarget')}\n` +
-                       `- GAP To Time Factor : ${getVal('rekGapTf')}\n` +
-                       `======================\n` +
-                       `*FOKUS CABANG*\n` +
-                       `\tTARGET/SALES/\tACV%\n` +
-                       `1. \tTEBUS MURAH (QTY REDEEM) : ${getVal('rfokus1')}\n` +
-                       `2. \tSERBA GRATIS (PAKET) : ${getVal('rfokus2')}\n` +
-                       `3. SEUUGER : ${getVal('rfokus3')}\n` +
-                       `4. PROMO CEBAN : ${getVal('rfokus4')}\n` +
-                       `5. PSM : ${getVal('rfokus5')}\n` +
-                       `*MEMBER*\n` +
-                       `1. \tActual NEW MEMBER :\t${getVal('rmemberNew')}\n` +
-                       `2. \tKonstribusi struk Member \t: ( Struk MEMBER : Total struk :${getVal('rmemberStruk')}\n` +
-                       `*CATEGORY*\t(Rupiah)\n` +
-                       `( Sales )\n` +
-                       `1. \tTOYS (NS)\t : ${getVal('rcat1')}\n` +
-                       `2. TELUR : ${getVal('rcat2')}\n` +
-                       `======================\n` +
-                       `*E-COMMERCE*\n` +
-                       `1. \tFEE BASE (RP)\t : ${getVal('rFeeBase')}\n` +
-                       `Terimakasih`;
-            }
-
-            document.getElementById('outputResult').innerText = text;
-            document.getElementById('loadingStatus').style.display = 'block';
-
-            const payload = {
-                jenisLaporan: jenisLaporan,
-                kodeToko: kodeToko,
-                namaToko: namaToko,
-                periode: periode,
-                shiftInfo: shiftInfo,
-                hasilText: text
-            };
-
-            fetch(WEB_APP_URL, {
-                method: 'POST',
-                mode: 'no-cors',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            })
-            .then(() => {
-                document.getElementById('loadingStatus').style.display = 'none';
-                alert("Report berhasil digenerate dan data otomatis tersimpan aman di Cloud Google Sheets!");
-            })
-            .catch((error) => {
-                document.getElementById('loadingStatus').style.display = 'none';
-                alert("Gagal mengirim ke cloud: " + error);
-            });
-        }
-
-        function copyResult() {
-            const text = document.getElementById('outputResult').innerText;
-            navigator.clipboard.writeText(text).then(() => {
-                alert('Teks format WhatsApp berhasil disalin!');
-            });
-        }
-
-        window.onload = function() {
-            muatTargetDanItemDefault(); // Muat target & item tersimpan saat halaman dibuka
-            gantiPilihanToko(); // Set target awal sesuai toko pertama
-        };
-    </script>
-</body>
-</html>
+ 
