@@ -5,21 +5,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Report Sales Shift & Rekap 20 Toko</title>
     <style>
-        body { font-family: Arial, sans-serif; line-height: 1.25; color: #333; max-width: 650px; margin: 0 auto; padding: 15px; background-color: #f4f6f9; }
+        body { font-family: Arial, sans-serif; line-height: 1.25; color: #333; max-width: 680px; margin: 0 auto; padding: 12px; background-color: #f4f6f9; }
         h1 { font-size: 1.2rem; color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 8px; text-align: center; }
-        .card { background: #fff; padding: 15px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-bottom: 15px; }
-        label { display: block; margin-bottom: 5px; font-weight: bold; font-size: 0.85rem; }
-        select, input { width: 100%; padding: 8px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
-        .row-group { display: flex; gap: 10px; }
+        .card { background: #fff; padding: 12px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-bottom: 12px; }
+        label { display: block; margin-bottom: 4px; font-weight: bold; font-size: 0.8rem; }
+        select, input { width: 100%; padding: 7px; margin-bottom: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-size: 0.85rem; }
+        .row-group { display: flex; gap: 8px; }
         .row-group > div { flex: 1; }
         button { background-color: #27ae60; color: white; padding: 10px; border: none; border-radius: 4px; cursor: pointer; width: 100%; font-weight: bold; font-size: 0.95rem; margin-top: 5px; }
         button:hover { background-color: #219653; }
         .btn-blue { background-color: #2980b9; margin-top: 10px; }
         .btn-blue:hover { background-color: #1f618d; }
-        pre { background: #f1f1f1; padding: 12px; border-radius: 4px; white-space: pre-wrap; word-wrap: break-word; font-family: Arial, sans-serif; font-size: 0.85rem; border: 1px solid #ddd; }
-        fieldset { border: 1px solid #ddd; border-radius: 6px; padding: 10px; margin-bottom: 12px; }
+        pre { background: #f1f1f1; padding: 10px; border-radius: 4px; white-space: pre-wrap; word-wrap: break-word; font-family: Arial, sans-serif; font-size: 0.8rem; border: 1px solid #ddd; }
+        fieldset { border: 1px solid #ddd; border-radius: 6px; padding: 8px; margin-bottom: 10px; }
         legend { font-weight: bold; font-size: 0.85rem; color: #2980b9; }
         .loading { display: none; text-align: center; color: #e67e22; font-weight: bold; margin-top: 8px; }
+        
+        /* Styling Tabel Input seperti Gambar */
+        .table-input { width: 100%; border-collapse: collapse; margin-bottom: 5px; font-size: 0.8rem; }
+        .table-input th { background-color: #16a085; color: white; padding: 6px 4px; text-align: center; border: 1px solid #1abc9c; }
+        .table-input td { padding: 4px; border: 1px solid #ddd; text-align: center; }
+        .table-input input { text-align: center; margin-bottom: 0; padding: 5px; font-size: 0.85rem; }
+        .table-input td:first-child { text-align: left; font-weight: bold; padding-left: 6px; color: #2c3e50; }
     </style>
 </head>
 <body>
@@ -100,29 +107,84 @@
         </fieldset>
 
         <fieldset>
-            <legend>FOKUS CABANG (Format: Target/Sales/ACV%)</legend>
-            <label>1. Tebus Murah:</label><input type="text" id="fokus1" value="23/30/33%">
-            <label>2. Serba Gratis:</label><input type="text" id="fokus2" value="14/6/43%">
-            <label>3. Sueger:</label><input type="text" id="fokus3" value="68/19/28%">
-            <label>4. Promo Ceban:</label><input type="text" id="fokus4" value="278/0/0">
+            <legend>FOKUS CABANG</legend>
+            <table class="table-input">
+                <thead>
+                    <tr>
+                        <th style="width: 37%;">Nama Program</th>
+                        <th style="width: 21%;">Target</th>
+                        <th style="width: 21%;">Sales</th>
+                        <th style="width: 21%;">OnHand</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>TEBUS MURAH</td>
+                        <td><input type="text" id="fokus1_t" value="23"></td>
+                        <td><input type="text" id="fokus1_s" value="30"></td>
+                        <td><input type="text" id="fokus1_oh" value="0"></td>
+                    </tr>
+                    <tr>
+                        <td>SERBA GRATIS</td>
+                        <td><input type="text" id="fokus2_t" value="14"></td>
+                        <td><input type="text" id="fokus2_s" value="6"></td>
+                        <td><input type="text" id="fokus2_oh" value="0"></td>
+                    </tr>
+                    <tr>
+                        <td>SUEUGEER</td>
+                        <td><input type="text" id="fokus3_t" value="68"></td>
+                        <td><input type="text" id="fokus3_s" value="19"></td>
+                        <td><input type="text" id="fokus3_oh" value="0"></td>
+                    </tr>
+                    <tr>
+                        <td>PROMO CEBAN</td>
+                        <td><input type="text" id="fokus4_t" value="278"></td>
+                        <td><input type="text" id="fokus4_s" value="0"></td>
+                        <td><input type="text" id="fokus4_oh" value="0"></td>
+                    </tr>
+                </tbody>
+            </table>
         </fieldset>
 
         <fieldset>
-            <legend>MEMBER</legend>
-            <label>1. Actual New Member:</label><input type="text" id="memberNew" value="2/0/0%">
-            <label>2. Kontribusi Struk Member:</label><input type="text" id="memberStruk" value="279/123/44%">
+            <legend>MEMBER & STRUK</legend>
+            <div class="row-group">
+                <div>
+                    <label>Actual New Member:</label>
+                    <input type="text" id="memberNew" value="2">
+                </div>
+                <div>
+                    <label>Struk Member:</label>
+                    <input type="text" id="memberStruk" value="123">
+                </div>
+                <div>
+                    <label>Total Struk:</label>
+                    <input type="text" id="totalStruk" value="279">
+                </div>
+            </div>
         </fieldset>
 
         <fieldset>
-            <legend>PSM (Format: Target/Actual/%)</legend>
-            <label>1. Bango:</label><input type="text" id="psm1" value="22/1/5%">
-            <label>2. Daia:</label><input type="text" id="psm2" value="52/4/8%">
-            <label>3. Enakk:</label><input type="text" id="psm3" value="39/0/0">
-            <label>4. Garnier:</label><input type="text" id="psm4" value="31/1/3%">
-            <label>5. Le Minerale:</label><input type="text" id="psm5" value="265/15/6%">
-            <label>6. Lifebuoy:</label><input type="text" id="psm6" value="24/2/8%">
-            <label>7. Nipis Madu:</label><input type="text" id="psm7" value="139/7/5%">
-            <label>8. Taro:</label><input type="text" id="psm8" value="59/4/7%">
+            <legend>PSM (Product Sales Mission)</legend>
+            <table class="table-input">
+                <thead>
+                    <tr>
+                        <th style="width: 50%;">Nama Item PSM</th>
+                        <th style="width: 25%;">Target</th>
+                        <th style="width: 25%;">Actual</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>Bango</td><td><input type="text" id="psm1_t" value="22"></td><td><input type="text" id="psm1_a" value="1"></td></tr>
+                    <tr><td>Daia</td><td><input type="text" id="psm2_t" value="52"></td><td><input type="text" id="psm2_a" value="4"></td></tr>
+                    <tr><td>Enaak</td><td><input type="text" id="psm3_t" value="39"></td><td><input type="text" id="psm3_a" value="0"></td></tr>
+                    <tr><td>Garnier</td><td><input type="text" id="psm4_t" value="31"></td><td><input type="text" id="psm4_a" value="1"></td></tr>
+                    <tr><td>Le mineral</td><td><input type="text" id="psm5_t" value="265"></td><td><input type="text" id="psm5_a" value="15"></td></tr>
+                    <tr><td>Lifebuoy</td><td><input type="text" id="psm6_t" value="24"></td><td><input type="text" id="psm6_a" value="2"></td></tr>
+                    <tr><td>Nipis madu</td><td><input type="text" id="psm7_t" value="139"></td><td><input type="text" id="psm7_a" value="7"></td></tr>
+                    <tr><td>Taro</td><td><input type="text" id="psm8_t" value="59"></td><td><input type="text" id="psm8_a" value="4"></td></tr>
+                </tbody>
+            </table>
         </fieldset>
 
         <fieldset>
@@ -191,8 +253,6 @@
 
     <script>
         document.getElementById('periode').value = '2026-09-02';
-        
-        // URL Web App Anda sudah terpasang otomatis di sini:
         const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzgTnGqr8MIEnz-mvl4s_kDpEp_9IssduKsGswjCM1XYhvUHM8FqGsUFuPLRLxmcbvp/exec";
 
         function toggleMode() {
@@ -226,12 +286,16 @@
             return dateString;
         }
 
+        function getVal(id) {
+            return document.getElementById(id) ? document.getElementById(id).value : '';
+        }
+
         function processData(type) {
-            const periodeRaw = document.getElementById('periode').value;
+            const periodeRaw = getVal('periode');
             const periode = formatDateID(periodeRaw);
-            const wh = document.getElementById('wh').value;
-            const am = document.getElementById('am').value;
-            const ac = document.getElementById('ac').value;
+            const wh = getVal('wh');
+            const am = getVal('am');
+            const ac = getVal('ac');
             
             let text = "";
             let jenisLaporan = "";
@@ -240,12 +304,34 @@
             let shiftInfo = "-";
 
             if (type === 'single') {
-                const shift = document.getElementById('shift').value;
-                const storeVal = document.getElementById('selectStore').value.split('|');
+                const shift = getVal('shift');
+                const storeVal = getVal('selectStore').split('|');
                 kodeToko = storeVal[0];
                 namaToko = storeVal[1];
                 jenisLaporan = "Laporan Per Toko (Shift)";
                 shiftInfo = "Shift " + shift;
+
+                // Hitung persen ACV otomatis atau ambil dari input gabungan
+                // Format Fokus: Target/Sales/Persen
+                const f1 = `${getVal('fokus1_t')}/${getVal('fokus1_s')}/${Math.round((getVal('fokus1_s')/(getVal('fokus1_t')||1))*100)}%`;
+                const f2 = `${getVal('fokus2_t')}/${getVal('fokus2_s')}/${Math.round((getVal('fokus2_s')/(getVal('fokus2_t')||1))*100)}%`;
+                const f3 = `${getVal('fokus3_t')}/${getVal('fokus3_s')}/${Math.round((getVal('fokus3_s')/(getVal('fokus3_t')||1))*100)}%`;
+                const f4 = `${getVal('fokus4_t')}/${getVal('fokus4_s')}/${Math.round((getVal('fokus4_s')/(getVal('fokus4_t')||1))*100)}%`;
+
+                // Format PSM: Target-actual-%
+                const p1 = `${getVal('psm1_t')} - ${getVal('psm1_a')} - ${Math.round((getVal('psm1_a')/(getVal('psm1_t')||1))*100)}%`;
+                const p2 = `${getVal('psm2_t')} - ${getVal('psm2_a')} - ${Math.round((getVal('psm2_a')/(getVal('psm2_t')||1))*100)}%`;
+                const p3 = `${getVal('psm3_t')} - ${getVal('psm3_a')} - ${Math.round((getVal('psm3_a')/(getVal('psm3_t')||1))*100)}%`;
+                const p4 = `${getVal('psm4_t')} - ${getVal('psm4_a')} - ${Math.round((getVal('psm4_a')/(getVal('psm4_t')||1))*100)}%`;
+                const p5 = `${getVal('psm5_t')} - ${getVal('psm5_a')} - ${Math.round((getVal('psm5_a')/(getVal('psm5_t')||1))*100)}%`;
+                const p6 = `${getVal('psm6_t')} - ${getVal('psm6_a')} - ${Math.round((getVal('psm6_a')/(getVal('psm6_t')||1))*100)}%`;
+                const p7 = `${getVal('psm7_t')} - ${getVal('psm7_a')} - ${Math.round((getVal('psm7_a')/(getVal('psm7_t')||1))*100)}%`;
+                const p8 = `${getVal('psm8_t')} - ${getVal('psm8_a')} - ${Math.round((getVal('psm8_a')/(getVal('psm8_t')||1))*100)}%`;
+
+                const mNew = getVal('memberNew');
+                const mStruk = getVal('memberStruk');
+                const tStruk = getVal('totalStruk');
+                const mPersen = Math.round((mStruk/(tStruk||1))*100);
 
                 text = `*REPORT SALES SHIFT ${shift}*\n` +
                        `PERIODE : ${periode}\n` +
@@ -258,43 +344,43 @@
                        `======================\n` +
                        `*REVENUE*\n` +
                        `1. NET SALES\n` +
-                       `- Time factor : ${document.getElementById('revTimeFactor').value}\n` +
-                       `- TARGET  MTD : ${document.getElementById('revTargetMtd').value}\n` +
-                       `- Target Time Factor: ${document.getElementById('revTargetTf').value}\n` +
-                       `- ACTUAL : ${document.getElementById('revActual').value}\n` +
-                       `- ACHIVE MTD : ${document.getElementById('revAchMtd').value}\n` +
-                       `- AChieved Time Factor : ${document.getElementById('revAchTf').value}\n` +
-                       `- GAP TO TARGET : ${document.getElementById('revGapTarget').value}\n` +
-                       `- GAP To Time Factor: ${document.getElementById('revGapTf').value}\n` +
+                       `- Time factor : ${getVal('revTimeFactor')}\n` +
+                       `- TARGET  MTD : ${getVal('revTargetMtd')}\n` +
+                       `- Target Time Factor: ${getVal('revTargetTf')}\n` +
+                       `- ACTUAL : ${getVal('revActual')}\n` +
+                       `- ACHIVE MTD : ${getVal('revAchMtd')}\n` +
+                       `- AChieved Time Factor : ${getVal('revAchTf')}\n` +
+                       `- GAP TO TARGET : ${getVal('revGapTarget')}\n` +
+                       `- GAP To Time Factor: ${getVal('revGapTf')}\n` +
                        `*FOKUS CABANG*\n` +
                        `======================\n` +
                        ` TARGET/SALES/\tACV%\n` +
-                       `1. TEBUS MURAH (QTY REDEEM)\t: ${document.getElementById('fokus1').value}\n` +
-                       `2. SERBA GRATIS (PAKET)\t: ${document.getElementById('fokus2').value}\n` +
-                       `3. SUEGER\t: ${document.getElementById('fokus3').value}\n` +
-                       `4. PROMO CEBAN\t: ${document.getElementById('fokus4').value}\n` +
+                       `1. TEBUS MURAH (QTY REDEEM)\t: ${f1}\n` +
+                       `2. SERBA GRATIS (PAKET)\t: ${f2}\n` +
+                       `3. SUEGER\t: ${f3}\n` +
+                       `4. PROMO CEBAN\t: ${f4}\n` +
                        `*MEMBER*\n` +
-                       `1. Actual NEW MEMBER : ${document.getElementById('memberNew').value}\n` +
-                       `2. Konstribusi struk Member : ${document.getElementById('memberStruk').value}\n` +
+                       `1. Actual NEW MEMBER : ${mNew}/0/0%\n` +
+                       `2. Konstribusi struk Member : ${tStruk}/${mStruk}/${mPersen}%\n` +
                        `======================\n` +
                        `*PSM*\n` +
                        `(In Qty).( Target - actual - %)\n` +
-                       `1. BANGO: ${document.getElementById('psm1').value}\n` +
-                       `2. DAIA: ${document.getElementById('psm2').value}\n` +
-                       `3. ENAKK: ${document.getElementById('psm3').value}\n` +
-                       `4. GARNIER: ${document.getElementById('psm4').value}\n` +
-                       `5. LE MINERALE: ${document.getElementById('psm5').value}\n` +
-                       `6. LIFEBUOY: ${document.getElementById('psm6').value}\n` +
-                       `7. NIPIS MADU: ${document.getElementById('psm7').value}\n` +
-                       `8. TARO: ${document.getElementById('psm8').value}\n` +
+                       `1. BANGO: ${p1}\n` +
+                       `2. DAIA: ${p2}\n` +
+                       `3. ENAKK: ${p3}\n` +
+                       `4. GARNIER: ${p4}\n` +
+                       `5. LE MINERALE: ${p5}\n` +
+                       `6. LIFEBUOY: ${p6}\n` +
+                       `7. NIPIS MADU: ${p7}\n` +
+                       `8. TARO: ${p8}\n` +
                        `======================\n` +
                        `*CATEGORY*\t(Rupiah)\n` +
                        `( Sales )\n` +
-                       `1. TOYS (NS): ${document.getElementById('cat1').value}\n` +
-                       `2. HBPL (NS): ${document.getElementById('cat2').value}\n` +
+                       `1. TOYS (NS): ${getVal('cat1')}\n` +
+                       `2. HBPL (NS): ${getVal('cat2')}\n` +
                        `======================\n` +
                        `*E-COMMERCE*\n` +
-                       `1. FEE BASE (RP)\t: ${document.getElementById('feeBase').value}\n` +
+                       `1. FEE BASE (RP)\t: ${getVal('feeBase')}\n` +
                        `Terimakasih`;
             } else {
                 jenisLaporan = "Rekap Gabungan 20 Toko Area";
@@ -308,32 +394,32 @@
                        `======================\n` +
                        `*REVENUE*\n` +
                        `1. NET SALES\t\n` +
-                       `- Time factor : ${document.getElementById('rekTimeFactor').value}\n` +
-                       `- TARGET  MTD : ${document.getElementById('rekTargetMtd').value}\n` +
-                       `- Target Time Factor : ${document.getElementById('rekTargetTf').value}\n` +
-                       `- ACTUAL : ${document.getElementById('rekActual').value}\n` +
-                       `- ACHIVE MTD :${document.getElementById('rekAchMtd').value}\n` +
-                       `- Achieved Time Factor :${document.getElementById('rekAchTf').value}\n` +
-                       `- GAP TO TARGET : ${document.getElementById('rekGapTarget').value}\n` +
-                       `- GAP To Time Factor : ${document.getElementById('rekGapTf').value}\n` +
+                       `- Time factor : ${getVal('rekTimeFactor')}\n` +
+                       `- TARGET  MTD : ${getVal('rekTargetMtd')}\n` +
+                       `- Target Time Factor : ${getVal('rekTargetTf')}\n` +
+                       `- ACTUAL : ${getVal('rekActual')}\n` +
+                       `- ACHIVE MTD :${getVal('rekAchMtd')}\n` +
+                       `- Achieved Time Factor :${getVal('rekAchTf')}\n` +
+                       `- GAP TO TARGET : ${getVal('rekGapTarget')}\n` +
+                       `- GAP To Time Factor : ${getVal('rekGapTf')}\n` +
                        `======================\n` +
                        `*FOKUS CABANG*\n` +
                        `\tTARGET/SALES/\tACV%\n` +
-                       `1. \tTEBUS MURAH (QTY REDEEM) : ${document.getElementById('rfokus1').value}\n` +
-                       `2. \tSERBA GRATIS (PAKET) : ${document.getElementById('rfokus2').value}\n` +
-                       `3. SEUUGER : ${document.getElementById('rfokus3').value}\n` +
-                       `4. PROMO CEBAN : ${document.getElementById('rfokus4').value}\n` +
-                       `5. PSM : ${document.getElementById('rfokus5').value}\n` +
+                       `1. \tTEBUS MURAH (QTY REDEEM) : ${getVal('rfokus1')}\n` +
+                       `2. \tSERBA GRATIS (PAKET) : ${getVal('rfokus2')}\n` +
+                       `3. SEUUGER : ${getVal('rfokus3')}\n` +
+                       `4. PROMO CEBAN : ${getVal('rfokus4')}\n` +
+                       `5. PSM : ${getVal('rfokus5')}\n` +
                        `*MEMBER*\n` +
-                       `1. \tActual NEW MEMBER :\t${document.getElementById('rmemberNew').value}\n` +
-                       `2. \tKonstribusi struk Member \t: ( Struk MEMBER : Total struk :${document.getElementById('rmemberStruk').value}\n` +
+                       `1. \tActual NEW MEMBER :\t${getVal('rmemberNew')}\n` +
+                       `2. \tKonstribusi struk Member \t: ( Struk MEMBER : Total struk :${getVal('rmemberStruk')}\n` +
                        `*CATEGORY*\t(Rupiah)\n` +
                        `( Sales )\n` +
-                       `1. \tTOYS (NS)\t : ${document.getElementById('rcat1').value}\n` +
-                       `2. TELUR : ${document.getElementById('rcat2').value}\n` +
+                       `1. \tTOYS (NS)\t : ${getVal('rcat1')}\n` +
+                       `2. TELUR : ${getVal('rcat2')}\n` +
                        `======================\n` +
                        `*E-COMMERCE*\n` +
-                       `1. \tFEE BASE (RP)\t : ${document.getElementById('rFeeBase').value}\n` +
+                       `1. \tFEE BASE (RP)\t : ${getVal('rFeeBase')}\n` +
                        `Terimakasih`;
             }
 
