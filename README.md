@@ -44,12 +44,12 @@
             <option value="rekap">2. Rekap Gabungan 20 Toko Area</option>
         </select>
 
-        <button class="btn-purple" onclick="simpanDataTokoAktif(); alert('Berhasil! Revenue, Target MTD, Fokus Cabang & PSM untuk toko ini telah disimpan secara khusus.');">💾 Simpan Data Toko Ini</button>
+        <button class="btn-purple" onclick="simpanDataTokoAktif(); alert('Berhasil! Data toko untuk tanggal ini telah disimpan.');">💾 Simpan Data Toko Ini</button>
 
         <div class="row-group" style="margin-top: 8px;">
             <div>
                 <label for="periode">Periode:</label>
-                <input type="date" id="periode" onchange="hitungOtomatisSingle()">
+                <input type="date" id="periode" onchange="gantiTanggalReport()">
             </div>
             <div>
                 <label for="shift" id="labelShift">Shift:</label>
@@ -101,7 +101,7 @@
     <!-- INPUT DETAIL PER TOKO -->
     <div class="card" id="formPerToko">
         <fieldset>
-            <legend>💰 REVENUE (Net Sales - Target MTD & Actual Unik per Toko)</legend>
+            <legend>💰 REVENUE (Net Sales - Target MTD & Actual)</legend>
             <div class="row-group">
                 <div><label>Time Factor (%):</label><input type="text" id="revTimeFactor" value="6,66%" oninput="hitungOtomatisSingle()"></div>
                 <div><label>Actual (Rp):</label><input type="text" id="revActual" value="0" oninput="hitungOtomatisSingle()"></div>
@@ -121,7 +121,7 @@
         </fieldset>
 
         <fieldset>
-            <legend>FOKUS CABANG (Target Unik per Toko)</legend>
+            <legend>FOKUS CABANG</legend>
             <table class="table-input">
                 <thead>
                     <tr>
@@ -150,7 +150,7 @@
         </fieldset>
 
         <fieldset>
-            <legend>PSM (Nama & Target Unik per Toko)</legend>
+            <legend>PSM</legend>
             <table class="table-input">
                 <thead>
                     <tr>
@@ -297,22 +297,28 @@
             return Math.round(num).toLocaleString('id-ID');
         }
 
-        // Muat Data Toko (Target MTD, Actual, Fokus, PSM, dll) Secara Spesifik Saat Toko Dipilih
+        function gantiTanggalReport() {
+            gantiPilihanToko();
+            hitungOtomatisSingle();
+        }
+
+        // Muat Data Toko Berdasarkan Tanggal dan Toko Aktif (Termasuk Target Fokus Cabang & PSM masing-masing toko)
         function gantiPilihanToko() {
             const select = document.getElementById('selectStore');
             const selectedOption = select.options[select.selectedIndex];
             const storeKey = select.value;
+            const tglVal = document.getElementById('periode').value;
             const defaultTargetMtd = selectedOption.getAttribute('data-target') || '0';
             
-            const savedData = localStorage.getItem('toko_' + storeKey);
+            const storageKey = 'toko_' + tglVal + '_' + storeKey;
+            const savedData = localStorage.getItem(storageKey);
             
             if (savedData) {
                 const d = JSON.parse(savedData);
-                // Target MTD & Actual tersimpan unik per toko
                 document.getElementById('revTargetMtd').value = formatNum(d.targetMtd !== undefined ? d.targetMtd : parseInt(defaultTargetMtd, 10));
                 document.getElementById('revActual').value = formatNum(d.actual || 0);
 
-                // Fokus Cabang Toko Ini
+                // Muat Target & Sales Fokus Cabang khusus toko ini
                 document.getElementById('fokus1_t').value = d.f1_t || 0;
                 document.getElementById('fokus1_s').value = d.f1_s || 0;
                 document.getElementById('fokus2_t').value = d.f2_t || 0;
@@ -322,10 +328,10 @@
                 document.getElementById('fokus4_t').value = d.f4_t || 0;
                 document.getElementById('fokus4_s').value = d.f4_s || 0;
 
-                // Nama & Target PSM Toko Ini
+                // Muat Target & Actual PSM khusus toko ini
                 for (let i = 1; i <= 9; i++) {
                     if (d['psm' + i + '_name'] !== undefined) document.getElementById('psm' + i + '_name').value = d['psm' + i + '_name'];
-                    if (d['psm' + i + '_t'] !== undefined) document.getElementById('psm' + i + '_t').value = d['psm' + i + '_t'];
+                    document.getElementById('psm' + i + '_t').value = d['psm' + i + '_t'] || 0;
                     document.getElementById('psm' + i + '_a').value = d['psm' + i + '_a'] || 0;
                 }
 
@@ -336,7 +342,7 @@
                 document.getElementById('cat2').value = d.cat2 || 0;
                 document.getElementById('feeBase').value = d.feeBase || 0;
             } else {
-                // Jika belum pernah disimpan, pakai default data HTML
+                // Jika belum ada data tersimpan untuk toko & tanggal ini, reset ke 0 (Target Fokus & PSM juga di-reset agar tidak sama antar toko)
                 document.getElementById('revTargetMtd').value = formatNum(parseInt(defaultTargetMtd, 10));
                 document.getElementById('revActual').value = '0';
                 document.getElementById('memberNew').value = '0';
@@ -388,16 +394,18 @@
             document.getElementById('revGapTf').value = formatNum(gapTf);
         }
 
-        // Menyimpan SEMUA data termasuk Target MTD, Actual, Fokus, dan PSM spesifik ke toko aktif
+        // Menyimpan semua data toko (Revenue, Target & Sales Fokus Cabang, Target & Actual PSM, Member, Category, Fee Base) secara terpisah
         function simpanDataTokoAktif() {
             const storeKey = document.getElementById('selectStore').value;
-            let existingData = localStorage.getItem('toko_' + storeKey);
-            let d = existingData ? JSON.parse(existingData) : {};
+            const tglVal = document.getElementById('periode').value;
+            const storageKey = 'toko_' + tglVal + '_' + storeKey;
 
+            let d = {};
             d.targetMtd = parseNum(document.getElementById('revTargetMtd').value);
             d.targetTf = parseNum(document.getElementById('revTargetTf').value);
             d.actual = parseNum(document.getElementById('revActual').value);
             
+            // Simpan target & sales fokus cabang masing-masing toko
             d.f1_t = parseNum(document.getElementById('fokus1_t').value);
             d.f1_s = parseNum(document.getElementById('fokus1_s').value);
             d.f2_t = parseNum(document.getElementById('fokus2_t').value);
@@ -427,7 +435,7 @@
             d.cat2 = parseNum(document.getElementById('cat2').value);
             d.feeBase = parseNum(document.getElementById('feeBase').value);
 
-            localStorage.setItem('toko_' + storeKey, JSON.stringify(d));
+            localStorage.setItem(storageKey, JSON.stringify(d));
         }
 
         function hitungRekapOtomatis() {
@@ -438,9 +446,11 @@
             let cat1 = 0, cat2 = 0, feeBase = 0;
             let countTersimpan = 0;
 
+            const tglVal = document.getElementById('periode').value;
             const selectOptions = document.getElementById('selectStore').options;
+            
             for (let i = 0; i < selectOptions.length; i++) {
-                const key = 'toko_' + selectOptions[i].value;
+                const key = 'toko_' + tglVal + '_' + selectOptions[i].value;
                 const saved = localStorage.getItem(key);
                 if (saved) {
                     countTersimpan++;
@@ -459,7 +469,7 @@
             }
 
             if (countTersimpan === 0) {
-                alert("Belum ada data toko yang disimpan! Silakan isi dan klik 'Generate & Simpan Data Toko' minimal untuk beberapa toko terlebih dahulu.");
+                alert("Belum ada data toko yang disimpan untuk tanggal ini! Silakan isi dan simpan data toko terlebih dahulu.");
                 return;
             }
 
@@ -490,7 +500,7 @@
 
             document.getElementById('rFeeBase').value = formatNum(feeBase);
 
-            alert(`Berhasil merangkum data dari ${countTersimpan} toko yang sudah diisi!`);
+            alert(`Berhasil merangkum data tanggal ini dari ${countTersimpan} toko yang sudah diisi!`);
         }
 
         function getVal(id) {
@@ -634,7 +644,7 @@
                 namaToko: namaToko,
                 periode: periode,
                 shiftInfo: shiftInfo,
-                hasilText: text
+                hasilTest: text
             };
 
             fetch(WEB_APP_URL, {
@@ -661,7 +671,7 @@
         }
 
         window.onload = function() {
-            gantiPilihanToko(); // Muat data awal toko pertama saat halaman dibuka
+            gantiPilihanToko();
         };
     </script>
 </body>
