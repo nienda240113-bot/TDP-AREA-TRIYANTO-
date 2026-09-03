@@ -20,6 +20,8 @@
         .btn-orange:hover { background-color: #b94000; }
         .btn-purple { background-color: #8e44ad; margin-bottom: 8px; }
         .btn-purple:hover { background-color: #732d91; }
+        .btn-small { background-color: #16a085; padding: 6px; font-size: 0.8rem; margin-top: 6px; margin-bottom: 4px; }
+        .btn-small:hover { background-color: #138d75; }
         pre { background: #f1f1f1; padding: 10px; border-radius: 4px; white-space: pre-wrap; word-wrap: break-word; font-family: Arial, sans-serif; font-size: 0.8rem; border: 1px solid #ddd; }
         fieldset { border: 1px solid #ddd; border-radius: 6px; padding: 8px; margin-bottom: 10px; }
         legend { font-weight: bold; font-size: 0.85rem; color: #2980b9; }
@@ -47,7 +49,6 @@
         <div class="row-group" style="margin-top: 8px;">
             <div>
                 <label for="periode">Periode (Otomatis Tanggal HP):</label>
-                <!-- Tanggal terisi otomatis sesuai HP dan mengambil data cloud saat diubah -->
                 <input type="date" id="periode" onchange="muatDataDariCloud()">
             </div>
             <div>
@@ -137,6 +138,7 @@
                     <tr><td>PROMO CEBAN</td><td><input type="text" id="fokus4_t" value="0"></td><td><input type="text" id="fokus4_s" value="0"></td><td><input type="text" id="fokus4_p" value="0%"></td></tr>
                 </tbody>
             </table>
+            <button class="btn-small" onclick="simpanBagianKhusus('fokus')">💾 Simpan Target Fokus Cabang Saja</button>
         </fieldset>
 
         <fieldset>
@@ -176,6 +178,7 @@
                     </tr>
                 </tbody>
             </table>
+            <button class="btn-small" onclick="simpanBagianKhusus('psm')">💾 Simpan Target PSM Saja</button>
         </fieldset>
 
         <fieldset>
@@ -189,7 +192,7 @@
             <label>Fee Base (Rp):</label><input type="text" id="feeBase" value="0">
         </fieldset>
 
-        <button onclick="processData('single')">Generate & Simpan ke Cloud</button>
+        <button onclick="processData('single')">Generate & Simpan Semua ke Cloud</button>
     </div>
 
     <!-- INPUT REKAP 20 TOKO -->
@@ -255,7 +258,6 @@
     <script>
         const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzgTnGqr8MIEnz-mvl4s_kDpEp_9IssduKsGswjCM1XYhvUHM8FqGsUFuPLRLxmcbvp/exec";
 
-        // Mengatur tanggal otomatis sesuai tanggal perangkat HP/komputer saat ini
         function setTanggalOtomatisHP() {
             const today = new Date();
             const yyyy = today.getFullYear();
@@ -304,7 +306,6 @@
             return Math.round(num).toLocaleString('id-ID');
         }
 
-        // Fungsi untuk mengambil data dari Cloud Google Sheets saat tanggal atau toko diubah
         function muatDataDariCloud() {
             const select = document.getElementById('selectStore');
             const selectedOption = select.options[select.selectedIndex];
@@ -315,7 +316,6 @@
             document.getElementById('loadingStatus').innerText = "Sedang memuat data dari Cloud...";
             document.getElementById('loadingStatus').style.display = 'block';
 
-            // Mengirim request GET/POST ke Google Apps Script untuk mengambil data tersimpan
             fetch(WEB_APP_URL + "?action=getData&periode=" + tglVal + "&kodeToko=" + kodeToko)
             .then(res => res.json())
             .then(d => {
@@ -346,7 +346,6 @@
                     document.getElementById('cat2').value = d.cat2 || 0;
                     document.getElementById('feeBase').value = d.feeBase || 0;
                 } else {
-                    // Reset ke default jika belum ada data di cloud untuk tanggal tersebut
                     document.getElementById('revTargetMtd').value = formatNum(parseInt(defaultTargetMtd, 10));
                     document.getElementById('revActual').value = '0';
                     document.getElementById('memberNew').value = '0';
@@ -370,7 +369,6 @@
             })
             .catch(() => {
                 document.getElementById('loadingStatus').style.display = 'none';
-                // Fallback aman jika offline
                 document.getElementById('revTargetMtd').value = formatNum(parseInt(defaultTargetMtd, 10));
                 hitungOtomatisSingle();
             });
@@ -404,8 +402,58 @@
             document.getElementById('revGapTf').value = formatNum(gapTf);
         }
 
-        function hitungRekapOtomatis() {
-            alert("Fitur rekap area otomatis membaca data dari cloud.");
+        // Fungsi khusus untuk menyimpan bagian tertentu (Fokus Cabang atau PSM) ke Cloud secara terpisah
+        function simpanBagianKhusus( bagian ) {
+            const periodeRaw = getVal('periode');
+            const storeVal = getVal('selectStore').split('|');
+            const kodeToko = storeVal[0];
+            const namaToko = storeVal[1];
+
+            let payload = {
+                jenisLaporan: "Simpan " + bagian.toUpperCase(),
+                kodeToko: kodeToko,
+                namaToko: namaToko,
+                periode: periodeRaw,
+                targetMtd: parseNum(getVal('revTargetMtd')),
+                actual: parseNum(getVal('revActual')),
+                mNew: parseNum(getVal('memberNew')),
+                mStruk: parseNum(getVal('memberStruk')),
+                tStruk: parseNum(getVal('totalStruk')),
+                cat1: parseNum(getVal('cat1')),
+                cat2: parseNum(getVal('cat2')),
+                feeBase: parseNum(getVal('feeBase'))
+            };
+
+            // Masukkan data Fokus Cabang
+            payload.f1_t = parseNum(getVal('fokus1_t')); payload.f1_s = parseNum(getVal('fokus1_s'));
+            payload.f2_t = parseNum(getVal('fokus2_t')); payload.f2_s = parseNum(getVal('fokus2_s'));
+            payload.f3_t = parseNum(getVal('fokus3_t')); payload.f3_s = parseNum(getVal('fokus3_s'));
+            payload.f4_t = parseNum(getVal('fokus4_t')); payload.f4_s = parseNum(getVal('fokus4_s'));
+
+            // Masukkan data PSM
+            for (let i = 1; i <= 9; i++) {
+                payload['psm' + i + '_name'] = getVal('psm' + i + '_name');
+                payload['psm' + i + '_t'] = parseNum(getVal('psm' + i + '_t'));
+                payload['psm' + i + '_a'] = parseNum(getVal('psm' + i + '_a'));
+            }
+
+            document.getElementById('loadingStatus').innerText = "Menyimpan " + bagian.toUpperCase() + " ke Cloud...";
+            document.getElementById('loadingStatus').style.display = 'block';
+
+            fetch(WEB_APP_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            })
+            .then(() => {
+                document.getElementById('loadingStatus').style.display = 'none';
+                alert("Target " + bagian.toUpperCase() + " untuk toko " + kodeToko + " berhasil disimpan ke Cloud!");
+            })
+            .catch((error) => {
+                document.getElementById('loadingStatus').style.display = 'none';
+                alert("Gagal menyimpan ke cloud: " + error);
+            });
         }
 
         function getVal(id) {
@@ -507,7 +555,6 @@
             document.getElementById('outputResult').innerText = text;
             document.getElementById('loadingStatus').style.display = 'block';
 
-            // Kumpulkan semua data untuk disimpan ke Cloud Google Sheets
             let payload = {
                 jenisLaporan: jenisLaporan,
                 kodeToko: kodeToko,
