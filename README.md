@@ -94,16 +94,15 @@
         </div>
     </div>
 
-    <!-- INPUT DETAIL PER TOKO -->
     <div class="card" id="formPerToko">
         <fieldset>
             <legend>💰 REVENUE (Net Sales)</legend>
             <div class="row-group">
-                <div><label>Time Factor (%):</label><input type="text" id="revTimeFactor" value="10.0%" oninput="hitungOtomatisSingle()"></div>
-                <div><label>Actual (Rp):</label><input type="text" id="revActual" value="0" oninput="hitungOtomatisSingle()"></div>
+                <div><label>Time Factor (%):</label><input type="text" id="revTimeFactor" value="6,66%" oninput="hitungOtomatisSingle()"></div>
+                <div><label>Actual (Rp):</label><input type="text" id="revActual" value="13.332.882" oninput="hitungOtomatisSingle()"></div>
             </div>
             <div class="row-group">
-                <div><label>Target MTD (Rp):</label><input type="text" id="revTargetMtd" value="0" oninput="hitungOtomatisSingle()"></div>
+                <div><label>Target MTD (Rp):</label><input type="text" id="revTargetMtd" value="453.303.178" oninput="hitungOtomatisSingle()"></div>
                 <div><label>Target TF (Rp) - Auto:</label><input type="text" id="revTargetTf" value="0" readonly style="background-color: #e9ecef;"></div>
             </div>
             <div class="row-group">
@@ -189,14 +188,13 @@
         <button onclick="processData('single')">Generate & Simpan Data Toko</button>
     </div>
 
-    <!-- INPUT REKAP 20 TOKO -->
     <div class="card" id="formRekapArea" style="display:none;">
         <button class="btn-orange" onclick="hitungRekapOtomatis()">⚡ Hitung Rekap Otomatis dari Data 20 Toko</button>
         
         <fieldset>
             <legend>REVENUE REKAP AREA</legend>
             <div class="row-group">
-                <div><label>Time Factor (%):</label><input type="text" id="rekTimeFactor" value="10,0%"></div>
+                <div><label>Time Factor (%):</label><input type="text" id="rekTimeFactor" value="6,66%"></div>
                 <div><label>Actual:</label><input type="text" id="rekActual" value="0"></div>
             </div>
             <div class="row-group">
@@ -250,7 +248,7 @@
     </div>
 
     <script>
-        document.getElementById('periode').value = '2026-09-03';
+        document.getElementById('periode').value = '2026-09-02';
         const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzgTnGqr8MIEnz-mvl4s_kDpEp_9IssduKsGswjCM1XYhvUHM8FqGsUFuPLRLxmcbvp/exec";
 
         function toggleMode() {
@@ -295,7 +293,7 @@
 
         function hitungOtomatisSingle() {
             const tglVal = document.getElementById('periode').value;
-            let hariKe = 3;
+            let hariKe = 2;
             if (tglVal) {
                 const parts = tglVal.split('-');
                 if (parts.length === 3) hariKe = parseInt(parts[2], 10) || 1;
@@ -305,11 +303,15 @@
             const targetMtd = parseNum(document.getElementById('revTargetMtd').value);
             const actual = parseNum(document.getElementById('revActual').value);
 
+            // Perhitungan Target Time Factor sesuai proporsi hari/tanggal
             const multiplierTf = (tfPersenInput / 100) * hariKe;
             const targetTf = Math.round(targetMtd * multiplierTf);
 
-            const achMtd = targetMtd > 0 ? ((actual / targetMtd) * 100).toFixed(2).replace('.', ',') + '%' : '0%';
-            const achTf = targetTf > 0 ? ((actual / targetTf) * 100).toFixed(2).replace('.', ',') + '%' : '0%';
+            // Pencapaian
+            const achMtd = targetMtd > 0 ? ((actual / targetMtd) * 100).toFixed(1).replace('.', ',') + '%' : '0%';
+            const achTf = targetTf > 0 ? ((actual / targetTf) * 100).toFixed(1).replace('.', ',') + '%' : '0%';
+            
+            // GAP sesuai format contoh Anda (Target MTD - Actual, dan Target TF - Actual)
             const gapTarget = targetMtd - actual;
             const gapTf = targetTf - actual;
 
@@ -320,7 +322,6 @@
             document.getElementById('revGapTf').value = formatNum(gapTf);
         }
 
-        // Simpan data toko ke memori browser saat tombol Generate diklik
         function simpanDataTokoAktif() {
             const storeKey = document.getElementById('selectStore').value;
             const dataToko = {
@@ -351,7 +352,6 @@
             localStorage.setItem('toko_' + storeKey, JSON.stringify(dataToko));
         }
 
-        // Fungsi Otomatis Hitung Rekap dari 20 Toko
         function hitungRekapOtomatis() {
             let totTargetMtd = 0, totTargetTf = 0, totActual = 0;
             let f1_t = 0, f1_s = 0, f2_t = 0, f2_s = 0, f3_t = 0, f3_s = 0, f4_t = 0, f4_s = 0;
@@ -385,9 +385,8 @@
                 return;
             }
 
-            // Hitung Revenue Rekap
-            const achMtd = totTargetMtd > 0 ? ((totActual / totTargetMtd) * 100).toFixed(2).replace('.', ',') + '%' : '0%';
-            const achTf = totTargetTf > 0 ? ((totActual / totTargetTf) * 100).toFixed(2).replace('.', ',') + '%' : '0%';
+            const achMtd = totTargetMtd > 0 ? ((totActual / totTargetMtd) * 100).toFixed(1).replace('.', ',') + '%' : '0%';
+            const achTf = totTargetTf > 0 ? ((totActual / totTargetTf) * 100).toFixed(1).replace('.', ',') + '%' : '0%';
             const gapTarget = totTargetMtd - totActual;
             const gapTf = totTargetTf - totActual;
 
@@ -399,22 +398,18 @@
             document.getElementById('rekGapTarget').value = formatNum(gapTarget);
             document.getElementById('rekGapTf').value = formatNum(gapTf);
 
-            // Hitung Fokus Cabang Rekap (Target/Sales/%)
             document.getElementById('rfokus1').value = `${f1_t}/${f1_s}/${f1_t > 0 ? Math.round((f1_s/f1_t)*100) : 0}%`;
             document.getElementById('rfokus2').value = `${f2_t}/${f2_s}/${f2_t > 0 ? Math.round((f2_s/f2_t)*100) : 0}%`;
             document.getElementById('rfokus3').value = `${f3_t}/${f3_s}/${f3_t > 0 ? Math.round((f3_s/f3_t)*100) : 0}%`;
             document.getElementById('rfokus4').value = `${f4_t}/${f4_s}/${f4_t > 0 ? Math.round((f4_s/f4_t)*100) : 0}%`;
             document.getElementById('rfokus5').value = `${psm_t}/${psm_a}/${psm_t > 0 ? Math.round((psm_a/psm_t)*100) : 0}%`;
 
-            // Hitung Member Rekap
             document.getElementById('rmemberNew').value = `${mNew}/0/0%`;
             document.getElementById('rmemberStruk').value = `${tStruk}/${mStruk}/${tStruk > 0 ? Math.round((mStruk/tStruk)*100) : 0}%`;
 
-            // Hitung Category Rekap
             document.getElementById('rcat1').value = `${cat1}/0/0%`;
             document.getElementById('rcat2').value = `${cat2}/0/0%`;
 
-            // E-Commerce Fee Base
             document.getElementById('rFeeBase').value = formatNum(feeBase);
 
             alert(`Berhasil merangkum data dari ${countTersimpan} toko yang sudah diisi!`);
@@ -438,7 +433,7 @@
             let shiftInfo = "-";
 
             if (type === 'single') {
-                simpanDataTokoAktif(); // Simpan otomatis saat generate toko
+                simpanDataTokoAktif();
                 const shift = getVal('shift');
                 const storeVal = getVal('selectStore').split('|');
                 kodeToko = storeVal[0];
@@ -557,50 +552,4 @@
                        `2. TELUR : ${getVal('rcat2')}\n` +
                        `======================\n` +
                        `*E-COMMERCE*\n` +
-                       `1. \tFEE BASE (RP)\t : ${getVal('rFeeBase')}\n` +
-                       `Terimakasih`;
-            }
-
-            document.getElementById('outputResult').innerText = text;
-
-            document.getElementById('loadingStatus').style.display = 'block';
-
-            const payload = {
-                jenisLaporan: jenisLaporan,
-                kodeToko: kodeToko,
-                namaToko: namaToko,
-                periode: periode,
-                shiftInfo: shiftInfo,
-                hasilText: text
-            };
-
-            fetch(WEB_APP_URL, {
-                method: 'POST',
-                mode: 'no-cors',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            })
-            .then(() => {
-                document.getElementById('loadingStatus').style.display = 'none';
-                alert("Report berhasil digenerate dan data otomatis tersimpan aman di Cloud Google Sheets!");
-            })
-            .catch((error) => {
-                document.getElementById('loadingStatus').style.display = 'none';
-                alert("Gagal mengirim ke cloud: " + error);
-            });
-        }
-
-        function copyResult() {
-            const text = document.getElementById('outputResult').innerText;
-            navigator.clipboard.writeText(text).then(() => {
-                alert('Teks format WhatsApp berhasil disalin!');
-            });
-        }
-
-        window.onload = function() {
-            hitungOtomatisSingle();
-            processData('single');
-        };
-    </script>
-</body>
-</html>
+                       `1. \tFEE
