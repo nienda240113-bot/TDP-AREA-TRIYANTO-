@@ -43,7 +43,7 @@
         <div class="row-group">
             <div>
                 <label for="periode">Periode:</label>
-                <input type="date" id="periode">
+                <input type="date" id="periode" onchange="hitungOtomatis()">
             </div>
             <div>
                 <label for="shift" id="labelShift">Shift:</label>
@@ -96,14 +96,14 @@
     <div class="card" id="formPerToko">
         <fieldset>
             <legend>REVENUE</legend>
-            <label>Time Factor (%):</label><input type="text" id="revTimeFactor" value="6,66%">
-            <label>Target MTD:</label><input type="text" id="revTargetMtd" value="453.303.178">
-            <label>Target Time Factor:</label><input type="text" id="revTargetTf" value="15.009.307">
-            <label>Actual:</label><input type="text" id="revActual" value="13.332.882">
-            <label>Achievement MTD (%):</label><input type="text" id="revAchMtd" value="89%">
-            <label>Achievement Time Factor (%):</label><input type="text" id="revAchTf" value="6,1%">
-            <label>Gap to Target:</label><input type="text" id="revGapTarget" value="15.122.266">
-            <label>Gap to Time Factor:</label><input type="text" id="revGapTf" value="423.432.458">
+            <label>Time Factor (%):</label><input type="text" id="revTimeFactor" value="6,66%" oninput="hitungOtomatis()">
+            <label>Target MTD:</label><input type="text" id="revTargetMtd" value="453.303.178" oninput="hitungOtomatis()">
+            <label>Target Time Factor:</label><input type="text" id="revTargetTf" value="15.009.307" readonly style="background-color: #e9ecef;">
+            <label>Actual:</label><input type="text" id="revActual" value="13.332.882" oninput="hitungOtomatis()">
+            <label>Achievement MTD (%):</label><input type="text" id="revAchMtd" value="89%" readonly style="background-color: #e9ecef;">
+            <label>Achievement Time Factor (%):</label><input type="text" id="revAchTf" value="6,1%" readonly style="background-color: #e9ecef;">
+            <label>Gap to Target:</label><input type="text" id="revGapTarget" value="15.122.266" readonly style="background-color: #e9ecef;">
+            <label>Gap to Time Factor:</label><input type="text" id="revGapTf" value="423.432.458" readonly style="background-color: #e9ecef;">
         </fieldset>
 
         <fieldset>
@@ -273,11 +273,66 @@
             return dateString;
         }
 
+        function parseNum(val) {
+            if (!val) return 0;
+            return parseFloat(val.toString().replace(/\./g, '').replace(/,/g, '.')) || 0;
+        }
+
+        function formatNum(num) {
+            return num.toLocaleString('id-ID');
+        }
+
+        // Fungsi Perhitungan Otomatis Berdasarkan Tanggal & Actual
+        function hitungOtomatis() {
+            const tglVal = document.getElementById('periode').value;
+            let hariKe = 2; // Default jika tanggal kosong
+            
+            if (tglVal) {
+                const parts = tglVal.split('-');
+                if (parts.length === 3) {
+                    hariKe = parseInt(parts[2], 10) || 1;
+                }
+            }
+
+            // Asumsi Time Factor proporsional harian (hari ke- / total hari dalam bulan, misal 30 hari)
+            // Atau menggunakan persentase yang diinput dikali hari
+            const tfPersenInput = parseNum(document.getElementById('revTimeFactor').value);
+            // Jika user menginput misal 6,66% per hari atau total kumulatif sampai tanggal tersebut:
+            // Rumus standar Time Factor harian kumulatif = (Target MTD * (TimeFactor / 100)) * hariKe (atau sesuai rumus perusahaan Anda)
+            // Di sini kita buat dinamis mengikuti tanggal: Time Factor harian dikalikan tanggal (hari ke-)
+            
+            const targetMtd = parseNum(document.getElementById('revTargetMtd').value);
+            const actual = parseNum(document.getElementById('revActual').value);
+
+            // Hitung Target Time Factor otomatis (Contoh: Proporsi harian berdasarkan tanggal)
+            // Misal persentase harian dikali akumulasi hari ke-
+            const multiplierTf = (tfPersenInput / 100) * hariKe;
+            const targetTf = Math.round(targetMtd * multiplierTf);
+
+            // Achievement MTD (%) = (Actual / Target MTD) * 100
+            const achMtd = targetMtd > 0 ? ((actual / targetMtd) * 100).toFixed(1).replace('.', ',') + '%' : '0%';
+
+            // Achievement Time Factor (%) = (Actual / Target Time Factor) * 100
+            const achTf = targetTf > 0 ? ((actual / targetTf) * 100).toFixed(1).replace('.', ',') + '%' : '0%';
+
+            // Gap to Target = Target MTD - Actual (atau sebaliknya tergantung format minus/positif)
+            const gapTarget = targetMtd - actual;
+            const gapTf = targetTf - actual;
+
+            // Masukkan hasil perhitungan ke form input otomatis
+            document.getElementById('revTargetTf').value = formatNum(targetTf);
+            document.getElementById('revAchMtd').value = achMtd;
+            document.getElementById('revAchTf').value = achTf;
+            document.getElementById('revGapTarget').value = formatNum(gapTarget);
+            document.getElementById('revGapTf').value = formatNum(gapTf);
+        }
+
         function getVal(id) {
             return document.getElementById(id) ? document.getElementById(id).value : '';
         }
 
         function processData(type) {
+            hitungOtomatis(); // Pastikan hitung ulang sebelum generate
             const periodeRaw = getVal('periode');
             const periode = formatDateID(periodeRaw);
             const wh = getVal('wh');
@@ -424,7 +479,7 @@
                 namaToko: namaToko,
                 periode: periode,
                 shiftInfo: shiftInfo,
-                hasilText: text
+            hasilText: text
             };
 
             fetch(WEB_APP_URL, {
@@ -451,6 +506,7 @@
         }
 
         window.onload = function() {
+            hitungOtomatis();
             processData('single');
         };
     </script>
