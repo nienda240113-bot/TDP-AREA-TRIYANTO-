@@ -237,7 +237,6 @@
     </div>
 
     <script>
-        // URL Web App Google Apps Script Anda yang benar
         const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxYjtMqkKz_QmgTtJGIa5VzqqyBxaGx1CD2-5sKLgADtb6hoGUtAwB9WScug8HuQwa9/exec";
 
         function setTanggalOtomatisHP() {
@@ -267,7 +266,83 @@
 
         setTanggalOtomatisHP();
 
-        // Fungsi Simulasi / Proses Pengiriman Data dengan Notifikasi Jelas
+        // 1. FUNGSI RESET FORM KETIKA PINDAH TOKO / TANGGAL
+        function resetFormToko() {
+            // Reset Fokus Cabang
+            for(let i=1; i<=4; i++) {
+                document.getElementById(`fokus${i}_t`).value = "0";
+                document.getElementById(`fokus${i}_s`).value = "0";
+                document.getElementById(`fokus${i}_p`).value = "0%";
+            }
+            // Reset PSM
+            for(let i=1; i<=9; i++) {
+                if(document.getElementById(`psm${i}_t`)) document.getElementById(`psm${i}_t`).value = "0";
+                if(document.getElementById(`psm${i}_a`)) document.getElementById(`psm${i}_a`).value = "0";
+                if(document.getElementById(`psm${i}_p`)) document.getElementById(`psm${i}_p`).value = "0%";
+            }
+            // Reset Revenue & Lainnya
+            document.getElementById('revActual').value = "0";
+            document.getElementById('revTargetMtd').value = "0";
+            document.getElementById('memberNew').value = "0";
+            document.getElementById('memberStruk').value = "0";
+            document.getElementById('totalStruk').value = "0";
+            document.getElementById('cat1').value = "0";
+            document.getElementById('cat2').value = "0";
+            document.getElementById('feeBase').value = "0";
+        }
+
+        // 2. FUNGSI AMBIL DATA DARI CLOUD BERDASARKAN TOKO & TANGGAL
+        function muatDataDariCloud() {
+            const storeVal = document.getElementById('selectStore').value;
+            const periode = document.getElementById('periode').value;
+            const loading = document.getElementById('loadingStatus');
+
+            // Kosongkan form dulu sebagai indikator awal perpindahan toko
+            resetFormToko();
+
+            loading.style.display = 'block';
+            loading.innerText = "Memuat data toko dari Cloud...";
+
+            // Mengirim request GET/POST untuk mengambil data toko tertentu
+            fetch(`${WEB_APP_URL}?action=get&store=${encodeURIComponent(storeVal)}&periode=${periode}`)
+            .then(res => res.json())
+            .then(data => {
+                loading.style.display = 'none';
+                if (data && data.success && data.found) {
+                    // Jika data toko tersebut ditemukan di cloud pada tanggal itu, isi otomatis form
+                    const d = data.payload;
+                    if(d.revActual) document.getElementById('revActual').value = d.revActual;
+                    if(d.revTargetMtd) document.getElementById('revTargetMtd').value = d.revTargetMtd;
+                    
+                    // Isi data fokus cabang jika ada
+                    if(d.fokus) {
+                        for(let i=1; i<=4; i++) {
+                            if(d.fokus[`t${i}`]) document.getElementById(`fokus${i}_t`).value = d.fokus[`t${i}`];
+                            if(d.fokus[`s${i}`]) document.getElementById(`fokus${i}_s`).value = d.fokus[`s${i}`];
+                        }
+                    }
+                    // Isi data PSM jika ada
+                    if(d.psm) {
+                        for(let i=1; i<=9; i++) {
+                            if(d.psm[`t${i}`]) document.getElementById(`psm${i}_t`).value = d.psm[`t${i}`];
+                            if(d.psm[`a${i}`]) document.getElementById(`psm${i}_a`).value = d.psm[`a${i}`];
+                        }
+                    }
+                    alert(`✅ Data toko ${storeVal} untuk tanggal ${periode} berhasil dimuat.`);
+                } else {
+                    // Jika belum ada data tersimpan di tanggal itu, form tetap bersih (0)
+                    console.log("Belum ada data tersimpan untuk toko & tanggal ini.");
+                }
+                hitungOtomatisSingle();
+            })
+            .catch(err => {
+                loading.style.display = 'none';
+                console.log("Mode offline atau belum ada data tersimpan di Cloud.");
+                hitungOtomatisSingle();
+            });
+        }
+
+        // 3. FUNGSI SIMPAN DATA KE CLOUD
         function processData(type) {
             const loading = document.getElementById('loadingStatus');
             loading.style.display = 'block';
@@ -276,7 +351,7 @@
             const storeVal = document.getElementById('selectStore').value;
             const periode = document.getElementById('periode').value;
 
-            // Kumpul data payload
+            // Mengumpulkan seluruh data per toko
             const payload = {
                 action: 'save',
                 periode: periode,
@@ -286,26 +361,41 @@
                 am: document.getElementById('am').value,
                 ac: document.getElementById('ac').value,
                 revActual: document.getElementById('revActual').value,
-                revTargetMtd: document.getElementById('revTargetMtd').value
+                revTargetMtd: document.getElementById('revTargetMtd').value,
+                fokus: {
+                    t1: document.getElementById('fokus1_t').value, s1: document.getElementById('fokus1_s').value,
+                    t2: document.getElementById('fokus2_t').value, s2: document.getElementById('fokus2_s').value,
+                    t3: document.getElementById('fokus3_t').value, s3: document.getElementById('fokus3_s').value,
+                    t4: document.getElementById('fokus4_t').value, s4: document.getElementById('fokus4_s').value,
+                },
+                psm: {
+                    t1: document.getElementById('psm1_t').value, a1: document.getElementById('psm1_a').value,
+                    t2: document.getElementById('psm2_t').value, a2: document.getElementById('psm2_a').value,
+                    t3: document.getElementById('psm3_t').value, a3: document.getElementById('psm3_a').value,
+                    t4: document.getElementById('psm4_t').value, a4: document.getElementById('psm4_a').value,
+                    t5: document.getElementById('psm5_t').value, a5: document.getElementById('psm5_a').value,
+                    t6: document.getElementById('psm6_t').value, a6: document.getElementById('psm6_a').value,
+                    t7: document.getElementById('psm7_t').value, a7: document.getElementById('psm7_a').value,
+                    t8: document.getElementById('psm8_t').value, a8: document.getElementById('psm8_a').value,
+                    t9: document.getElementById('psm9_t').value, a9: document.getElementById('psm9_a').value,
+                }
             };
 
-            // Kirim via fetch ke URL Apps Script Anda
             fetch(WEB_APP_URL, {
                 method: 'POST',
-                mode: 'no-cors', // Menghindari kendala CORS pada GAS
+                mode: 'no-cors',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload)
             })
             .then(() => {
                 loading.style.display = 'none';
-                alert("✅ Sukses! Data berhasil disimpan ke Cloud untuk toko dan tanggal tersebut.");
+                alert(`✅ Sukses! Data toko ${storeVal} berhasil disimpan ke Cloud.`);
                 
-                // Update teks WhatsApp otomatis sebagai preview
                 document.getElementById('outputResult').innerText = 
 `LAPORAN SALES PER TOKO
 Tanggal : ${periode}
 Toko    : ${storeVal}
-Status  : BERHASIL TERSIMPAN KE CLOUD ☁️`;
+Status  : DATA BERHASIL DISIMPAN TERPISAH DI CLOUD ☁️`;
             })
             .catch(error => {
                 loading.style.display = 'none';
@@ -330,11 +420,24 @@ Status  : BERHASIL TERSIMPAN KE CLOUD ☁️`;
         }
 
         function hitungOtomatisSingle() {
-            // Placeholder fungsi perhitungan otomatis jika diperlukan
-        }
-
-        function muatDataDariCloud() {
-            // Fungsi saat tanggal atau toko diubah untuk memuat data lama jika ada
+            // Kalkulasi persentase otomatis per item
+            for(let i=1; i<=4; i++) {
+                let t = parseFloat(document.getElementById(`fokus${i}_t`).value.replace(/\./g,'')) || 0;
+                let s = parseFloat(document.getElementById(`fokus${i}_s`).value.replace(/\./g,'')) || 0;
+                let p = t > 0 ? ((s / t) * 100).toFixed(1) + '%' : '0%';
+                document.getElementById(`fokus${i}_p`).value = p;
+            }
+            for(let i=1; i<=9; i++) {
+                let tElem = document.getElementById(`psm${i}_t`);
+                let aElem = document.getElementById(`psm${i}_a`);
+                let pElem = document.getElementById(`psm${i}_p`);
+                if(tElem && aElem && pElem) {
+                    let t = parseFloat(tElem.value.replace(/\./g,'')) || 0;
+                    let a = parseFloat(aElem.value.replace(/\./g,'')) || 0;
+                    let p = t > 0 ? ((a / t) * 100).toFixed(1) + '%' : '0%';
+                    pElem.value = p;
+                }
+            }
         }
     </script>
 </body>
