@@ -24,6 +24,7 @@
         fieldset { border: 1px solid #ddd; border-radius: 6px; padding: 8px; margin-bottom: 10px; }
         legend { font-weight: bold; font-size: 0.85rem; color: #2980b9; }
         .loading { display: none; text-align: center; color: #e67e22; font-weight: bold; margin-top: 8px; }
+        .info-periode { font-size: 0.75rem; color: #c0392b; margin-bottom: 6px; font-style: italic; }
         
         .table-input { width: 100%; border-collapse: collapse; margin-bottom: 5px; font-size: 0.8rem; }
         .table-input th { background-color: #16a085; color: white; padding: 6px 4px; text-align: center; border: 1px solid #1abc9c; }
@@ -45,8 +46,7 @@
 
         <div class="row-group" style="margin-top: 8px;">
             <div>
-                <label for="periode">Periode (Otomatis Tanggal HP):</label>
-                <!-- Saat tanggal diganti, otomatis memuat data spesifik toko & tanggal tersebut dari cloud -->
+                <label for="periode">Periode (Tanggal Laporan):</label>
                 <input type="date" id="periode" onchange="muatDataDariCloud()">
             </div>
             <div>
@@ -71,7 +71,6 @@
 
         <div id="singleStoreSection">
             <label for="selectStore">Pilih Toko:</label>
-            <!-- Saat Toko diganti (misal dari CC21 ke CI30), otomatis memuat data spesifik toko tersebut dari cloud -->
             <select id="selectStore" onchange="muatDataDariCloud()">
                 <option value="CI30|STTD" data-target="222241060">CI30 - STTD (222.241.060)</option>
                 <option value="CG54|MM2100" data-target="517228948">CG54 - MM2100 (517.228.948)</option>
@@ -121,6 +120,13 @@
 
         <fieldset>
             <legend>FOKUS CABANG</legend>
+            <div class="info-periode">📅 Target Berlaku Dari Tanggal: 
+                <select id="rangeFokus" style="display:inline-block; width: 140px; padding: 3px; font-size: 0.8rem; margin-bottom: 0;">
+                    <option value="1-15">Tanggal 1 s.d 15</option>
+                    <option value="16-31">Tanggal 16 s.d 31</option>
+                    <option value="1-31">Full 1 Bulan (1-31)</option>
+                </select>
+            </div>
             <table class="table-input">
                 <thead>
                     <tr>
@@ -137,8 +143,6 @@
                     <tr><td>PROMO CEBAN</td><td><input type="text" id="fokus4_t" value="0"></td><td><input type="text" id="fokus4_s" value="0"></td><td><input type="text" id="fokus4_p" value="0%"></td></tr>
                 </tbody>
             </table>
-            <!-- Tombol simpan khusus Fokus Cabang untuk toko yang sedang aktif -->
-            <button class="btn-small" onclick="simpanBagianKhusus('fokus')">💾 Simpan Target Fokus Cabang Toko Ini</button>
         </fieldset>
 
         <fieldset>
@@ -152,6 +156,15 @@
 
         <fieldset>
             <legend>PSM</legend>
+            <div class="info-periode">📅 Target Berlaku Dari Tanggal: 
+                <select id="rangePsm" style="display:inline-block; width: 140px; padding: 3px; font-size: 0.8rem; margin-bottom: 0;">
+                    <option value="1-7">Tanggal 1 s.d 7</option>
+                    <option value="8-14">Tanggal 8 s.d 14</option>
+                    <option value="15-21">Tanggal 15 s.d 21</option>
+                    <option value="22-31">Tanggal 22 s.d 31</option>
+                    <option value="1-31">Full 1 Bulan (1-31)</option>
+                </select>
+            </div>
             <table class="table-input">
                 <thead>
                     <tr>
@@ -178,8 +191,6 @@
                     </tr>
                 </tbody>
             </table>
-            <!-- Tombol simpan khusus PSM untuk toko yang sedang aktif -->
-            <button class="btn-small" onclick="simpanBagianKhusus('psm')">💾 Simpan Target PSM Toko Ini</button>
         </fieldset>
 
         <fieldset>
@@ -307,7 +318,6 @@
             return Math.round(num).toLocaleString('id-ID');
         }
 
-        // Fungsi vital: Otomatis menarik data spesifik milik toko & tanggal yang sedang dipilih dari Cloud
         function muatDataDariCloud() {
             const select = document.getElementById('selectStore');
             const selectedOption = select.options[select.selectedIndex];
@@ -323,10 +333,10 @@
             .then(d => {
                 document.getElementById('loadingStatus').style.display = 'none';
                 if (d && d.found) {
-                    // Jika data toko ini sudah pernah disimpan di cloud, tampilkan isinya
                     document.getElementById('revTargetMtd').value = formatNum(d.targetMtd || parseInt(defaultTargetMtd, 10));
                     document.getElementById('revActual').value = formatNum(d.actual || 0);
 
+                    if (d.rangeFokus) document.getElementById('rangeFokus').value = d.rangeFokus;
                     document.getElementById('fokus1_t').value = d.f1_t || 0;
                     document.getElementById('fokus1_s').value = d.f1_s || 0;
                     document.getElementById('fokus2_t').value = d.f2_t || 0;
@@ -336,6 +346,7 @@
                     document.getElementById('fokus4_t').value = d.f4_t || 0;
                     document.getElementById('fokus4_s').value = d.f4_s || 0;
 
+                    if (d.rangePsm) document.getElementById('rangePsm').value = d.rangePsm;
                     for (let i = 1; i <= 9; i++) {
                         if (d['psm' + i + '_name']) document.getElementById('psm' + i + '_name').value = d['psm' + i + '_name'];
                         document.getElementById('psm' + i + '_t').value = d['psm' + i + '_t'] || 0;
@@ -349,7 +360,6 @@
                     document.getElementById('cat2').value = d.cat2 || 0;
                     document.getElementById('feeBase').value = d.feeBase || 0;
                 } else {
-                    // Jika toko tersebut belum ada datanya di tanggal ini, inisialisasi awal bersih/default
                     document.getElementById('revTargetMtd').value = formatNum(parseInt(defaultTargetMtd, 10));
                     document.getElementById('revActual').value = '0';
                     document.getElementById('memberNew').value = '0';
@@ -404,58 +414,6 @@
             document.getElementById('revAchTf').value = achTf;
             document.getElementById('revGapTarget').value = formatNum(gapTarget);
             document.getElementById('revGapTf').value = formatNum(gapTf);
-        }
-
-        // Fungsi untuk menyimpan bagian tertentu (Fokus/PSM) tanpa mengganggu toko lain di Cloud
-        function simpanBagianKhusus(bagian) {
-            const periodeRaw = getVal('periode');
-            const storeVal = getVal('selectStore').split('|');
-            const kodeToko = storeVal[0];
-            const namaToko = storeVal[1];
-
-            let payload = {
-                jenisLaporan: "Simpan " + bagian.toUpperCase() + " " + kodeToko,
-                kodeToko: kodeToko,
-                namaToko: namaToko,
-                periode: periodeRaw,
-                targetMtd: parseNum(getVal('revTargetMtd')),
-                actual: parseNum(getVal('revActual')),
-                mNew: parseNum(getVal('memberNew')),
-                mStruk: parseNum(getVal('memberStruk')),
-                tStruk: parseNum(getVal('totalStruk')),
-                cat1: parseNum(getVal('cat1')),
-                cat2: parseNum(getVal('cat2')),
-                feeBase: parseNum(getVal('feeBase'))
-            };
-
-            payload.f1_t = parseNum(getVal('fokus1_t')); payload.f1_s = parseNum(getVal('fokus1_s'));
-            payload.f2_t = parseNum(getVal('fokus2_t')); payload.f2_s = parseNum(getVal('fokus2_s'));
-            payload.f3_t = parseNum(getVal('fokus3_t')); payload.f3_s = parseNum(getVal('fokus3_s'));
-            payload.f4_t = parseNum(getVal('fokus4_t')); payload.f4_s = parseNum(getVal('fokus4_s'));
-
-            for (let i = 1; i <= 9; i++) {
-                payload['psm' + i + '_name'] = getVal('psm' + i + '_name');
-                payload['psm' + i + '_t'] = parseNum(getVal('psm' + i + '_t'));
-                payload['psm' + i + '_a'] = parseNum(getVal('psm' + i + '_a'));
-            }
-
-            document.getElementById('loadingStatus').innerText = "Menyimpan " + bagian.toUpperCase() + " Toko " + kodeToko + " ke Cloud...";
-            document.getElementById('loadingStatus').style.display = 'block';
-
-            fetch(WEB_APP_URL, {
-                method: 'POST',
-                mode: 'no-cors',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            })
-            .then(() => {
-                document.getElementById('loadingStatus').style.display = 'none';
-                alert("Berhasil! Target " + bagian.toUpperCase() + " untuk toko " + kodeToko + " aman tersimpan di Cloud.");
-            })
-            .catch((error) => {
-                document.getElementById('loadingStatus').style.display = 'none';
-                alert("Gagal menyimpan ke cloud: " + error);
-            });
         }
 
         function getVal(id) {
@@ -566,10 +524,12 @@
                 hasilTest: text,
                 targetMtd: parseNum(getVal('revTargetMtd')),
                 actual: parseNum(getVal('revActual')),
+                rangeFokus: getVal('rangeFokus'),
                 f1_t: parseNum(getVal('fokus1_t')), f1_s: parseNum(getVal('fokus1_s')),
                 f2_t: parseNum(getVal('fokus2_t')), f2_s: parseNum(getVal('fokus2_s')),
                 f3_t: parseNum(getVal('fokus3_t')), f3_s: parseNum(getVal('fokus3_s')),
                 f4_t: parseNum(getVal('fokus4_t')), f4_s: parseNum(getVal('fokus4_s')),
+                rangePsm: getVal('rangePsm'),
                 mNew: parseNum(getVal('memberNew')),
                 mStruk: parseNum(getVal('memberStruk')),
                 tStruk: parseNum(getVal('totalStruk')),
@@ -592,7 +552,7 @@
             })
             .then(() => {
                 document.getElementById('loadingStatus').style.display = 'none';
-                alert("Data Seluruh Toko " + kodeToko + " Berhasil Disimpan Aman ke Cloud!");
+                alert("Data Toko " + kodeToko + " Berhasil Disimpan Aman ke Cloud!");
             })
             .catch((error) => {
                 document.getElementById('loadingStatus').style.display = 'none';
