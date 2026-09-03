@@ -15,17 +15,12 @@
         button { background-color: #27ae60; color: white; padding: 10px; border: none; border-radius: 4px; cursor: pointer; width: 100%; font-weight: bold; font-size: 0.95rem; margin-top: 5px; }
         button:hover { background-color: #219653; }
         .btn-blue { background-color: #2980b9; margin-top: 10px; }
-        .btn-blue:hover { background-color: #1f618d; }
         .btn-orange { background-color: #d35400; margin-bottom: 10px; }
-        .btn-orange:hover { background-color: #b94000; }
-        .btn-small { background-color: #16a085; padding: 6px; font-size: 0.8rem; margin-top: 6px; margin-bottom: 4px; }
-        .btn-small:hover { background-color: #138d75; }
-        pre { background: #f1f1f1; padding: 10px; border-radius: 4px; white-space: pre-wrap; word-wrap: break-word; font-family: Arial, sans-serif; font-size: 0.8rem; border: 1px solid #ddd; }
+        pre { background: #f1f1f1; padding: 10px; border-radius: 4px; white-space: pre-wrap; word-wrap: break-word; font-family: Arial, sans-serif; font-size: 0.8rem; border: 1px solid #ddd; max-height: 350px; overflow-y: auto; }
         fieldset { border: 1px solid #ddd; border-radius: 6px; padding: 8px; margin-bottom: 10px; }
         legend { font-weight: bold; font-size: 0.85rem; color: #2980b9; }
         .loading { display: none; text-align: center; color: #e67e22; font-weight: bold; margin-top: 8px; }
         .info-periode { font-size: 0.75rem; color: #c0392b; margin-bottom: 6px; font-style: italic; }
-        
         .table-input { width: 100%; border-collapse: collapse; margin-bottom: 5px; font-size: 0.8rem; }
         .table-input th { background-color: #16a085; color: white; padding: 6px 4px; text-align: center; border: 1px solid #1abc9c; }
         .table-input td { padding: 4px; border: 1px solid #ddd; text-align: center; }
@@ -157,11 +152,10 @@
         <fieldset>
             <legend>PSM</legend>
             <div class="info-periode">📅 Target Berlaku Dari Tanggal: 
-                <select id="rangePsm" style="display:inline-block; width: 140px; padding: 3px; font-size: 0.8rem; margin-bottom: 0;">
-                    <option value="1-7">Tanggal 1 s.d 7</option>
-                    <option value="8-14">Tanggal 8 s.d 14</option>
-                    <option value="15-21">Tanggal 15 s.d 21</option>
-                    <option value="22-31">Tanggal 22 s.d 31</option>
+                <select id="rangePsm" style="display:inline-block; width: 155px; padding: 3px; font-size: 0.8rem; margin-bottom: 0;">
+                    <option value="1-15">Tanggal 1 s.d 15</option>
+                    <option value="16-23">Tanggal 16 s.d 23</option>
+                    <option value="24-31">Tanggal 24 s.d 30/31</option>
                     <option value="1-31">Full 1 Bulan (1-31)</option>
                 </select>
             </div>
@@ -207,57 +201,15 @@
         <button onclick="processData('single')">Generate & Simpan Semua ke Cloud</button>
     </div>
 
-    <!-- INPUT REKAP 20 TOKO -->
+    <!-- INPUT REKAP 20 TOKO AREA -->
     <div class="card" id="formRekapArea" style="display:none;">
-        <button class="btn-orange" onclick="hitungRekapOtomatis()">⚡ Hitung Rekap Otomatis</button>
-        
         <fieldset>
-            <legend>REVENUE REKAP AREA</legend>
-            <div class="row-group">
-                <div><label>Time Factor (%):</label><input type="text" id="rekTimeFactor" value="6,66%"></div>
-                <div><label>Actual:</label><input type="text" id="rekActual" value="0"></div>
-            </div>
-            <div class="row-group">
-                <div><label>Target MTD:</label><input type="text" id="rekTargetMtd" value="0"></div>
-                <div><label>Target Time Factor:</label><input type="text" id="rekTargetTf" value="0"></div>
-            </div>
-            <div class="row-group">
-                <div><label>Achievement MTD (%):</label><input type="text" id="rekAchMtd" value="0%"></div>
-                <div><label>Achievement Time Factor (%):</label><input type="text" id="rekAchTf" value="0%"></div>
-            </div>
-            <div class="row-group">
-                <div><label>Gap to Target:</label><input type="text" id="rekGapTarget" value="0"></div>
-                <div><label>Gap to Time Factor:</label><input type="text" id="rekGapTf" value="0"></div>
-            </div>
+            <legend>📊 GENERATE REKAP GABUNGAN 20 TOKO</legend>
+            <p style="font-size: 0.8rem; color: #555; margin-bottom: 10px;">
+                Fitur ini akan menarik seluruh data ke-20 toko yang sudah tersimpan di Cloud pada tanggal periode di atas, lalu menyusunnya menjadi ringkasan area secara otomatis.
+            </p>
+            <button class="btn-orange" onclick="generateRekapArea()">Tarik Data & Generate Rekap 20 Toko</button>
         </fieldset>
-
-        <fieldset>
-            <legend>FOKUS CABANG REKAP</legend>
-            <label>1. Tebus Murah:</label><input type="text" id="rfokus1" value="0/0/0%">
-            <label>2. Serba Gratis:</label><input type="text" id="rfokus2" value="0/0/0%">
-            <label>3. Sueuger:</label><input type="text" id="rfokus3" value="0/0/0%">
-            <label>4. Promo Ceban:</label><input type="text" id="rfokus4" value="0/0/0%">
-            <label>5. PSM:</label><input type="text" id="rfokus5" value="0/0/0%">
-        </fieldset>
-
-        <fieldset>
-            <legend>MEMBER REKAP</legend>
-            <label>1. Actual New Member:</label><input type="text" id="rmemberNew" value="0/0/0%">
-            <label>2. Kontribusi Struk Member:</label><input type="text" id="rmemberStruk" value="0/0/0%">
-        </fieldset>
-
-        <fieldset>
-            <legend>CATEGORY REKAP</legend>
-            <label>1. Toys (NS):</label><input type="text" id="rcat1" value="0/0/0%">
-            <label>2. HBPL (NS):</label><input type="text" id="rcat2" value="0/0/0%">
-        </fieldset>
-
-        <fieldset>
-            <legend>E-COMMERCE REKAP</legend>
-            <label>Fee Base (Rp):</label><input type="text" id="rFeeBase" value="0">
-        </fieldset>
-
-        <button onclick="processData('rekap')">Generate Rekap & Kirim ke Cloud</button>
     </div>
 
     <div class="card">
@@ -268,7 +220,7 @@
     </div>
 
     <script>
-        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzgTnGqr8MIEnz-mvl4s_kDpEp_9IssduKsGswjCM1XYhvUHM8FqGsUFuPLRLxmcbvp/exec";
+        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxD6A72MasbJST5iTb4JGA82dJ7rk0k5TajOekS_giOyI0dHU_XZkvg8K8SB4e5y5fk/exec";
 
         function setTanggalOtomatisHP() {
             const today = new Date();
@@ -427,44 +379,37 @@
             const am = getVal('am');
             const ac = getVal('ac');
             
-            let text = "";
-            let jenisLaporan = "";
-            let kodeToko = "-";
-            let namaToko = "-";
-            let shiftInfo = "-";
+            const storeVal = getVal('selectStore').split('|');
+            const kodeToko = storeVal[0];
+            const namaToko = storeVal[1];
+            const shift = getVal('shift');
+            const jenisLaporan = "Laporan Per Toko (Shift)";
+            const shiftInfo = "Shift " + shift;
 
-            if (type === 'single') {
-                const shift = getVal('shift');
-                const storeVal = getVal('selectStore').split('|');
-                kodeToko = storeVal[0];
-                namaToko = storeVal[1];
-                jenisLaporan = "Laporan Per Toko (Shift)";
-                shiftInfo = "Shift " + shift;
+            const f1 = `${getVal('fokus1_t')}/${getVal('fokus1_s')}/${getVal('fokus1_p')}`;
+            const f2 = `${getVal('fokus2_t')}/${getVal('fokus2_s')}/${getVal('fokus2_p')}`;
+            const f3 = `${getVal('fokus3_t')}/${getVal('fokus3_s')}/${getVal('fokus3_p')}`;
+            const f4 = `${getVal('fokus4_t')}/${getVal('fokus4_s')}/${getVal('fokus4_p')}`;
 
-                const f1 = `${getVal('fokus1_t')}/${getVal('fokus1_s')}/${getVal('fokus1_p')}`;
-                const f2 = `${getVal('fokus2_t')}/${getVal('fokus2_s')}/${getVal('fokus2_p')}`;
-                const f3 = `${getVal('fokus3_t')}/${getVal('fokus3_s')}/${getVal('fokus3_p')}`;
-                const f4 = `${getVal('fokus4_t')}/${getVal('fokus4_s')}/${getVal('fokus4_p')}`;
+            let psmListText = "";
+            for (let i = 1; i <= 8; i++) {
+                const nameItem = getVal('psm' + i + '_name').toUpperCase();
+                const pItem = `${getVal('psm' + i + '_t')} - ${getVal('psm' + i + '_a')} - ${getVal('psm' + i + '_p')}`;
+                psmListText += `${i}. ${nameItem}: ${pItem}\n`;
+            }
+            
+            const p9NameVal = getVal('psm9_name');
+            if (p9NameVal) {
+                psmListText += `9. ${p9NameVal.toUpperCase()}: ${getVal('psm9_t')} - ${getVal('psm9_a')} - ${getVal('psm9_p')}\n`;
+            }
+            psmListText = psmListText.trimEnd();
 
-                let psmListText = "";
-                for (let i = 1; i <= 8; i++) {
-                    const nameItem = getVal('psm' + i + '_name').toUpperCase();
-                    const pItem = `${getVal('psm' + i + '_t')} - ${getVal('psm' + i + '_a')} - ${getVal('psm' + i + '_p')}`;
-                    psmListText += `${i}. ${nameItem}: ${pItem}\n`;
-                }
-                
-                const p9NameVal = getVal('psm9_name');
-                if (p9NameVal) {
-                    psmListText += `9. ${p9NameVal.toUpperCase()}: ${getVal('psm9_t')} - ${getVal('psm9_a')} - ${getVal('psm9_p')}\n`;
-                }
-                psmListText = psmListText.trimEnd();
+            const mNew = getVal('memberNew');
+            const mStruk = getVal('memberStruk');
+            const tStruk = getVal('totalStruk');
+            const mPersen = Math.round((mStruk/(tStruk||1))*100);
 
-                const mNew = getVal('memberNew');
-                const mStruk = getVal('memberStruk');
-                const tStruk = getVal('totalStruk');
-                const mPersen = Math.round((mStruk/(tStruk||1))*100);
-
-                text = `*REPORT SALES SHIFT ${shift}*\n` +
+            let text = `*REPORT SALES SHIFT ${shift}*\n` +
                        `PERIODE : ${periode}\n` +
                        `WH : ${wh}\n` +
                        `AM : ${am}\n` +
@@ -506,11 +451,6 @@
                        `*E-COMMERCE*\n` +
                        `1. FEE BASE (RP)\t: ${getVal('feeBase')}\n` +
                        `Terimakasih`;
-            } else {
-                jenisLaporan = "Rekap Gabungan 20 Toko Area";
-                shiftInfo = "All Area";
-                text = `*REPORT SALES*\nPERIODE : ${periode}\nTerimakasih`;
-            }
 
             document.getElementById('outputResult').innerText = text;
             document.getElementById('loadingStatus').style.display = 'block';
@@ -557,6 +497,81 @@
             .catch((error) => {
                 document.getElementById('loadingStatus').style.display = 'none';
                 alert("Gagal mengirim ke cloud: " + error);
+            });
+        }
+
+        function generateRekapArea() {
+            const periodeRaw = getVal('periode');
+            const periode = formatDateID(periodeRaw);
+            const wh = getVal('wh');
+            const am = getVal('am');
+            const ac = getVal('ac');
+
+            document.getElementById('loadingStatus').innerText = "Mengambil data rekap 20 toko dari Cloud...";
+            document.getElementById('loadingStatus').style.display = 'block';
+
+            // Ambil seluruh daftar toko dari dropdown
+            const selectStore = document.getElementById('selectStore');
+            let storeOptions = [];
+            for (let i = 0; i < selectStore.options.length; i++) {
+                let parts = selectStore.options[i].value.split('|');
+                storeOptions.push({ kode: parts[0], nama: parts[1] });
+            }
+
+            // Fetch data per toko secara paralel dari Cloud
+            let promises = storeOptions.map(store => {
+                return fetch(WEB_APP_URL + "?action=getData&periode=" + periodeRaw + "&kodeToko=" + store.kode)
+                    .then(res => res.json())
+                    .then(d => {
+                        return {
+                            kode: store.kode,
+                            nama: store.nama,
+                            found: d && d.found ? true : false,
+                            targetMtd: d && d.targetMtd ? parseNum(d.targetMtd) : 0,
+                            actual: d && d.actual ? parseNum(d.actual) : 0
+                        };
+                    })
+                    .catch(() => {
+                        return { kode: store.kode, nama: store.nama, found: false, targetMtd: 0, actual: 0 };
+                    });
+            });
+
+            Promise.all(promises).then(results => {
+                document.getElementById('loadingStatus').style.display = 'none';
+
+                let totalTargetMtd = 0;
+                let totalActual = 0;
+                let listTokoText = "";
+
+                results.forEach((item, index) => {
+                    totalTargetMtd += item.targetMtd;
+                    totalActual += item.actual;
+                    let ach = item.targetMtd > 0 ? ((item.actual / item.targetMtd) * 100).toFixed(1) + '%' : '0%';
+                    listTokoText += `${index + 1}. ${item.kode} - ${item.nama}\n   Target: ${formatNum(item.targetMtd)} | Actual: ${formatNum(item.actual)} (${ach})\n`;
+                });
+
+                let totalAch = totalTargetMtd > 0 ? ((totalActual / totalTargetMtd) * 100).toFixed(1).replace('.', ',') + '%' : '0%';
+                let totalGap = totalTargetMtd - totalActual;
+
+                let rekapText = `📊 *REKAP SALES AREA 20 TOKO* 📊\n` +
+                                `PERIODE : ${periode}\n` +
+                                `WH : ${wh} | AM : ${am} | AC : ${ac}\n` +
+                                `==============================\n` +
+                                `*TOTAL AREA PERFORMANCE*\n` +
+                                `- Total Target MTD : ${formatNum(totalTargetMtd)}\n` +
+                                `- Total Actual     : ${formatNum(totalActual)}\n` +
+                                `- Total Ach. MTD   : ${totalAch}\n` +
+                                `- Total GAP Target : ${formatNum(totalGap)}\n` +
+                                `==============================\n` +
+                                `*RINCIAN PER TOKO:*\n\n` +
+                                listTokoText + `\n` +
+                                `Terimakasih 🙏`;
+
+                document.getElementById('outputResult').innerText = rekapText;
+                alert("Rekap 20 toko berhasil digenerate dari Cloud!");
+            }).catch(err => {
+                document.getElementById('loadingStatus').style.display = 'none';
+                alert("Terjadi kesalahan saat menarik data rekap: " + err);
             });
         }
 
