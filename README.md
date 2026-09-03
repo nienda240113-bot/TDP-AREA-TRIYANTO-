@@ -132,10 +132,10 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr><td>TEBUS MURAH</td><td><input type="text" id="fokus1_t" value="0"></td><td><input type="text" id="fokus1_s" value="0"></td><td><input type="text" id="fokus1_p" value="0%"></td></tr>
-                    <tr><td>SERBA GRATIS</td><td><input type="text" id="fokus2_t" value="0"></td><td><input type="text" id="fokus2_s" value="0"></td><td><input type="text" id="fokus2_p" value="0%"></td></tr>
-                    <tr><td>SUEUGEER</td><td><input type="text" id="fokus3_t" value="0"></td><td><input type="text" id="fokus3_s" value="0"></td><td><input type="text" id="fokus3_p" value="0%"></td></tr>
-                    <tr><td>PROMO CEBAN</td><td><input type="text" id="fokus4_t" value="0"></td><td><input type="text" id="fokus4_s" value="0"></td><td><input type="text" id="fokus4_p" value="0%"></td></tr>
+                    <tr><td>TEBUS MURAH</td><td><input type="text" id="fokus1_t" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="fokus1_s" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="fokus1_p" value="0%" readonly style="background-color: #e9ecef;"></td></tr>
+                    <tr><td>SERBA GRATIS</td><td><input type="text" id="fokus2_t" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="fokus2_s" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="fokus2_p" value="0%" readonly style="background-color: #e9ecef;"></td></tr>
+                    <tr><td>SUEUGEER</td><td><input type="text" id="fokus3_t" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="fokus3_s" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="fokus3_p" value="0%" readonly style="background-color: #e9ecef;"></td></tr>
+                    <tr><td>PROMO CEBAN</td><td><input type="text" id="fokus4_t" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="fokus4_s" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="fokus4_p" value="0%" readonly style="background-color: #e9ecef;"></td></tr>
                 </tbody>
             </table>
         </fieldset>
@@ -169,19 +169,19 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr><td><input type="text" id="psm1_name" value="BANGO" style="text-align: left; font-weight: bold;"></td><td><input type="text" id="psm1_t" value="0"></td><td><input type="text" id="psm1_a" value="0"></td><td><input type="text" id="psm1_p" value="0%"></td></tr>
-                    <tr><td><input type="text" id="psm2_name" value="DAIA" style="text-align: left; font-weight: bold;"></td><td><input type="text" id="psm2_t" value="0"></td><td><input type="text" id="psm2_a" value="0"></td><td><input type="text" id="psm2_p" value="0%"></td></tr>
-                    <tr><td><input type="text" id="psm3_name" value="ENAAK" style="text-align: left; font-weight: bold;"></td><td><input type="text" id="psm3_t" value="0"></td><td><input type="text" id="psm3_a" value="0"></td><td><input type="text" id="psm3_p" value="0%"></td></tr>
-                    <tr><td><input type="text" id="psm4_name" value="GARNIER" style="text-align: left; font-weight: bold;"></td><td><input type="text" id="psm4_t" value="0"></td><td><input type="text" id="psm4_a" value="0"></td><td><input type="text" id="psm4_p" value="0%"></td></tr>
-                    <tr><td><input type="text" id="psm5_name" value="LE MINERAL" style="text-align: left; font-weight: bold;"></td><td><input type="text" id="psm5_t" value="0"></td><td><input type="text" id="psm5_a" value="0"></td><td><input type="text" id="psm5_p" value="0%"></td></tr>
-                    <tr><td><input type="text" id="psm6_name" value="LIFEBUOY" style="text-align: left; font-weight: bold;"></td><td><input type="text" id="psm6_t" value="0"></td><td><input type="text" id="psm6_a" value="0"></td><td><input type="text" id="psm6_p" value="0%"></td></tr>
-                    <tr><td><input type="text" id="psm7_name" value="NIPIS MADU" style="text-align: left; font-weight: bold;"></td><td><input type="text" id="psm7_t" value="0"></td><td><input type="text" id="psm7_a" value="0"></td><td><input type="text" id="psm7_p" value="0%"></td></tr>
-                    <tr><td><input type="text" id="psm8_name" value="TARO" style="text-align: left; font-weight: bold;"></td><td><input type="text" id="psm8_t" value="0"></td><td><input type="text" id="psm8_a" value="0"></td><td><input type="text" id="psm8_p" value="0%"></td></tr>
+                    <tr><td><input type="text" id="psm1_name" value="BANGO" style="text-align: left; font-weight: bold;"></td><td><input type="text" id="psm1_t" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="psm1_a" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="psm1_p" value="0%" readonly style="background-color: #e9ecef;"></td></tr>
+                    <tr><td><input type="text" id="psm2_name" value="DAIA" style="text-align: left; font-weight: bold;"></td><td><input type="text" id="psm2_t" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="psm2_a" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="psm2_p" value="0%" readonly style="background-color: #e9ecef;"></td></tr>
+                    <tr><td><input type="text" id="psm3_name" value="ENAAK" style="text-align: left; font-weight: bold;"></td><td><input type="text" id="psm3_t" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="psm3_a" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="psm3_p" value="0%" readonly style="background-color: #e9ecef;"></td></tr>
+                    <tr><td><input type="text" id="psm4_name" value="GARNIER" style="text-align: left; font-weight: bold;"></td><td><input type="text" id="psm4_t" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="psm4_a" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="psm4_p" value="0%" readonly style="background-color: #e9ecef;"></td></tr>
+                    <tr><td><input type="text" id="psm5_name" value="LE MINERAL" style="text-align: left; font-weight: bold;"></td><td><input type="text" id="psm5_t" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="psm5_a" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="psm5_p" value="0%" readonly style="background-color: #e9ecef;"></td></tr>
+                    <tr><td><input type="text" id="psm6_name" value="LIFEBUOY" style="text-align: left; font-weight: bold;"></td><td><input type="text" id="psm6_t" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="psm6_a" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="psm6_p" value="0%" readonly style="background-color: #e9ecef;"></td></tr>
+                    <tr><td><input type="text" id="psm7_name" value="NIPIS MADU" style="text-align: left; font-weight: bold;"></td><td><input type="text" id="psm7_t" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="psm7_a" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="psm7_p" value="0%" readonly style="background-color: #e9ecef;"></td></tr>
+                    <tr><td><input type="text" id="psm8_name" value="TARO" style="text-align: left; font-weight: bold;"></td><td><input type="text" id="psm8_t" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="psm8_a" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="psm8_p" value="0%" readonly style="background-color: #e9ecef;"></td></tr>
                     <tr>
                         <td><input type="text" id="psm9_name" value="" placeholder="Item Lainnya..." style="text-align: left; font-weight: bold;"></td>
-                        <td><input type="text" id="psm9_t" value="0"></td>
-                        <td><input type="text" id="psm9_a" value="0"></td>
-                        <td><input type="text" id="psm9_p" value="0%"></td>
+                        <td><input type="text" id="psm9_t" value="0" oninput="hitungOtomatisSingle()"></td>
+                        <td><input type="text" id="psm9_a" value="0" oninput="hitungOtomatisSingle()"></td>
+                        <td><input type="text" id="psm9_p" value="0%" readonly style="background-color: #e9ecef;"></td>
                     </tr>
                 </tbody>
             </table>
@@ -348,6 +348,7 @@
                 if (parts.length === 3) hariKe = parseInt(parts[2], 10) || 1;
             }
 
+            // 1. Hitung Revenue
             const tfPersenInput = parseNum(document.getElementById('revTimeFactor').value);
             const targetMtd = parseNum(document.getElementById('revTargetMtd').value);
             const actual = parseNum(document.getElementById('revActual').value);
@@ -366,6 +367,22 @@
             document.getElementById('revAchTf').value = achTf;
             document.getElementById('revGapTarget').value = formatNum(gapTarget);
             document.getElementById('revGapTf').value = formatNum(gapTf);
+
+            // 2. Hitung Otomatis Fokus Cabang (%)
+            for (let i = 1; i <= 4; i++) {
+                const t = parseNum(document.getElementById('fokus' + i + '_t').value);
+                const s = parseNum(document.getElementById('fokus' + i + '_s').value);
+                const p = t > 0 ? ((s / t) * 100).toFixed(1).replace('.', ',') + '%' : '0%';
+                document.getElementById('fokus' + i + '_p').value = p;
+            }
+
+            // 3. Hitung Otomatis PSM (%)
+            for (let i = 1; i <= 9; i++) {
+                const t = parseNum(document.getElementById('psm' + i + '_t').value);
+                const a = parseNum(document.getElementById('psm' + i + '_a').value);
+                const p = t > 0 ? ((a / t) * 100).toFixed(1).replace('.', ',') + '%' : '0%';
+                document.getElementById('psm' + i + '_p').value = p;
+            }
         }
 
         function getVal(id) {
@@ -386,21 +403,21 @@
             const jenisLaporan = "Laporan Per Toko (Shift)";
             const shiftInfo = "Shift " + shift;
 
-            const f1 = `${getVal('fokus1_t')}/${getVal('fokus1_s')}/${getVal('fokus1_p')}`;
-            const f2 = `${getVal('fokus2_t')}/${getVal('fokus2_s')}/${getVal('fokus2_p')}`;
-            const f3 = `${getVal('fokus3_t')}/${getVal('fokus3_s')}/${getVal('fokus3_p')}`;
-            const f4 = `${getVal('fokus4_t')}/${getVal('fokus4_s')}/${getVal('fokus4_p')}`;
+            const f1 = `${getVal('fokus1_t')}/${getVal('fokus1_s')}/${document.getElementById('fokus1_p').value}`;
+            const f2 = `${getVal('fokus2_t')}/${getVal('fokus2_s')}/${document.getElementById('fokus2_p').value}`;
+            const f3 = `${getVal('fokus3_t')}/${getVal('fokus3_s')}/${document.getElementById('fokus3_p').value}`;
+            const f4 = `${getVal('fokus4_t')}/${getVal('fokus4_s')}/${document.getElementById('fokus4_p').value}`;
 
             let psmListText = "";
             for (let i = 1; i <= 8; i++) {
                 const nameItem = getVal('psm' + i + '_name').toUpperCase();
-                const pItem = `${getVal('psm' + i + '_t')} - ${getVal('psm' + i + '_a')} - ${getVal('psm' + i + '_p')}`;
+                const pItem = `${getVal('psm' + i + '_t')} - ${getVal('psm' + i + '_a')} - ${document.getElementById('psm' + i + '_p').value}`;
                 psmListText += `${i}. ${nameItem}: ${pItem}\n`;
             }
             
             const p9NameVal = getVal('psm9_name');
             if (p9NameVal) {
-                psmListText += `9. ${p9NameVal.toUpperCase()}: ${getVal('psm9_t')} - ${getVal('psm9_a')} - ${getVal('psm9_p')}\n`;
+                psmListText += `9. ${p9NameVal.toUpperCase()}: ${getVal('psm9_t')} - ${getVal('psm9_a')} - ${document.getElementById('psm9_p').value}\n`;
             }
             psmListText = psmListText.trimEnd();
 
@@ -510,7 +527,6 @@
             document.getElementById('loadingStatus').innerText = "Mengambil data rekap 20 toko dari Cloud...";
             document.getElementById('loadingStatus').style.display = 'block';
 
-            // Ambil seluruh daftar toko dari dropdown
             const selectStore = document.getElementById('selectStore');
             let storeOptions = [];
             for (let i = 0; i < selectStore.options.length; i++) {
@@ -518,7 +534,6 @@
                 storeOptions.push({ kode: parts[0], nama: parts[1] });
             }
 
-            // Fetch data per toko secara paralel dari Cloud
             let promises = storeOptions.map(store => {
                 return fetch(WEB_APP_URL + "?action=getData&periode=" + periodeRaw + "&kodeToko=" + store.kode)
                     .then(res => res.json())
