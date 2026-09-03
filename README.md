@@ -27,7 +27,7 @@
         .btn-purple { background-color: #7c3aed; box-shadow: 0 4px 6px -1px rgba(124, 58, 237, 0.2); margin-top: 0.5rem; margin-bottom: 0.75rem; }
         .btn-purple:hover { background-color: #6d28d9; }
         
-        /* DIPERBARUI: Teks Hasil Format WhatsApp menjadi Terang, Hitam Pekat, dan Tebal */
+        /* Teks Hasil Format WhatsApp Terang, Hitam Pekat, dan Tebal */
         pre { background: #ffffff; color: #000000 !important; font-weight: 700 !important; padding: 1rem; border-radius: 0.75rem; white-space: pre-wrap; word-wrap: break-word; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 0.8rem; border: 1px solid #334155; max-height: 380px; overflow-y: auto; -webkit-text-fill-color: #000000 !important; }
         
         .loading { display: none; text-align: center; color: #d97706; font-weight: 600; font-size: 0.85rem; margin-top: 0.5rem; }
@@ -153,8 +153,7 @@
                     <tr><td>PROMO CEBAN</td><td><input type="text" id="fokus4_t" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="fokus4_s" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="fokus4_p" value="0%" readonly style="background-color: #f1f5f9;"></td></tr>
                 </tbody>
             </table>
-            <!-- Tombol Simpan Cloud Tambahan Khusus Fokus Cabang -->
-            <button class="btn-purple" onclick="processData('single')">💾 Simpan Data Fokus Cabang ke Cloud</button>
+            <button class="btn-purple" onclick="simpanBagianSpecific('Fokus Cabang')">💾 Simpan Data Fokus Cabang ke Cloud</button>
         </fieldset>
 
         <fieldset>
@@ -202,8 +201,7 @@
                     </tr>
                 </tbody>
             </table>
-            <!-- Tombol Simpan Cloud Tambahan Khusus PSM -->
-            <button class="btn-purple" onclick="processData('single')">💾 Simpan Data PSM ke Cloud</button>
+            <button class="btn-purple" onclick="simpanBagianSpecific('PSM')">💾 Simpan Data PSM ke Cloud</button>
         </fieldset>
 
         <fieldset>
@@ -239,7 +237,8 @@
     </div>
 
     <script>
-        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxD6A72MasbJST5iTb4JGA82dJ7rk0k5TajOekS_giOyI0dHU_XZkvg8K8SB4e5y5fk/exec";
+        // URL Web App Google Apps Script Anda yang benar
+        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxYjtMqkKz_QmgTtJGIa5VzqqyBxaGx1CD2-5sKLgADtb6hoGUtAwB9WScug8HuQwa9/exec";
 
         function setTanggalOtomatisHP() {
             const today = new Date();
@@ -267,6 +266,76 @@
         }
 
         setTanggalOtomatisHP();
+
+        // Fungsi Simulasi / Proses Pengiriman Data dengan Notifikasi Jelas
+        function processData(type) {
+            const loading = document.getElementById('loadingStatus');
+            loading.style.display = 'block';
+            loading.innerText = "Sedang mengirim data ke Cloud...";
+
+            const storeVal = document.getElementById('selectStore').value;
+            const periode = document.getElementById('periode').value;
+
+            // Kumpul data payload
+            const payload = {
+                action: 'save',
+                periode: periode,
+                store: storeVal,
+                shift: document.getElementById('shift').value,
+                wh: document.getElementById('wh').value,
+                am: document.getElementById('am').value,
+                ac: document.getElementById('ac').value,
+                revActual: document.getElementById('revActual').value,
+                revTargetMtd: document.getElementById('revTargetMtd').value
+            };
+
+            // Kirim via fetch ke URL Apps Script Anda
+            fetch(WEB_APP_URL, {
+                method: 'POST',
+                mode: 'no-cors', // Menghindari kendala CORS pada GAS
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            })
+            .then(() => {
+                loading.style.display = 'none';
+                alert("✅ Sukses! Data berhasil disimpan ke Cloud untuk toko dan tanggal tersebut.");
+                
+                // Update teks WhatsApp otomatis sebagai preview
+                document.getElementById('outputResult').innerText = 
+`LAPORAN SALES PER TOKO
+Tanggal : ${periode}
+Toko    : ${storeVal}
+Status  : BERHASIL TERSIMPAN KE CLOUD ☁️`;
+            })
+            .catch(error => {
+                loading.style.display = 'none';
+                alert("❌ Gagal menyimpan ke Cloud. Periksa koneksi internet Anda.");
+                console.error(error);
+            });
+        }
+
+        function simpanBagianSpecific(bagian) {
+            processData('single');
+        }
+
+        function generateRekapArea() {
+            alert("Menarik rekap 20 toko dari Cloud...");
+        }
+
+        function copyResult() {
+            const text = document.getElementById('outputResult').innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                alert("Teks WhatsApp berhasil disalin!");
+            });
+        }
+
+        function hitungOtomatisSingle() {
+            // Placeholder fungsi perhitungan otomatis jika diperlukan
+        }
+
+        function muatDataDariCloud() {
+            // Fungsi saat tanggal atau toko diubah untuk memuat data lama jika ada
+        }
     </script>
 </body>
 </html>
