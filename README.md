@@ -24,7 +24,7 @@
         .table-input th { background-color: #0d9488; color: white; padding: 0.5rem; text-align: center; border: 1px solid #14b8a6; }
         .table-input td { padding: 0.35rem; border: 1px solid #e2e8f0; text-align: center; }
         .table-input input { text-align: center; margin-bottom: 0; padding: 0.4rem; font-size: 0.8rem; }
-        .table-input td:first-child { text-align: left; padding-left: 0.5rem; }
+        .table-input td:first-child { text-align: left; padding-left: 0.5rem; font-weight: 500; }
     </style>
 </head>
 <body class="max-w-xl mx-auto p-3 sm:p-4">
@@ -87,10 +87,14 @@
     <!-- FORM INPUT PER TOKO -->
     <div class="card-modern" id="formPerToko">
         <fieldset>
-            <legend>💰 REVENUE</legend>
+            <legend>💰 REVENUE & TARGET</legend>
             <div class="row-group">
-                <div><label>Actual (Rp):</label><input type="text" id="revActual" value="0"></div>
+                <div><label>Actual Sales (Rp):</label><input type="text" id="revActual" value="0"></div>
                 <div><label>Target MTD (Rp):</label><input type="text" id="revTargetMtd" value="0"></div>
+            </div>
+            <div class="row-group mt-2">
+                <div><label>Target Daily (Rp):</label><input type="text" id="revTargetDaily" value="0"></div>
+                <div><label>Ach Sales (%):</label><input type="text" id="revAch" value="0%" readonly class="bg-slate-100 font-bold"></div>
             </div>
         </fieldset>
 
@@ -110,16 +114,18 @@
         </fieldset>
 
         <fieldset>
-            <legend>PSM</legend>
+            <legend>PSM (PRODUK SPECIAL MINGGUAN)</legend>
             <table class="table-input">
                 <thead>
                     <tr><th>Item PSM</th><th>Target</th><th>Actual</th></tr>
                 </thead>
                 <tbody>
-                    <tr><td>BANGO</td><td><input type="text" id="psm1_t" value="0"></td><td><input type="text" id="psm1_a" value="0"></td></tr>
-                    <tr><td>DAIA</td><td><input type="text" id="psm2_t" value="0"></td><td><input type="text" id="psm2_a" value="0"></td></tr>
-                    <tr><td>ENAAK</td><td><input type="text" id="psm3_t" value="0"></td><td><input type="text" id="psm3_a" value="0"></td></tr>
-                    <tr><td>GARNIER</td><td><input type="text" id="psm4_t" value="0"></td><td><input type="text" id="psm4_a" value="0"></td></tr>
+                    <tr><td>PSM 1 (Bango)</td><td><input type="text" id="psm1_t" value="0"></td><td><input type="text" id="psm1_a" value="0"></td></tr>
+                    <tr><td>PSM 2 (Daia)</td><td><input type="text" id="psm2_t" value="0"></td><td><input type="text" id="psm2_a" value="0"></td></tr>
+                    <tr><td>PSM 3 (Enaak)</td><td><input type="text" id="psm3_t" value="0"></td><td><input type="text" id="psm3_a" value="0"></td></tr>
+                    <tr><td>PSM 4 (Garnier)</td><td><input type="text" id="psm4_t" value="0"></td><td><input type="text" id="psm4_a" value="0"></td></tr>
+                    <tr><td>PSM 5 (Cadbury/Lain)</td><td><input type="text" id="psm5_t" value="0"></td><td><input type="text" id="psm5_a" value="0"></td></tr>
+                    <tr><td>PSM 6 (Sunsilk/Lain)</td><td><input type="text" id="psm6_t" value="0"></td><td><input type="text" id="psm6_a" value="0"></td></tr>
                 </tbody>
             </table>
         </fieldset>
@@ -149,11 +155,13 @@
         function resetForm() {
             document.getElementById('revActual').value = "0";
             document.getElementById('revTargetMtd').value = "0";
+            document.getElementById('revTargetDaily').value = "0";
+            document.getElementById('revAch').value = "0%";
             for(let i=1; i<=4; i++) {
                 document.getElementById(`fokus${i}_t`).value = "0";
                 document.getElementById(`fokus${i}_s`).value = "0";
             }
-            for(let i=1; i<=4; i++) {
+            for(let i=1; i<=6; i++) {
                 document.getElementById(`psm${i}_t`).value = "0";
                 document.getElementById(`psm${i}_a`).value = "0";
             }
@@ -201,6 +209,8 @@
                     const d = data.payload;
                     if(d.revActual) document.getElementById('revActual').value = d.revActual;
                     if(d.revTargetMtd) document.getElementById('revTargetMtd').value = d.revTargetMtd;
+                    if(d.revTargetDaily) document.getElementById('revTargetDaily').value = d.revTargetDaily;
+                    if(d.revAch) document.getElementById('revAch').value = d.revAch;
                     
                     if(d.fokus) {
                         for(let i=1; i<=4; i++) {
@@ -209,7 +219,7 @@
                         }
                     }
                     if(d.psm) {
-                        for(let i=1; i<=4; i++) {
+                        for(let i=1; i<=6; i++) {
                             if(d.psm[`t${i}`]) document.getElementById(`psm${i}_t`).value = d.psm[`t${i}`];
                             if(d.psm[`a${i}`]) document.getElementById(`psm${i}_a`).value = d.psm[`a${i}`];
                         }
@@ -288,6 +298,8 @@
                 ac: document.getElementById('ac').value,
                 revActual: document.getElementById('revActual').value,
                 revTargetMtd: document.getElementById('revTargetMtd').value,
+                revTargetDaily: document.getElementById('revTargetDaily').value,
+                revAch: document.getElementById('revAch').value,
                 fokus: {
                     t1: document.getElementById('fokus1_t').value, s1: document.getElementById('fokus1_s').value,
                     t2: document.getElementById('fokus2_t').value, s2: document.getElementById('fokus2_s').value,
@@ -299,6 +311,8 @@
                     t2: document.getElementById('psm2_t').value, a2: document.getElementById('psm2_a').value,
                     t3: document.getElementById('psm3_t').value, a3: document.getElementById('psm3_a').value,
                     t4: document.getElementById('psm4_t').value, a4: document.getElementById('psm4_a').value,
+                    t5: document.getElementById('psm5_t').value, a5: document.getElementById('psm5_a').value,
+                    t6: document.getElementById('psm6_t').value, a6: document.getElementById('psm6_a').value,
                 }
             };
 
