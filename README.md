@@ -18,6 +18,8 @@
         .btn-blue:hover { background-color: #1f618d; }
         .btn-orange { background-color: #d35400; margin-bottom: 10px; }
         .btn-orange:hover { background-color: #b94000; }
+        .btn-purple { background-color: #8e44ad; margin-bottom: 8px; }
+        .btn-purple:hover { background-color: #732d91; }
         pre { background: #f1f1f1; padding: 10px; border-radius: 4px; white-space: pre-wrap; word-wrap: break-word; font-family: Arial, sans-serif; font-size: 0.8rem; border: 1px solid #ddd; }
         fieldset { border: 1px solid #ddd; border-radius: 6px; padding: 8px; margin-bottom: 10px; }
         legend { font-weight: bold; font-size: 0.85rem; color: #2980b9; }
@@ -28,7 +30,7 @@
         .table-input th { background-color: #16a085; color: white; padding: 6px 4px; text-align: center; border: 1px solid #1abc9c; }
         .table-input td { padding: 4px; border: 1px solid #ddd; text-align: center; }
         .table-input input { text-align: center; margin-bottom: 0; padding: 5px; font-size: 0.85rem; }
-        .table-input td:first-child { text-align: left; font-weight: bold; padding-left: 6px; color: #2c3e50; }
+        .table-input td:first-child { text-align: left; padding-left: 4px; }
     </style>
 </head>
 <body>
@@ -147,26 +149,27 @@
 
         <fieldset>
             <legend>PSM (Product Sales Mission)</legend>
+            <button class="btn-purple" onclick="simpanDaftarPsm()">💾 Simpan Daftar Nama Item PSM</button>
             <table class="table-input">
                 <thead>
                     <tr>
-                        <th style="width: 40%;">Nama Item PSM</th>
+                        <th style="width: 40%;">Nama Item PSM (Bisa Diedit)</th>
                         <th style="width: 20%;">Target</th>
                         <th style="width: 20%;">Actual</th>
                         <th style="width: 20%;">%</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr><td>Bango</td><td><input type="text" id="psm1_t" value="0"></td><td><input type="text" id="psm1_a" value="0"></td><td><input type="text" id="psm1_p" value="0%"></td></tr>
-                    <tr><td>Daia</td><td><input type="text" id="psm2_t" value="0"></td><td><input type="text" id="psm2_a" value="0"></td><td><input type="text" id="psm2_p" value="0%"></td></tr>
-                    <tr><td>Enaak</td><td><input type="text" id="psm3_t" value="0"></td><td><input type="text" id="psm3_a" value="0"></td><td><input type="text" id="psm3_p" value="0%"></td></tr>
-                    <tr><td>Garnier</td><td><input type="text" id="psm4_t" value="0"></td><td><input type="text" id="psm4_a" value="0"></td><td><input type="text" id="psm4_p" value="0%"></td></tr>
-                    <tr><td>Le mineral</td><td><input type="text" id="psm5_t" value="0"></td><td><input type="text" id="psm5_a" value="0"></td><td><input type="text" id="psm5_p" value="0%"></td></tr>
-                    <tr><td>Lifebuoy</td><td><input type="text" id="psm6_t" value="0"></td><td><input type="text" id="psm6_a" value="0"></td><td><input type="text" id="psm6_p" value="0%"></td></tr>
-                    <tr><td>Nipis madu</td><td><input type="text" id="psm7_t" value="0"></td><td><input type="text" id="psm7_a" value="0"></td><td><input type="text" id="psm7_p" value="0%"></td></tr>
-                    <tr><td>Taro</td><td><input type="text" id="psm8_t" value="0"></td><td><input type="text" id="psm8_a" value="0"></td><td><input type="text" id="psm8_p" value="0%"></td></tr>
+                    <tr><td><input type="text" id="psm1_name" value="BANGO" style="text-align: left; font-weight: bold;"></td><td><input type="text" id="psm1_t" value="0"></td><td><input type="text" id="psm1_a" value="0"></td><td><input type="text" id="psm1_p" value="0%"></td></tr>
+                    <tr><td><input type="text" id="psm2_name" value="DAIA" style="text-align: left; font-weight: bold;"></td><td><input type="text" id="psm2_t" value="0"></td><td><input type="text" id="psm2_a" value="0"></td><td><input type="text" id="psm2_p" value="0%"></td></tr>
+                    <tr><td><input type="text" id="psm3_name" value="ENAAK" style="text-align: left; font-weight: bold;"></td><td><input type="text" id="psm3_t" value="0"></td><td><input type="text" id="psm3_a" value="0"></td><td><input type="text" id="psm3_p" value="0%"></td></tr>
+                    <tr><td><input type="text" id="psm4_name" value="GARNIER" style="text-align: left; font-weight: bold;"></td><td><input type="text" id="psm4_t" value="0"></td><td><input type="text" id="psm4_a" value="0"></td><td><input type="text" id="psm4_p" value="0%"></td></tr>
+                    <tr><td><input type="text" id="psm5_name" value="LE MINERAL" style="text-align: left; font-weight: bold;"></td><td><input type="text" id="psm5_t" value="0"></td><td><input type="text" id="psm5_a" value="0"></td><td><input type="text" id="psm5_p" value="0%"></td></tr>
+                    <tr><td><input type="text" id="psm6_name" value="LIFEBUOY" style="text-align: left; font-weight: bold;"></td><td><input type="text" id="psm6_t" value="0"></td><td><input type="text" id="psm6_a" value="0"></td><td><input type="text" id="psm6_p" value="0%"></td></tr>
+                    <tr><td><input type="text" id="psm7_name" value="NIPIS MADU" style="text-align: left; font-weight: bold;"></td><td><input type="text" id="psm7_t" value="0"></td><td><input type="text" id="psm7_a" value="0"></td><td><input type="text" id="psm7_p" value="0%"></td></tr>
+                    <tr><td><input type="text" id="psm8_name" value="TARO" style="text-align: left; font-weight: bold;"></td><td><input type="text" id="psm8_t" value="0"></td><td><input type="text" id="psm8_a" value="0"></td><td><input type="text" id="psm8_p" value="0%"></td></tr>
                     <tr>
-                        <td><input type="text" id="psm9_name" placeholder="Item Lainnya..." style="text-align: left;"></td>
+                        <td><input type="text" id="psm9_name" value="" placeholder="Item Lainnya..." style="text-align: left; font-weight: bold;"></td>
                         <td><input type="text" id="psm9_t" value="0"></td>
                         <td><input type="text" id="psm9_a" value="0"></td>
                         <td><input type="text" id="psm9_p" value="0%"></td>
@@ -293,7 +296,29 @@
             return Math.round(num).toLocaleString('id-ID');
         }
 
-        // Mengubah target MTD otomatis saat toko dipilih
+        // Simpan nama-nama item PSM ke LocalStorage
+        function simpanDaftarPsm() {
+            const psmNames = {};
+            for (let i = 1; i <= 9; i++) {
+                psmNames['psm' + i] = document.getElementById('psm' + i + '_name').value;
+            }
+            localStorage.setItem('daftar_nama_psm', JSON.stringify(psmNames));
+            alert("Daftar nama item PSM berhasil disimpan! Nama ini akan tetap tersimpan saat Anda membuka ulang halaman.");
+        }
+
+        // Muat nama-nama item PSM tersimpan saat halaman dimuat
+        function muatDaftarPsm() {
+            const savedPsm = localStorage.getItem('daftar_nama_psm');
+            if (savedPsm) {
+                const psmNames = JSON.parse(savedPsm);
+                for (let i = 1; i <= 9; i++) {
+                    if (psmNames['psm' + i] !== undefined) {
+                        document.getElementById('psm' + i + '_name').value = psmNames['psm' + i];
+                    }
+                }
+            }
+        }
+
         function gantiPilihanToko() {
             const select = document.getElementById('selectStore');
             const selectedOption = select.options[select.selectedIndex];
@@ -301,7 +326,6 @@
             
             document.getElementById('revTargetMtd').value = formatNum(parseInt(targetMtd, 10));
             
-            // Kosongkan nilai Actual dan lainnya agar bersih dari data sebelumnya
             document.getElementById('revActual').value = '0';
             document.getElementById('fokus1_t').value = '0'; document.getElementById('fokus1_s').value = '0';
             document.getElementById('fokus2_t').value = '0'; document.getElementById('fokus2_s').value = '0';
@@ -361,8 +385,8 @@
                 f4_t: parseNum(document.getElementById('fokus4_t').value),
                 f4_s: parseNum(document.getElementById('fokus4_s').value),
 
-                psm_t: (parseNum(document.getElementById('psm1_t').value) + parseNum(document.getElementById('psm2_t').value) + parseNum(document.getElementById('psm3_t').value) + parseNum(document.getElementById('psm4_t').value) + parseNum(document.getElementById('psm5_t').value) + parseNum(document.getElementById('psm6_t').value) + parseNum(document.getElementById('psm7_t').value) + parseNum(document.getElementById('psm8_t').value)),
-                psm_a: (parseNum(document.getElementById('psm1_a').value) + parseNum(document.getElementById('psm2_a').value) + parseNum(document.getElementById('psm3_a').value) + parseNum(document.getElementById('psm4_a').value) + parseNum(document.getElementById('psm5_a').value) + parseNum(document.getElementById('psm6_a').value) + parseNum(document.getElementById('psm7_a').value) + parseNum(document.getElementById('psm8_a').value)),
+                psm_t: (parseNum(document.getElementById('psm1_t').value) + parseNum(document.getElementById('psm2_t').value) + parseNum(document.getElementById('psm3_t').value) + parseNum(document.getElementById('psm4_t').value) + parseNum(document.getElementById('psm5_t').value) + parseNum(document.getElementById('psm6_t').value) + parseNum(document.getElementById('psm7_t').value) + parseNum(document.getElementById('psm8_t').value) + parseNum(document.getElementById('psm9_t').value)),
+                psm_a: (parseNum(document.getElementById('psm1_a').value) + parseNum(document.getElementById('psm2_a').value) + parseNum(document.getElementById('psm3_a').value) + parseNum(document.getElementById('psm4_a').value) + parseNum(document.getElementById('psm5_a').value) + parseNum(document.getElementById('psm6_a').value) + parseNum(document.getElementById('psm7_a').value) + parseNum(document.getElementById('psm8_a').value) + parseNum(document.getElementById('psm9_a').value)),
 
                 mNew: parseNum(document.getElementById('memberNew').value),
                 mStruk: parseNum(document.getElementById('memberStruk').value),
@@ -469,20 +493,18 @@
                 const f3 = `${getVal('fokus3_t')}/${getVal('fokus3_s')}/${getVal('fokus3_p')}`;
                 const f4 = `${getVal('fokus4_t')}/${getVal('fokus4_s')}/${getVal('fokus4_p')}`;
 
-                const p1 = `${getVal('psm1_t')} - ${getVal('psm1_a')} - ${getVal('psm1_p')}`;
-                const p2 = `${getVal('psm2_t')} - ${getVal('psm2_a')} - ${getVal('psm2_p')}`;
-                const p3 = `${getVal('psm3_t')} - ${getVal('psm3_a')} - ${getVal('psm3_p')}`;
-                const p4 = `${getVal('psm4_t')} - ${getVal('psm4_a')} - ${getVal('psm4_p')}`;
-                const p5 = `${getVal('psm5_t')} - ${getVal('psm5_a')} - ${getVal('psm5_p')}`;
-                const p6 = `${getVal('psm6_t')} - ${getVal('psm6_a')} - ${getVal('psm6_p')}`;
-                const p7 = `${getVal('psm7_t')} - ${getVal('psm7_a')} - ${getVal('psm7_p')}`;
-                const p8 = `${getVal('psm8_t')} - ${getVal('psm8_a')} - ${getVal('psm8_p')}`;
+                let psmListText = "";
+                for (let i = 1; i <= 8; i++) {
+                    const nameItem = getVal('psm' + i + '_name').toUpperCase();
+                    const pItem = `${getVal('psm' + i + '_t')} - ${getVal('psm' + i + '_a')} - ${getVal('psm' + i + '_p')}`;
+                    psmListText += `${i}. ${nameItem}: ${pItem}\n`;
+                }
                 
-                let p9Text = "";
                 const p9NameVal = getVal('psm9_name');
                 if (p9NameVal) {
-                    p9Text = `\n9. ${p9NameVal.toUpperCase()}: ${getVal('psm9_t')} - ${getVal('psm9_a')} - ${getVal('psm9_p')}`;
+                    psmListText += `9. ${p9NameVal.toUpperCase()}: ${getVal('psm9_t')} - ${getVal('psm9_a')} - ${getVal('psm9_p')}\n`;
                 }
+                psmListText = psmListText.trimEnd();
 
                 const mNew = getVal('memberNew');
                 const mStruk = getVal('memberStruk');
@@ -521,14 +543,7 @@
                        `======================\n` +
                        `*PSM*\n` +
                        `(In Qty).( Target - actual - %)\n` +
-                       `1. BANGO: ${p1}\n` +
-                       `2. DAIA: ${p2}\n` +
-                       `3. ENAKK: ${p3}\n` +
-                       `4. GARNIER: ${p4}\n` +
-                       `5. LE MINERALE: ${p5}\n` +
-                       `6. LIFEBUOY: ${p6}\n` +
-                       `7. NIPIS MADU: ${p7}\n` +
-                       `8. TARO: ${p8}` + p9Text + `\n` +
+                       psmListText + `\n` +
                        `======================\n` +
                        `*CATEGORY*\t(Rupiah)\n` +
                        `( Sales )\n` +
@@ -580,7 +595,6 @@
             }
 
             document.getElementById('outputResult').innerText = text;
-
             document.getElementById('loadingStatus').style.display = 'block';
 
             const payload = {
@@ -616,6 +630,7 @@
         }
 
         window.onload = function() {
+            muatDaftarPsm(); // Muat nama item PSM tersimpan saat halaman dibuka
             gantiPilihanToko(); // Set target awal sesuai toko pertama
         };
     </script>
