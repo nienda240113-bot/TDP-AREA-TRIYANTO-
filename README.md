@@ -20,11 +20,8 @@
         button:hover { background-color: #15803d; }
         .btn-blue { background-color: #2563eb; }
         .btn-blue:hover { background-color: #1d4ed8; }
-        .btn-purple { background-color: #7c3aed; margin-top: 0.5rem; margin-bottom: 0.75rem; }
-        .btn-purple:hover { background-color: #6d28d9; }
         pre { background: #ffffff; color: #000000 !important; font-weight: 700 !important; padding: 1rem; border-radius: 0.75rem; white-space: pre-wrap; font-family: monospace; font-size: 0.8rem; border: 1px solid #334155; }
         .loading { display: none; text-align: center; color: #d97706; font-weight: 600; font-size: 0.85rem; margin-top: 0.5rem; }
-        .info-periode { font-size: 0.75rem; color: #dc2626; margin-bottom: 0.5rem; font-style: italic; font-weight: 500; }
         .table-input { width: 100%; border-collapse: collapse; margin-bottom: 0.5rem; font-size: 0.8rem; }
         .table-input th { background-color: #0d9488; color: white; padding: 0.5rem; text-align: center; border: 1px solid #14b8a6; }
         .table-input td { padding: 0.35rem; border: 1px solid #e2e8f0; text-align: center; }
@@ -39,9 +36,18 @@
         <p class="text-xs text-slate-500 mt-1 font-medium">Sistem Pelaporan & Rekapitulasi Toko Terintegrasi Cloud</p>
     </header>
 
+    <!-- PILIHAN MODE LAPORAN -->
+    <div class="card-modern border-blue-300 bg-blue-50/50">
+        <label for="modeReport" class="text-blue-700">Pilih Jenis Mode:</label>
+        <select id="modeReport" onchange="toggleModeReport()" class="bg-white font-semibold text-blue-900 border-blue-300">
+            <option value="single">1. Input / Edit Per Toko</option>
+            <option value="rekap">2. Rekap Gabungan 20 Toko Area</option>
+        </select>
+    </div>
+
     <div class="card-modern">
         <label for="periode">Periode (Tanggal Laporan):</label>
-        <input type="date" id="periode" onchange="muatDataDariCloud()">
+        <input type="date" id="periode" onchange="handlePeriodeChange()">
 
         <div class="row-group mt-2">
             <div><label>Shift:</label><input type="text" id="shift" value="2"></div>
@@ -53,31 +59,34 @@
             <div><label>AC:</label><input type="text" id="ac" value="TRIYANTO"></div>
         </div>
 
-        <label for="selectStore">Pilih Toko:</label>
-        <select id="selectStore" onchange="muatDataDariCloud()">
-            <option value="CI30|STTD">CI30 - STTD</option>
-            <option value="CG54|MM2100">CG54 - MM2100</option>
-            <option value="CG76|SPBU MM2100">CG76 - SPBU MM2100</option>
-            <option value="CA71|WARUNG SENGON">CA71 - WARUNG SENGON</option>
-            <option value="C965|CIBUNTU">C965 - CIBUNTU</option>
-            <option value="CI15|RAYA PASAR SETU">CI15 - RAYA PASAR SETU</option>
-            <option value="CF50|DANAU INDAH">CF50 - DANAU INDAH</option>
-            <option value="C560|RAWA JULANG">C560 - RAWA JULANG</option>
-            <option value="CH41|KP. MARIUK">CH41 - KP. MARIUK</option>
-            <option value="CC21|RAYA KP. UTAN">CC21 - RAYA KP. UTAN</option>
-            <option value="C624|RAWA BANTENG">C624 - RAWA BANTENG</option>
-            <option value="CE47|MEKARWANGI">CE47 - MEKARWANGI</option>
-            <option value="CI54|RAWA JULANG BARU">CI54 - RAWA JULANG BARU</option>
-            <option value="C574|SUKADANAU 2">C574 - SUKADANAU 2</option>
-            <option value="CG86|JARAKOSTA">CG86 - JARAKOSTA</option>
-            <option value="CH81|CIKEDOKAN SUKADANAU">CH81 - CIKEDOKAN SUKADANAU</option>
-            <option value="CA94|KP TANGSI">CA94 - KP TANGSI</option>
-            <option value="C935|TLAJUNG 2">C935 - TLAJUNG 2</option>
-            <option value="CI84|TELAJUNG KAWASAN">CI84 - TELAJUNG KAWASAN</option>
-            <option value="C573|GRAHA MUSTIKA MEDIA">C573 - GRAHA MUSTIKA MEDIA</option>
-        </select>
+        <div id="containerSelectStore">
+            <label for="selectStore">Pilih Toko:</label>
+            <select id="selectStore" onchange="muatDataDariCloud()">
+                <option value="CI30|STTD">CI30 - STTD</option>
+                <option value="CG54|MM2100">CG54 - MM2100</option>
+                <option value="CG76|SPBU MM2100">CG76 - SPBU MM2100</option>
+                <option value="CA71|WARUNG SENGON">CA71 - WARUNG SENGON</option>
+                <option value="C965|CIBUNTU">C965 - CIBUNTU</option>
+                <option value="CI15|RAYA PASAR SETU">CI15 - RAYA PASAR SETU</option>
+                <option value="CF50|DANAU INDAH">CF50 - DANAU INDAH</option>
+                <option value="C560|RAWA JULANG">C560 - RAWA JULANG</option>
+                <option value="CH41|KP. MARIUK">CH41 - KP. MARIUK</option>
+                <option value="CC21|RAYA KP. UTAN">CC21 - RAYA KP. UTAN</option>
+                <option value="C624|RAWA BANTENG">C624 - RAWA BANTENG</option>
+                <option value="CE47|MEKARWANGI">CE47 - MEKARWANGI</option>
+                <option value="CI54|RAWA JULANG BARU">CI54 - RAWA JULANG BARU</option>
+                <option value="C574|SUKADANAU 2">C574 - SUKADANAU 2</option>
+                <option value="CG86|JARAKOSTA">CG86 - JARAKOSTA</option>
+                <option value="CH81|CIKEDOKAN SUKADANAU">CH81 - CIKEDOKAN SUKADANAU</option>
+                <option value="CA94|KP TANGSI">CA94 - KP TANGSI</option>
+                <option value="C935|TLAJUNG 2">C935 - TLAJUNG 2</option>
+                <option value="CI84|TELAJUNG KAWASAN">CI84 - TELAJUNG KAWASAN</option>
+                <option value="C573|GRAHA MUSTIKA MEDIA">C573 - GRAHA MUSTIKA MEDIA</option>
+            </select>
+        </div>
     </div>
 
+    <!-- FORM INPUT PER TOKO -->
     <div class="card-modern" id="formPerToko">
         <fieldset>
             <legend>💰 REVENUE</legend>
@@ -120,6 +129,7 @@
         <button onclick="simpanKeCloud()">💾 Simpan Semua Data ke Cloud</button>
     </div>
 
+    <!-- PREVIEW / STATUS -->
     <div class="card-modern">
         <label>Status / Preview WhatsApp:</label>
         <pre id="outputResult">Belum ada data dikirim.</pre>
@@ -127,7 +137,7 @@
     </div>
 
     <script>
-        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxYjtMqkKz_QmgTtJGIa5VzqqyBxaGx1CD2-5sKLgADtb6hoGUtAwB9WScug8HuQwa9/exec";
+        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwgUCeDwAHOdjK6WmZ0RrUpQ1fzpI0jBQx7lggkYC4U7CZfwcV52s59WQ_DPyaAFrDi/exec";
 
         function setTanggalOtomatis() {
             const today = new Date();
@@ -135,7 +145,7 @@
             const mm = String(today.getMonth() + 1).padStart(2, '0');
             const dd = String(today.getDate()).padStart(2, '0');
             document.getElementById('periode').value = `${yyyy}-${mm}-${dd}`;
-            muatDataDariCloud(); // Langsung muat data setelah tanggal di-set
+            muatDataDariCloud();
         }
 
         function resetForm() {
@@ -151,13 +161,38 @@
             }
         }
 
-        // Ambil data lama dari Google Sheets saat ganti toko / tanggal / refresh
+        function toggleModeReport() {
+            const mode = document.getElementById('modeReport').value;
+            const formToko = document.getElementById('formPerToko');
+            const selectStoreContainer = document.getElementById('containerSelectStore');
+
+            if (mode === 'rekap') {
+                formToko.style.display = 'none';
+                selectStoreContainer.style.display = 'none';
+                tarikRekapArea();
+            } else {
+                formToko.style.display = 'block';
+                selectStoreContainer.style.display = 'block';
+                muatDataDariCloud();
+            }
+        }
+
+        function handlePeriodeChange() {
+            const mode = document.getElementById('modeReport').value;
+            if (mode === 'rekap') {
+                tarikRekapArea();
+            } else {
+                muatDataDariCloud();
+            }
+        }
+
+        // Ambil data per toko dari Cloud
         function muatDataDariCloud() {
             const storeVal = document.getElementById('selectStore').value;
             const periode = document.getElementById('periode').value;
             const loading = document.getElementById('loadingStatus');
 
-            resetForm(); // Kosongkan dulu agar tidak tercampur toko lain
+            resetForm();
             loading.style.display = 'block';
 
             fetch(`${WEB_APP_URL}?action=get&store=${encodeURIComponent(storeVal)}&periode=${periode}`)
@@ -192,7 +227,52 @@
             });
         }
 
-        // Kirim data ke Google Sheets
+        // Tarik rekap gabungan 20 toko area
+        function tarikRekapArea() {
+            const periode = document.getElementById('periode').value;
+            const loading = document.getElementById('loadingStatus');
+            loading.style.display = 'block';
+            loading.innerText = "Menarik rekapitulasi 20 toko dari Cloud...";
+
+            fetch(`${WEB_APP_URL}?action=rekapArea&periode=${periode}`)
+            .then(res => res.json())
+            .then(data => {
+                loading.style.display = 'none';
+                if(data.success) {
+                    let totalActualSemuaToko = 0;
+                    let totalTargetSemuaToko = 0;
+                    let rincianTeks = `📊 *REKAP AREA SALES TRIYANTO*\n📅 Tanggal: ${periode}\n----------------------------------\n`;
+                    
+                    if (data.rekapList.length === 0) {
+                        rincianTeks += `Belum ada data toko yang tersimpan pada tanggal ${periode}.`;
+                    } else {
+                        data.rekapList.forEach((item, index) => {
+                            let p = item.payload;
+                            let actual = parseFloat(String(p.revActual).replace(/\./g,'')) || 0;
+                            let target = parseFloat(String(p.revTargetMtd).replace(/\./g,'')) || 0;
+                            
+                            totalActualSemuaToko += actual;
+                            totalTargetSemuaToko += target;
+                            
+                            rincianTeks += `${index + 1}. Toko ${item.store}\n   Actual: Rp ${p.revActual} | Target: Rp ${p.revTargetMtd}\n`;
+                        });
+                        
+                        rincianTeks += `----------------------------------\n`;
+                        rincianTeks += `💰 *TOTAL ACTUAL AREA: Rp ${totalActualSemuaToko.toLocaleString('id-ID')}*\n`;
+                        rincianTeks += `🎯 *TOTAL TARGET MTD: Rp ${totalTargetSemuaToko.toLocaleString('id-ID')}*`;
+                    }
+                    
+                    document.getElementById('outputResult').innerText = rincianTeks;
+                }
+            })
+            .catch(err => {
+                loading.style.display = 'none';
+                alert("Gagal menarik data rekap area.");
+                console.error(err);
+            });
+        }
+
+        // Simpan data per toko ke Cloud
         function simpanKeCloud() {
             const loading = document.getElementById('loadingStatus');
             loading.style.display = 'block';
@@ -242,7 +322,7 @@
             });
         }
 
-        // Jalankan saat pertama kali dibuka
+        // Jalankan saat pertama kali halaman dibuka
         setTanggalOtomatis();
     </script>
 </body>
