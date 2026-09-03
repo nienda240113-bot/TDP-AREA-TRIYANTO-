@@ -189,13 +189,13 @@
 
         <fieldset>
             <legend>CATEGORY (Rupiah Sales)</legend>
-            <label>1. Toys (NS):</label><input type="text" id="cat1" value="0">
-            <label>2. HBPL (NS):</label><input type="text" id="cat2" value="0">
+            <label>1. Toys (NS):</label><input type="text" id="cat1" value="0" oninput="muatPreviewOtomatis()">
+            <label>2. HBPL (NS):</label><input type="text" id="cat2" value="0" oninput="muatPreviewOtomatis()">
         </fieldset>
 
         <fieldset>
             <legend>E-COMMERCE</legend>
-            <label>Fee Base (Rp):</label><input type="text" id="feeBase" value="0">
+            <label>Fee Base (Rp):</label><input type="text" id="feeBase" value="0" oninput="muatPreviewOtomatis()">
         </fieldset>
 
         <button onclick="processData('single')">Generate & Simpan Semua ke Cloud</button>
@@ -238,12 +238,14 @@
                 document.getElementById('formRekapArea').style.display = 'none';
                 document.getElementById('shift').style.display = 'block';
                 document.getElementById('labelShift').style.display = 'block';
+                muatPreviewOtomatis();
             } else {
                 document.getElementById('singleStoreSection').style.display = 'none';
                 document.getElementById('formPerToko').style.display = 'none';
                 document.getElementById('formRekapArea').style.display = 'block';
                 document.getElementById('shift').style.display = 'none';
                 document.getElementById('labelShift').style.display = 'none';
+                document.getElementById('outputResult').innerText = "Silakan klik tombol 'Tarik Data & Generate Rekap 20 Toko' di atas.";
             }
         }
 
@@ -380,13 +382,18 @@
                 const p = t > 0 ? Math.round((a / t) * 100) + '%' : '0%';
                 document.getElementById('psm' + i + '_p').value = p;
             }
+
+            muatPreviewOtomatis();
         }
 
         function getVal(id) {
             return document.getElementById(id) ? document.getElementById(id).value : '';
         }
 
-        function processData(type) {
+        function muatPreviewOtomatis() {
+            const mode = document.getElementById('modeReport').value;
+            if (mode !== 'single') return;
+
             const periodeRaw = getVal('periode');
             const periode = formatDateID(periodeRaw);
             const wh = getVal('wh');
@@ -396,33 +403,18 @@
             const storeVal = getVal('selectStore').split('|');
             const kodeToko = storeVal[0];
             const namaToko = storeVal[1];
-            const shift = getVal('shift');
-            const jenisLaporan = "Laporan Per Toko (Shift)";
-            const shiftInfo = "Shift " + shift;
 
             const f1 = `${getVal('fokus1_t')}/${getVal('fokus1_s')}/${document.getElementById('fokus1_p').value}`;
             const f2 = `${getVal('fokus2_t')}/${getVal('fokus2_s')}/${document.getElementById('fokus2_p').value}`;
             const f3 = `${getVal('fokus3_t')}/${getVal('fokus3_s')}/${document.getElementById('fokus3_p').value}`;
             const f4 = `${getVal('fokus4_t')}/${getVal('fokus4_s')}/${document.getElementById('fokus4_p').value}`;
 
-            let psmListText = "";
-            for (let i = 1; i <= 8; i++) {
-                const nameItem = getVal('psm' + i + '_name').toUpperCase();
-                const pItem = `${getVal('psm' + i + '_t')}/${getVal('psm' + i + '_a')}/${document.getElementById('psm' + i + '_p').value}`;
-                psmListText += `${i}. ${nameItem} : ${pItem}\n`;
-            }
-            const p9NameVal = getVal('psm9_name');
-            if (p9NameVal) {
-                psmListText += `9. ${p9NameVal.toUpperCase()} : ${getVal('psm9_t')}/${getVal('psm9_a')}/${document.getElementById('psm9_p').value}\n`;
-            }
-            psmListText = psmListText.trimEnd();
-
             const mNew = getVal('memberNew');
             const mStruk = getVal('memberStruk');
             const tStruk = getVal('totalStruk');
             const mPersen = tStruk > 0 ? Math.round((mStruk / tStruk) * 100) + '%' : '0%';
 
-            let text = `*REPORT SALES*\n` +
+            let text = `*REPORT SALES - TOKO ${kodeToko} (${namaToko})*\n` +
                        `PERIODE : ${periode}\n` +
                        `WH : ${wh}\n` +
                        `AM : ${am}\n` +
@@ -445,7 +437,6 @@
                        `2. SERBA GRATIS (PAKET) : ${f2}\n` +
                        `3. SUEUGEER : ${f3}\n` +
                        `4. PROMO CEBAN : ${f4}\n` +
-                       `5. PSM : (Lihat Rincian PSM Bawah)\n` +
                        `*MEMBER*\n` +
                        `1. Actual NEW MEMBER : ${mNew}/0/0%\n` +
                        `2. Konstribusi struk Member : ${tStruk}/${mStruk}/${mPersen}\n` +
@@ -459,6 +450,20 @@
                        `Terimakasih`;
 
             document.getElementById('outputResult').innerText = text;
+        }
+
+        function processData(type) {
+            muatPreviewOtomatis();
+            const periodeRaw = getVal('periode');
+            const periode = formatDateID(periodeRaw);
+            const storeVal = getVal('selectStore').split('|');
+            const kodeToko = storeVal[0];
+            const namaToko = storeVal[1];
+            const shift = getVal('shift');
+            const jenisLaporan = "Laporan Per Toko (Shift)";
+            const shiftInfo = "Shift " + shift;
+            const text = document.getElementById('outputResult').innerText;
+
             document.getElementById('loadingStatus').style.display = 'block';
 
             let payload = {
@@ -562,8 +567,9 @@
                 let totTargetMtd = 0, totActual = 0;
                 let totF1_t = 0, totF1_s = 0, totF2_t = 0, totF2_s = 0, totF3_t = 0, totF3_s = 0, totF4_t = 0, totF4_s = 0;
                 let totMNew = 0, totMStruk = 0, totTStruk = 0, totCat1 = 0, totCat2 = 0, totFeeBase = 0;
+                let listTokoText = "";
 
-                results.forEach(item => {
+                results.forEach((item, index) => {
                     totTargetMtd += item.targetMtd;
                     totActual += item.actual;
                     totF1_t += item.f1_t; totF1_s += item.f1_s;
@@ -576,6 +582,9 @@
                     totCat1 += item.cat1;
                     totCat2 += item.cat2;
                     totFeeBase += item.feeBase;
+
+                    let statusToko = item.found ? "✅ Masuk" : "❌ Belum Input";
+                    listTokoText += `${index + 1}. [${item.kode}] ${item.nama} (${statusToko})\n`;
                 });
 
                 const tfPersenInput = 6.66;
@@ -592,13 +601,16 @@
                 const f4_p = totF4_t > 0 ? Math.round((totF4_s / totF4_t) * 100) + '%' : '0%';
                 const mPersen = totTStruk > 0 ? Math.round((totMStruk / totTStruk) * 100) + '%' : '0%';
 
-                let rekapText = `*REPORT SALES (REKAP 20 TOKO AREA)*\n` +
+                let rekapText = `*REPORT SALES (REKAP GABUNGAN 20 TOKO)*\n` +
                                 `PERIODE : ${periode}\n` +
                                 `WH : ${wh}\n` +
                                 `AM : ${am}\n` +
                                 `AC : ${ac}\n` +
                                 `======================\n` +
-                                `*REVENUE*\n` +
+                                `*DAFTAR 20 TOKO AREA*\n` +
+                                `${listTokoText}` +
+                                `======================\n` +
+                                `*REVENUE (TOTAL)*\n` +
                                 `1. NET SALES\n` +
                                 `- Time factor : 6,66%\n` +
                                 `- TARGET MTD : ${formatNum(totTargetMtd)}\n` +
@@ -609,26 +621,26 @@
                                 `- GAP TO TARGET : ${formatNum(totGapTarget)}\n` +
                                 `- GAP To Time Factor : ${formatNum(totGapTf)}\n` +
                                 `======================\n` +
-                                `*FOKUS CABANG*\n` +
+                                `*FOKUS CABANG (TOTAL)*\n` +
                                 ` TARGET/SALES/ ACV%\n` +
                                 `1. TEBUS MURAH (QTY REDEEM) : ${totF1_t}/${totF1_s}/${f1_p}\n` +
                                 `2. SERBA GRATIS (PAKET) : ${totF2_t}/${totF2_s}/${f2_p}\n` +
                                 `3. SUEUGEER : ${totF3_t}/${totF3_s}/${f3_p}\n` +
                                 `4. PROMO CEBAN : ${totF4_t}/${totF4_s}/${f4_p}\n` +
-                                `*MEMBER*\n` +
+                                `*MEMBER (TOTAL)*\n` +
                                 `1. Actual NEW MEMBER : ${totMNew}/0/0%\n` +
                                 `2. Konstribusi struk Member : ${totTStruk}/${totMStruk}/${mPersen}\n` +
-                                `*CATEGORY* (Rupiah)\n` +
+                                `*CATEGORY (TOTAL)* (Rupiah)\n` +
                                 `( Sales )\n` +
                                 `1. TOYS (NS) : ${formatNum(totCat1)}\n` +
                                 `2. HBPL : ${formatNum(totCat2)}\n` +
                                 `======================\n` +
-                                `*E-COMMERCE*\n` +
+                                `*E-COMMERCE (TOTAL)*\n` +
                                 `1. FEE BASE (RP) : ${formatNum(totFeeBase)}\n` +
                                 `Terimakasih`;
 
                 document.getElementById('outputResult').innerText = rekapText;
-                alert("Rekap gabungan 20 toko berhasil digenerate sesuai format!");
+                alert("Rekap gabungan 20 toko beserta daftar nama & kode toko berhasil digenerate!");
             }).catch(err => {
                 document.getElementById('loadingStatus').style.display = 'none';
                 alert("Terjadi kesalahan saat menarik data rekap: " + err);
