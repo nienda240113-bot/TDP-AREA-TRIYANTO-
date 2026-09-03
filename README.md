@@ -111,17 +111,17 @@
             <table class="table-input">
                 <thead>
                     <tr>
-                        <th style="width: 37%;">Nama Program</th>
-                        <th style="width: 21%;">Target</th>
-                        <th style="width: 21%;">Sales</th>
-                        <th style="width: 21%;">OnHand</th>
+                        <th style="width: 40%;">Nama Program</th>
+                        <th style="width: 20%;">Target</th>
+                        <th style="width: 20%;">Sales</th>
+                        <th style="width: 20%;">%</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr><td>TEBUS MURAH</td><td><input type="text" id="fokus1_t" value="23"></td><td><input type="text" id="fokus1_s" value="30"></td><td><input type="text" id="fokus1_oh" value="0"></td></tr>
-                    <tr><td>SERBA GRATIS</td><td><input type="text" id="fokus2_t" value="14"></td><td><input type="text" id="fokus2_s" value="6"></td><td><input type="text" id="fokus2_oh" value="0"></td></tr>
-                    <tr><td>SUEUGEER</td><td><input type="text" id="fokus3_t" value="68"></td><td><input type="text" id="fokus3_s" value="19"></td><td><input type="text" id="fokus3_oh" value="0"></td></tr>
-                    <tr><td>PROMO CEBAN</td><td><input type="text" id="fokus4_t" value="278"></td><td><input type="text" id="fokus4_s" value="0"></td><td><input type="text" id="fokus4_oh" value="0"></td></tr>
+                    <tr><td>TEBUS MURAH</td><td><input type="text" id="fokus1_t" value="23"></td><td><input type="text" id="fokus1_s" value="30"></td><td><input type="text" id="fokus1_p" value="130%"></td></tr>
+                    <tr><td>SERBA GRATIS</td><td><input type="text" id="fokus2_t" value="14"></td><td><input type="text" id="fokus2_s" value="6"></td><td><input type="text" id="fokus2_p" value="43%"></td></tr>
+                    <tr><td>SUEUGEER</td><td><input type="text" id="fokus3_t" value="68"></td><td><input type="text" id="fokus3_s" value="19"></td><td><input type="text" id="fokus3_p" value="28%"></td></tr>
+                    <tr><td>PROMO CEBAN</td><td><input type="text" id="fokus4_t" value="278"></td><td><input type="text" id="fokus4_s" value="0"></td><td><input type="text" id="fokus4_p" value="0%"></td></tr>
                 </tbody>
             </table>
         </fieldset>
@@ -164,7 +164,6 @@
                     <tr><td>Lifebuoy</td><td><input type="text" id="psm6_t" value="24"></td><td><input type="text" id="psm6_a" value="2"></td><td><input type="text" id="psm6_p" value="8%"></td></tr>
                     <tr><td>Nipis madu</td><td><input type="text" id="psm7_t" value="139"></td><td><input type="text" id="psm7_a" value="7"></td><td><input type="text" id="psm7_p" value="5%"></td></tr>
                     <tr><td>Taro</td><td><input type="text" id="psm8_t" value="59"></td><td><input type="text" id="psm8_a" value="4"></td><td><input type="text" id="psm8_p" value="7%"></td></tr>
-                    <!-- Baris Tambahan Kosong -->
                     <tr>
                         <td><input type="text" id="psm9_name" placeholder="Item Lainnya..." style="text-align: left;"></td>
                         <td><input type="text" id="psm9_t" value="0"></td>
@@ -299,10 +298,10 @@
                 jenisLaporan = "Laporan Per Toko (Shift)";
                 shiftInfo = "Shift " + shift;
 
-                const f1 = `${getVal('fokus1_t')}/${getVal('fokus1_s')}/${Math.round((getVal('fokus1_s')/(getVal('fokus1_t')||1))*100)}%`;
-                const f2 = `${getVal('fokus2_t')}/${getVal('fokus2_s')}/${Math.round((getVal('fokus2_s')/(getVal('fokus2_t')||1))*100)}%`;
-                const f3 = `${getVal('fokus3_t')}/${getVal('fokus3_s')}/${Math.round((getVal('fokus3_s')/(getVal('fokus3_t')||1))*100)}%`;
-                const f4 = `${getVal('fokus4_t')}/${getVal('fokus4_s')}/${Math.round((getVal('fokus4_s')/(getVal('fokus4_t')||1))*100)}%`;
+                const f1 = `${getVal('fokus1_t')}/${getVal('fokus1_s')}/${getVal('fokus1_p')}`;
+                const f2 = `${getVal('fokus2_t')}/${getVal('fokus2_s')}/${getVal('fokus2_p')}`;
+                const f3 = `${getVal('fokus3_t')}/${getVal('fokus3_s')}/${getVal('fokus3_p')}`;
+                const f4 = `${getVal('fokus4_t')}/${getVal('fokus4_s')}/${getVal('fokus4_p')}`;
 
                 const p1 = `${getVal('psm1_t')} - ${getVal('psm1_a')} - ${getVal('psm1_p')}`;
                 const p2 = `${getVal('psm2_t')} - ${getVal('psm2_a')} - ${getVal('psm2_p')}`;
@@ -355,4 +354,105 @@
                        `2. Konstribusi struk Member : ${tStruk}/${mStruk}/${mPersen}%\n` +
                        `======================\n` +
                        `*PSM*\n` +
-                       `(In Qty).
+                       `(In Qty).( Target - actual - %)\n` +
+                       `1. BANGO: ${p1}\n` +
+                       `2. DAIA: ${p2}\n` +
+                       `3. ENAKK: ${p3}\n` +
+                       `4. GARNIER: ${p4}\n` +
+                       `5. LE MINERALE: ${p5}\n` +
+                       `6. LIFEBUOY: ${p6}\n` +
+                       `7. NIPIS MADU: ${p7}\n` +
+                       `8. TARO: ${p8}` + p9Text + `\n` +
+                       `======================\n` +
+                       `*CATEGORY*\t(Rupiah)\n` +
+                       `( Sales )\n` +
+                       `1. TOYS (NS): ${getVal('cat1')}\n` +
+                       `2. HBPL (NS): ${getVal('cat2')}\n` +
+                       `======================\n` +
+                       `*E-COMMERCE*\n` +
+                       `1. FEE BASE (RP)\t: ${getVal('feeBase')}\n` +
+                       `Terimakasih`;
+            } else {
+                jenisLaporan = "Rekap Gabungan 20 Toko Area";
+                shiftInfo = "All Area";
+
+                text = `*REPORT SALES*\n` +
+                       `PERIODE : ${periode}\n` +
+                       `WH : ${wh}\n` +
+                       `AM : ${am}\n` +
+                       `AC  : ${ac}\n` +
+                       `======================\n` +
+                       `*REVENUE*\n` +
+                       `1. NET SALES\t\n` +
+                       `- Time factor : ${getVal('rekTimeFactor')}\n` +
+                       `- TARGET  MTD : ${getVal('rekTargetMtd')}\n` +
+                       `- Target Time Factor : ${getVal('rekTargetTf')}\n` +
+                       `- ACTUAL : ${getVal('rekActual')}\n` +
+                       `- ACHIVE MTD :${getVal('rekAchMtd')}\n` +
+                       `- Achieved Time Factor :${getVal('rekAchTf')}\n` +
+                       `- GAP TO TARGET : ${getVal('rekGapTarget')}\n` +
+                       `- GAP To Time Factor : ${getVal('rekGapTf')}\n` +
+                       `======================\n` +
+                       `*FOKUS CABANG*\n` +
+                       `\tTARGET/SALES/\tACV%\n` +
+                       `1. \tTEBUS MURAH (QTY REDEEM) : ${getVal('rfokus1')}\n` +
+                       `2. \tSERBA GRATIS (PAKET) : ${getVal('rfokus2')}\n` +
+                       `3. SEUUGER : ${getVal('rfokus3')}\n` +
+                       `4. PROMO CEBAN : ${getVal('rfokus4')}\n` +
+                       `5. PSM : ${getVal('rfokus5')}\n` +
+                       `*MEMBER*\n` +
+                       `1. \tActual NEW MEMBER :\t${getVal('rmemberNew')}\n` +
+                       `2. \tKonstribusi struk Member \t: ( Struk MEMBER : Total struk :${getVal('rmemberStruk')}\n` +
+                       `*CATEGORY*\t(Rupiah)\n` +
+                       `( Sales )\n` +
+                       `1. \tTOYS (NS)\t : ${getVal('rcat1')}\n` +
+                       `2. TELUR : ${getVal('rcat2')}\n` +
+                       `======================\n` +
+                       `*E-COMMERCE*\n` +
+                       `1. \tFEE BASE (RP)\t : ${getVal('rFeeBase')}\n` +
+                       `Terimakasih`;
+            }
+
+            document.getElementById('outputResult').innerText = text;
+
+            // Kirim otomatis ke Cloud Google Sheets
+            document.getElementById('loadingStatus').style.display = 'block';
+
+            const payload = {
+                jenisLaporan: jenisLaporan,
+                kodeToko: kodeToko,
+                namaToko: namaToko,
+                periode: periode,
+                shiftInfo: shiftInfo,
+                hasilText: text
+            };
+
+            fetch(WEB_APP_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            })
+            .then(() => {
+                document.getElementById('loadingStatus').style.display = 'none';
+                alert("Report berhasil digenerate dan data otomatis tersimpan aman di Cloud Google Sheets!");
+            })
+            .catch((error) => {
+                document.getElementById('loadingStatus').style.display = 'none';
+                alert("Gagal mengirim ke cloud: " + error);
+            });
+        }
+
+        function copyResult() {
+            const text = document.getElementById('outputResult').innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                alert('Teks format WhatsApp berhasil disalin!');
+            });
+        }
+
+        window.onload = function() {
+            processData('single');
+        };
+    </script>
+</body>
+</html>
