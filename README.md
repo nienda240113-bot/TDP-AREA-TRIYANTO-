@@ -70,26 +70,26 @@
         <div id="singleStoreSection">
             <label for="selectStore">Pilih Toko:</label>
             <select id="selectStore" onchange="gantiPilihanToko()">
-                <option value="C624|ROWOSARI (RWBT)" data-target="453303178">C624 - RWBT</option>
-                <option value="C560|RAJ" data-target="400000000">C560 - RAJ</option>
-                <option value="CH81|CDKS" data-target="380000000">CH81 - CDKS</option>
-                <option value="CG76|SPMM" data-target="350000000">CG76 - SPMM</option>
-                <option value="C573|GMM" data-target="420000000">C573 - GMM</option>
-                <option value="CE47|MKRI" data-target="390000000">CE47 - MKRI</option>
-                <option value="CI30|STTD" data-target="310000000">CI30 - STTD</option>
-                <option value="CH41|KPMRK" data-target="360000000">CH41 - KPMRK</option>
-                <option value="CG54|MM21" data-target="480000000">CG54 - MM21</option>
-                <option value="C935|TLJ2" data-target="340000000">C935 - TLJ2</option>
-                <option value="CA71|WSGN" data-target="330000000">CA71 - WSGN</option>
-                <option value="C965|CIBUNTU (CBNU)" data-target="410000000">C965 - CBNU</option>
-                <option value="CG86|JKST" data-target="370000000">CG86 - JKST</option>
-                <option value="CA94|KPTI" data-target="320000000">CA94 - KPTI</option>
-                <option value="C574|SKU" data-target="450000000">C574 - SKU</option>
-                <option value="CI15|RPSU" data-target="300000000">CI15 - RPSU</option>
-                <option value="CI54|RJLB" data-target="350000000">CI54 - RJLB</option>
-                <option value="CF50|DNIA" data-target="390000000">CF50 - DNIA</option>
-                <option value="CC21|KUTN" data-target="360000000">CC21 - KUTN</option>
-                <option value="CI84|TLKW" data-target="330000000">CI84 - TLKW</option>
+                <option value="CI30|STTD" data-target="222241060">CI30 - STTD (222.241.060)</option>
+                <option value="CG54|MM2100" data-target="517228948">CG54 - MM2100 (517.228.948)</option>
+                <option value="CG76|SPBU MM2100" data-target="318065515">CG76 - SPBU MM2100 (318.065.515)</option>
+                <option value="CA71|WARUNG SENGON" data-target="257174148">CA71 - WARUNG SENGON (257.174.148)</option>
+                <option value="C965|CIBUNTU" data-target="453303178">C965 - CIBUNTU (453.303.178)</option>
+                <option value="CI15|RAYA PASAR SETU" data-target="219614971">CI15 - RAYA PASAR SETU (219.614.971)</option>
+                <option value="CF50|DANAU INDAH" data-target="261984389">CF50 - DANAU INDAH (261.984.389)</option>
+                <option value="C560|RAWA JULANG" data-target="244431245">C560 - RAWA JULANG (244.431.245)</option>
+                <option value="CH41|KP. MARIUK" data-target="367249845">CH41 - KP. MARIUK (367.249.845)</option>
+                <option value="CC21|RAYA KP. UTAN" data-target="329236895">CC21 - RAYA KP. UTAN (329.236.895)</option>
+                <option value="C624|RAWA BANTENG" data-target="401328356">C624 - RAWA BANTENG (401.328.356)</option>
+                <option value="CE47|MEKARWANGI" data-target="453977596">CE47 - MEKARWANGI (453.977.596)</option>
+                <option value="CI54|RAWA JULANG BARU" data-target="194499104">CI54 - RAWA JULANG BARU (194.499.104)</option>
+                <option value="C574|SUKADANAU 2" data-target="566487491">C574 - SUKADANAU 2 (566.487.491)</option>
+                <option value="CG86|JARAKOSTA" data-target="269656078">CG86 - JARAKOSTA (269.656.078)</option>
+                <option value="CH81|CIKEDOKAN SUKADANAU" data-target="371794096">CH81 - CIKEDOKAN SUKADANAU (371.794.096)</option>
+                <option value="CA94|KP TANGSI" data-target="227022310">CA94 - KP TANGSI (227.022.310)</option>
+                <option value="C935|TLAJUNG 2" data-target="316405150">C935 - TLAJUNG 2 (316.405.150)</option>
+                <option value="CI84|TELAJUNG KAWASAN" data-target="328916205">CI84 - TELAJUNG KAWASAN (328.916.205)</option>
+                <option value="C573|GRAHA MUSTIKA MEDIA" data-target="275823672">C573 - GRAHA MUSTIKA MEDIA (275.823.672)</option>
             </select>
         </div>
     </div>
@@ -103,7 +103,7 @@
                 <div><label>Actual (Rp):</label><input type="text" id="revActual" value="0" oninput="hitungOtomatisSingle()"></div>
             </div>
             <div class="row-group">
-                <div><label>Target MTD (Rp):</label><input type="text" id="revTargetMtd" value="453.303.178" oninput="hitungOtomatisSingle()"></div>
+                <div><label>Target MTD (Rp):</label><input type="text" id="revTargetMtd" value="0" oninput="hitungOtomatisSingle()"></div>
                 <div><label>Target TF (Rp) - Auto:</label><input type="text" id="revTargetTf" value="0" readonly style="background-color: #e9ecef;"></div>
             </div>
             <div class="row-group">
