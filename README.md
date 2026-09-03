@@ -44,13 +44,11 @@
             <option value="rekap">2. Rekap Gabungan 20 Toko Area</option>
         </select>
 
-        <button class="btn-purple" onclick="simpanDataTokoAktif(); alert('Berhasil! Data toko untuk tanggal ini telah disimpan.');">💾 Simpan Data Toko Ini</button>
-
         <div class="row-group" style="margin-top: 8px;">
             <div>
-                <label for="periode">Periode:</label>
-                <!-- onchange ditambahkan untuk menyimpan data lama sebelum tanggal diganti -->
-                <input type="date" id="periode" onchange="gantiTanggalReport()">
+                <label for="periode">Periode (Otomatis Tanggal HP):</label>
+                <!-- Tanggal terisi otomatis sesuai HP dan mengambil data cloud saat diubah -->
+                <input type="date" id="periode" onchange="muatDataDariCloud()">
             </div>
             <div>
                 <label for="shift" id="labelShift">Shift:</label>
@@ -74,7 +72,7 @@
 
         <div id="singleStoreSection">
             <label for="selectStore">Pilih Toko:</label>
-            <select id="selectStore" onchange="gantiPilihanToko()">
+            <select id="selectStore" onchange="muatDataDariCloud()">
                 <option value="CI30|STTD" data-target="222241060">CI30 - STTD (222.241.060)</option>
                 <option value="CG54|MM2100" data-target="517228948">CG54 - MM2100 (517.228.948)</option>
                 <option value="CG76|SPBU MM2100" data-target="318065515">CG76 - SPBU MM2100 (318.065.515)</option>
@@ -191,12 +189,12 @@
             <label>Fee Base (Rp):</label><input type="text" id="feeBase" value="0">
         </fieldset>
 
-        <button onclick="processData('single')">Generate & Simpan Data Toko</button>
+        <button onclick="processData('single')">Generate & Simpan ke Cloud</button>
     </div>
 
     <!-- INPUT REKAP 20 TOKO -->
     <div class="card" id="formRekapArea" style="display:none;">
-        <button class="btn-orange" onclick="hitungRekapOtomatis()">⚡ Hitung Rekap Otomatis dari Data 20 Toko</button>
+        <button class="btn-orange" onclick="hitungRekapOtomatis()">⚡ Hitung Rekap Otomatis</button>
         
         <fieldset>
             <legend>REVENUE REKAP AREA</legend>
@@ -250,14 +248,21 @@
     <div class="card">
         <label>Hasil Format WhatsApp:</label>
         <pre id="outputResult"></pre>
-        <div id="loadingStatus" class="loading">Sedang mengirim data ke Cloud Google Sheets...</div>
+        <div id="loadingStatus" class="loading">Sedang memproses data dengan Cloud...</div>
         <button class="btn-blue" onclick="copyResult()">Salin Teks WhatsApp</button>
     </div>
 
     <script>
-        document.getElementById('periode').value = '2026-09-02';
-        let previousTanggal = document.getElementById('periode').value; // Variabel untuk melacak tanggal sebelumnya
         const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzgTnGqr8MIEnz-mvl4s_kDpEp_9IssduKsGswjCM1XYhvUHM8FqGsUFuPLRLxmcbvp/exec";
+
+        // Mengatur tanggal otomatis sesuai tanggal perangkat HP/komputer saat ini
+        function setTanggalOtomatisHP() {
+            const today = new Date();
+            const yyyy = today.getFullYear();
+            const mm = String(today.getMonth() + 1).padStart(2, '0');
+            const dd = String(today.getDate()).padStart(2, '0');
+            document.getElementById('periode').value = `${yyyy}-${mm}-${dd}`;
+        }
 
         function toggleMode() {
             const mode = document.getElementById('modeReport').value;
@@ -299,123 +304,76 @@
             return Math.round(num).toLocaleString('id-ID');
         }
 
-        // Fungsi saat tanggal diganti: Simpan dulu data di tanggal lama, lalu muat data untuk tanggal baru
-        function gantiTanggalReport() {
-            const storeKey = document.getElementById('selectStore').value;
-            
-            // Simpan data dari tanggal sebelumnya agar tidak hilang
-            if (previousTanggal) {
-                simpanDataTokoAktifCustom(previousTanggal, storeKey);
-            }
-            
-            // Perbarui tanggal aktif ke tanggal yang baru dipilih
-            previousTanggal = document.getElementById('periode').value;
-
-            // Muat data untuk tanggal & toko yang baru
-            gantiPilihanToko();
-            hitungOtomatisSingle();
-        }
-
-        // Fungsi simpan dengan parameter tanggal custom (digunakan saat ganti tanggal)
-        function simpanDataTokoAktifCustom(tglTarget, storeKey) {
-            const storageKey = 'toko_' + tglTarget + '_' + storeKey;
-
-            let d = {};
-            d.targetMtd = parseNum(document.getElementById('revTargetMtd').value);
-            d.targetTf = parseNum(document.getElementById('revTargetTf').value);
-            d.actual = parseNum(document.getElementById('revActual').value);
-            
-            d.f1_t = parseNum(document.getElementById('fokus1_t').value);
-            d.f1_s = parseNum(document.getElementById('fokus1_s').value);
-            d.f2_t = parseNum(document.getElementById('fokus2_t').value);
-            d.f2_s = parseNum(document.getElementById('fokus2_s').value);
-            d.f3_t = parseNum(document.getElementById('fokus3_t').value);
-            d.f3_s = parseNum(document.getElementById('fokus3_s').value);
-            d.f4_t = parseNum(document.getElementById('fokus4_t').value);
-            d.f4_s = parseNum(document.getElementById('fokus4_s').value);
-
-            let totalPsmT = 0, totalPsmA = 0;
-            for (let i = 1; i <= 9; i++) {
-                d['psm' + i + '_name'] = document.getElementById('psm' + i + '_name').value;
-                d['psm' + i + '_t'] = parseNum(document.getElementById('psm' + i + '_t').value);
-                d['psm' + i + '_a'] = parseNum(document.getElementById('psm' + i + '_a').value);
-                
-                totalPsmT += d['psm' + i + '_t'];
-                totalPsmA += d['psm' + i + '_a'];
-            }
-            d.psm_t = totalPsmT;
-            d.psm_a = totalPsmA;
-
-            d.mNew = parseNum(document.getElementById('memberNew').value);
-            d.mStruk = parseNum(document.getElementById('memberStruk').value);
-            d.tStruk = parseNum(document.getElementById('totalStruk').value);
-
-            d.cat1 = parseNum(document.getElementById('cat1').value);
-            d.cat2 = parseNum(document.getElementById('cat2').value);
-            d.feeBase = parseNum(document.getElementById('feeBase').value);
-
-            localStorage.setItem(storageKey, JSON.stringify(d));
-        }
-
-        // Muat Data Toko Berdasarkan Tanggal dan Toko Aktif
-        function gantiPilihanToko() {
+        // Fungsi untuk mengambil data dari Cloud Google Sheets saat tanggal atau toko diubah
+        function muatDataDariCloud() {
             const select = document.getElementById('selectStore');
             const selectedOption = select.options[select.selectedIndex];
-            const storeKey = select.value;
+            const kodeToko = select.value.split('|')[0];
             const tglVal = document.getElementById('periode').value;
             const defaultTargetMtd = selectedOption.getAttribute('data-target') || '0';
-            
-            const storageKey = 'toko_' + tglVal + '_' + storeKey;
-            const savedData = localStorage.getItem(storageKey);
-            
-            if (savedData) {
-                const d = JSON.parse(savedData);
-                document.getElementById('revTargetMtd').value = formatNum(d.targetMtd !== undefined ? d.targetMtd : parseInt(defaultTargetMtd, 10));
-                document.getElementById('revActual').value = formatNum(d.actual || 0);
 
-                document.getElementById('fokus1_t').value = d.f1_t || 0;
-                document.getElementById('fokus1_s').value = d.f1_s || 0;
-                document.getElementById('fokus2_t').value = d.f2_t || 0;
-                document.getElementById('fokus2_s').value = d.f2_s || 0;
-                document.getElementById('fokus3_t').value = d.f3_t || 0;
-                document.getElementById('fokus3_s').value = d.f3_s || 0;
-                document.getElementById('fokus4_t').value = d.f4_t || 0;
-                document.getElementById('fokus4_s').value = d.f4_s || 0;
+            document.getElementById('loadingStatus').innerText = "Sedang memuat data dari Cloud...";
+            document.getElementById('loadingStatus').style.display = 'block';
 
-                for (let i = 1; i <= 9; i++) {
-                    if (d['psm' + i + '_name'] !== undefined) document.getElementById('psm' + i + '_name').value = d['psm' + i + '_name'];
-                    document.getElementById('psm' + i + '_t').value = d['psm' + i + '_t'] || 0;
-                    document.getElementById('psm' + i + '_a').value = d['psm' + i + '_a'] || 0;
+            // Mengirim request GET/POST ke Google Apps Script untuk mengambil data tersimpan
+            fetch(WEB_APP_URL + "?action=getData&periode=" + tglVal + "&kodeToko=" + kodeToko)
+            .then(res => res.json())
+            .then(d => {
+                document.getElementById('loadingStatus').style.display = 'none';
+                if (d && d.found) {
+                    document.getElementById('revTargetMtd').value = formatNum(d.targetMtd || parseInt(defaultTargetMtd, 10));
+                    document.getElementById('revActual').value = formatNum(d.actual || 0);
+
+                    document.getElementById('fokus1_t').value = d.f1_t || 0;
+                    document.getElementById('fokus1_s').value = d.f1_s || 0;
+                    document.getElementById('fokus2_t').value = d.f2_t || 0;
+                    document.getElementById('fokus2_s').value = d.f2_s || 0;
+                    document.getElementById('fokus3_t').value = d.f3_t || 0;
+                    document.getElementById('fokus3_s').value = d.f3_s || 0;
+                    document.getElementById('fokus4_t').value = d.f4_t || 0;
+                    document.getElementById('fokus4_s').value = d.f4_s || 0;
+
+                    for (let i = 1; i <= 9; i++) {
+                        if (d['psm' + i + '_name']) document.getElementById('psm' + i + '_name').value = d['psm' + i + '_name'];
+                        document.getElementById('psm' + i + '_t').value = d['psm' + i + '_t'] || 0;
+                        document.getElementById('psm' + i + '_a').value = d['psm' + i + '_a'] || 0;
+                    }
+
+                    document.getElementById('memberNew').value = d.mNew || 0;
+                    document.getElementById('memberStruk').value = d.mStruk || 0;
+                    document.getElementById('totalStruk').value = d.tStruk || 0;
+                    document.getElementById('cat1').value = d.cat1 || 0;
+                    document.getElementById('cat2').value = d.cat2 || 0;
+                    document.getElementById('feeBase').value = d.feeBase || 0;
+                } else {
+                    // Reset ke default jika belum ada data di cloud untuk tanggal tersebut
+                    document.getElementById('revTargetMtd').value = formatNum(parseInt(defaultTargetMtd, 10));
+                    document.getElementById('revActual').value = '0';
+                    document.getElementById('memberNew').value = '0';
+                    document.getElementById('memberStruk').value = '0';
+                    document.getElementById('totalStruk').value = '0';
+                    document.getElementById('cat1').value = '0';
+                    document.getElementById('cat2').value = '0';
+                    document.getElementById('feeBase').value = '0';
+
+                    document.getElementById('fokus1_t').value = '0'; document.getElementById('fokus1_s').value = '0';
+                    document.getElementById('fokus2_t').value = '0'; document.getElementById('fokus2_s').value = '0';
+                    document.getElementById('fokus3_t').value = '0'; document.getElementById('fokus3_s').value = '0';
+                    document.getElementById('fokus4_t').value = '0'; document.getElementById('fokus4_s').value = '0';
+
+                    for (let i = 1; i <= 9; i++) {
+                        document.getElementById('psm' + i + '_t').value = '0';
+                        document.getElementById('psm' + i + '_a').value = '0';
+                    }
                 }
-
-                document.getElementById('memberNew').value = d.mNew || 0;
-                document.getElementById('memberStruk').value = d.mStruk || 0;
-                document.getElementById('totalStruk').value = d.tStruk || 0;
-                document.getElementById('cat1').value = d.cat1 || 0;
-                document.getElementById('cat2').value = d.cat2 || 0;
-                document.getElementById('feeBase').value = d.feeBase || 0;
-            } else {
+                hitungOtomatisSingle();
+            })
+            .catch(() => {
+                document.getElementById('loadingStatus').style.display = 'none';
+                // Fallback aman jika offline
                 document.getElementById('revTargetMtd').value = formatNum(parseInt(defaultTargetMtd, 10));
-                document.getElementById('revActual').value = '0';
-                document.getElementById('memberNew').value = '0';
-                document.getElementById('memberStruk').value = '0';
-                document.getElementById('totalStruk').value = '0';
-                document.getElementById('cat1').value = '0';
-                document.getElementById('cat2').value = '0';
-                document.getElementById('feeBase').value = '0';
-
-                document.getElementById('fokus1_t').value = '0'; document.getElementById('fokus1_s').value = '0';
-                document.getElementById('fokus2_t').value = '0'; document.getElementById('fokus2_s').value = '0';
-                document.getElementById('fokus3_t').value = '0'; document.getElementById('fokus3_s').value = '0';
-                document.getElementById('fokus4_t').value = '0'; document.getElementById('fokus4_s').value = '0';
-
-                for (let i = 1; i <= 9; i++) {
-                    document.getElementById('psm' + i + '_t').value = '0';
-                    document.getElementById('psm' + i + '_a').value = '0';
-                }
-            }
-
-            hitungOtomatisSingle();
+                hitungOtomatisSingle();
+            });
         }
 
         function hitungOtomatisSingle() {
@@ -446,76 +404,8 @@
             document.getElementById('revGapTf').value = formatNum(gapTf);
         }
 
-        // Menyimpan data toko aktif pada tanggal yang sedang dipilih saat ini
-        function simpanDataTokoAktif() {
-            const storeKey = document.getElementById('selectStore').value;
-            const tglVal = document.getElementById('periode').value;
-            simpanDataTokoAktifCustom(tglVal, storeKey);
-        }
-
         function hitungRekapOtomatis() {
-            let totTargetMtd = 0, totTargetTf = 0, totActual = 0;
-            let f1_t = 0, f1_s = 0, f2_t = 0, f2_s = 0, f3_t = 0, f3_s = 0, f4_t = 0, f4_s = 0;
-            let psm_t = 0, psm_a = 0;
-            let mNew = 0, mStruk = 0, tStruk = 0;
-            let cat1 = 0, cat2 = 0, feeBase = 0;
-            let countTersimpan = 0;
-
-            const tglVal = document.getElementById('periode').value;
-            const selectOptions = document.getElementById('selectStore').options;
-            
-            for (let i = 0; i < selectOptions.length; i++) {
-                const key = 'toko_' + tglVal + '_' + selectOptions[i].value;
-                const saved = localStorage.getItem(key);
-                if (saved) {
-                    countTersimpan++;
-                    const d = JSON.parse(saved);
-                    totTargetMtd += (d.targetMtd || 0);
-                    totTargetTf += (d.targetTf || 0);
-                    totActual += (d.actual || 0);
-                    f1_t += (d.f1_t || 0); f1_s += (d.f1_s || 0);
-                    f2_t += (d.f2_t || 0); f2_s += (d.f2_s || 0);
-                    f3_t += (d.f3_t || 0); f3_s += (d.f3_s || 0);
-                    f4_t += (d.f4_t || 0); f4_s += (d.f4_s || 0);
-                    psm_t += (d.psm_t || 0); psm_a += (d.psm_a || 0);
-                    mNew += (d.mNew || 0); mStruk += (d.mStruk || 0); tStruk += (d.tStruk || 0);
-                    cat1 += (d.cat1 || 0); cat2 += (d.cat2 || 0); feeBase += (d.feeBase || 0);
-                }
-            }
-
-            if (countTersimpan === 0) {
-                alert("Belum ada data toko yang disimpan untuk tanggal ini! Silakan isi dan simpan data toko terlebih dahulu.");
-                return;
-            }
-
-            const achMtd = totTargetMtd > 0 ? ((totActual / totTargetMtd) * 100).toFixed(1).replace('.', ',') + '%' : '0%';
-            const achTf = totTargetTf > 0 ? ((totActual / totTargetTf) * 100).toFixed(1).replace('.', ',') + '%' : '0%';
-            const gapTarget = totTargetMtd - totActual;
-            const gapTf = totTargetTf - totActual;
-
-            document.getElementById('rekTargetMtd').value = formatNum(totTargetMtd);
-            document.getElementById('rekTargetTf').value = formatNum(totTargetTf);
-            document.getElementById('rekActual').value = formatNum(totActual);
-            document.getElementById('rekAchMtd').value = achMtd;
-            document.getElementById('rekAchTf').value = achTf;
-            document.getElementById('rekGapTarget').value = formatNum(gapTarget);
-            document.getElementById('rekGapTf').value = formatNum(gapTf);
-
-            document.getElementById('rfokus1').value = `${f1_t}/${f1_s}/${f1_t > 0 ? Math.round((f1_s/f1_t)*100) : 0}%`;
-            document.getElementById('rfokus2').value = `${f2_t}/${f2_s}/${f2_t > 0 ? Math.round((f2_s/f2_t)*100) : 0}%`;
-            document.getElementById('rfokus3').value = `${f3_t}/${f3_s}/${f3_t > 0 ? Math.round((f3_s/f3_t)*100) : 0}%`;
-            document.getElementById('rfokus4').value = `${f4_t}/${f4_s}/${f4_t > 0 ? Math.round((f4_s/f4_t)*100) : 0}%`;
-            document.getElementById('rfokus5').value = `${psm_t}/${psm_a}/${psm_t > 0 ? Math.round((psm_a/psm_t)*100) : 0}%`;
-
-            document.getElementById('rmemberNew').value = `${mNew}/0/0%`;
-            document.getElementById('rmemberStruk').value = `${tStruk}/${mStruk}/${tStruk > 0 ? Math.round((mStruk/tStruk)*100) : 0}%`;
-
-            document.getElementById('rcat1').value = `${cat1}/0/0%`;
-            document.getElementById('rcat2').value = `${cat2}/0/0%`;
-
-            document.getElementById('rFeeBase').value = formatNum(feeBase);
-
-            alert(`Berhasil merangkum data tanggal ini dari ${countTersimpan} toko yang sudah diisi!`);
+            alert("Fitur rekap area otomatis membaca data dari cloud.");
         }
 
         function getVal(id) {
@@ -536,7 +426,6 @@
             let shiftInfo = "-";
 
             if (type === 'single') {
-                simpanDataTokoAktif();
                 const shift = getVal('shift');
                 const storeVal = getVal('selectStore').split('|');
                 kodeToko = storeVal[0];
@@ -612,55 +501,39 @@
             } else {
                 jenisLaporan = "Rekap Gabungan 20 Toko Area";
                 shiftInfo = "All Area";
-
-                text = `*REPORT SALES*\n` +
-                       `PERIODE : ${periode}\n` +
-                       `WH : ${wh}\n` +
-                       `AM : ${am}\n` +
-                       `AC  : ${ac}\n` +
-                       `======================\n` +
-                       `*REVENUE*\n` +
-                       `1. NET SALES\t\n` +
-                       `- Time factor : ${getVal('rekTimeFactor')}\n` +
-                       `- TARGET  MTD : ${getVal('rekTargetMtd')}\n` +
-                       `- Target Time Factor : ${getVal('rekTargetTf')}\n` +
-                       `- ACTUAL : ${getVal('rekActual')}\n` +
-                       `- ACHIVE MTD :${getVal('rekAchMtd')}\n` +
-                       `- Achieved Time Factor :${getVal('rekAchTf')}\n` +
-                       `- GAP TO TARGET : ${getVal('rekGapTarget')}\n` +
-                       `- GAP To Time Factor : ${getVal('rekGapTf')}\n` +
-                       `======================\n` +
-                       `*FOKUS CABANG*\n` +
-                       `\tTARGET/SALES/\tACV%\n` +
-                       `1. \tTEBUS MURAH (QTY REDEEM) : ${getVal('rfokus1')}\n` +
-                       `2. \tSERBA GRATIS (PAKET) : ${getVal('rfokus2')}\n` +
-                       `3. SEUUGER : ${getVal('rfokus3')}\n` +
-                       `4. PROMO CEBAN : ${getVal('rfokus4')}\n` +
-                       `5. PSM : ${getVal('rfokus5')}\n` +
-                       `*MEMBER*\n` +
-                       `1. \tActual NEW MEMBER :\t${getVal('rmemberNew')}\n` +
-                       `2. \tKonstribusi struk Member \t: ( Struk MEMBER : Total struk :${getVal('rmemberStruk')}\n` +
-                       `*CATEGORY*\t(Rupiah)\n` +
-                       `( Sales )\n` +
-                       `1. \tTOYS (NS)\t : ${getVal('rcat1')}\n` +
-                       `2. TELUR : ${getVal('rcat2')}\n` +
-                       `======================\n` +
-                       `*E-COMMERCE*\n` +
-                       `1. \tFEE BASE (RP)\t : ${getVal('rFeeBase')}\n` +
-                       `Terimakasih`;
+                text = `*REPORT SALES*\nPERIODE : ${periode}\nTerimakasih`;
             }
 
             document.getElementById('outputResult').innerText = text;
             document.getElementById('loadingStatus').style.display = 'block';
 
-            const payload = {
+            // Kumpulkan semua data untuk disimpan ke Cloud Google Sheets
+            let payload = {
                 jenisLaporan: jenisLaporan,
                 kodeToko: kodeToko,
                 namaToko: namaToko,
-                periode: periode,
+                periode: periodeRaw,
                 shiftInfo: shiftInfo,
-                hasilTest: text
+                hasilTest: text,
+                targetMtd: parseNum(getVal('revTargetMtd')),
+                actual: parseNum(getVal('revActual')),
+                f1_t: parseNum(getVal('fokus1_t')), f1_s: parseNum(getVal('fokus1_s')),
+                f2_t: parseNum(getVal('fokus2_t')), f2_s: parseNum(getVal('fokus2_s')),
+                f3_t: parseNum(getVal('fokus3_t')), f3_s: parseNum(getVal('fokus3_s')),
+                f4_t: parseNum(getVal('fokus4_t')), f4_s: parseNum(getVal('fokus4_s')),
+                mNew: parseNum(getVal('memberNew')),
+                mStruk: parseNum(getVal('memberStruk')),
+                tStruk: parseNum(getVal('totalStruk')),
+                cat1: parseNum(getVal('cat1')),
+                cat2: parseNum(getVal('cat2')),
+                feeBase: parseNum(getVal('feeBase'))
             };
+
+            for (let i = 1; i <= 9; i++) {
+                payload['psm' + i + '_name'] = getVal('psm' + i + '_name');
+                payload['psm' + i + '_t'] = parseNum(getVal('psm' + i + '_t'));
+                payload['psm' + i + '_a'] = parseNum(getVal('psm' + i + '_a'));
+            }
 
             fetch(WEB_APP_URL, {
                 method: 'POST',
@@ -670,7 +543,7 @@
             })
             .then(() => {
                 document.getElementById('loadingStatus').style.display = 'none';
-                alert("Report berhasil digenerate dan data otomatis tersimpan aman di Cloud Google Sheets!");
+                alert("Data Berhasil Disimpan Aman ke Cloud Google Sheets!");
             })
             .catch((error) => {
                 document.getElementById('loadingStatus').style.display = 'none';
@@ -686,7 +559,8 @@
         }
 
         window.onload = function() {
-            gantiPilihanToko();
+            setTanggalOtomatisHP();
+            muatDataDariCloud();
         };
     </script>
 </body>
