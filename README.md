@@ -69,37 +69,38 @@
 
         <div id="singleStoreSection">
             <label for="selectStore">Pilih Toko:</label>
-            <select id="selectStore">
-                <option value="C624|ROWOSARI (RWBT)">C624 - RWBT</option>
-                <option value="C560|RAJ">C560 - RAJ</option>
-                <option value="CH81|CDKS">CH81 - CDKS</option>
-                <option value="CG76|SPMM">CG76 - SPMM</option>
-                <option value="C573|GMM">C573 - GMM</option>
-                <option value="CE47|MKRI">CE47 - MKRI</option>
-                <option value="CI30|STTD">CI30 - STTD</option>
-                <option value="CH41|KPMRK">CH41 - KPMRK</option>
-                <option value="CG54|MM21">CG54 - MM21</option>
-                <option value="C935|TLJ2">C935 - TLJ2</option>
-                <option value="CA71|WSGN">CA71 - WSGN</option>
-                <option value="C965|CIBUNTU (CBNU)">C965 - CBNU</option>
-                <option value="CG86|JKST">CG86 - JKST</option>
-                <option value="CA94|KPTI">CA94 - KPTI</option>
-                <option value="C574|SKU">C574 - SKU</option>
-                <option value="CI15|RPSU">CI15 - RPSU</option>
-                <option value="CI54|RJLB">CI54 - RJLB</option>
-                <option value="CF50|DNIA">CF50 - DNIA</option>
-                <option value="CC21|KUTN">CC21 - KUTN</option>
-                <option value="CI84|TLKW">CI84 - TLKW</option>
+            <select id="selectStore" onchange="gantiPilihanToko()">
+                <option value="C624|ROWOSARI (RWBT)" data-target="453303178">C624 - RWBT</option>
+                <option value="C560|RAJ" data-target="400000000">C560 - RAJ</option>
+                <option value="CH81|CDKS" data-target="380000000">CH81 - CDKS</option>
+                <option value="CG76|SPMM" data-target="350000000">CG76 - SPMM</option>
+                <option value="C573|GMM" data-target="420000000">C573 - GMM</option>
+                <option value="CE47|MKRI" data-target="390000000">CE47 - MKRI</option>
+                <option value="CI30|STTD" data-target="310000000">CI30 - STTD</option>
+                <option value="CH41|KPMRK" data-target="360000000">CH41 - KPMRK</option>
+                <option value="CG54|MM21" data-target="480000000">CG54 - MM21</option>
+                <option value="C935|TLJ2" data-target="340000000">C935 - TLJ2</option>
+                <option value="CA71|WSGN" data-target="330000000">CA71 - WSGN</option>
+                <option value="C965|CIBUNTU (CBNU)" data-target="410000000">C965 - CBNU</option>
+                <option value="CG86|JKST" data-target="370000000">CG86 - JKST</option>
+                <option value="CA94|KPTI" data-target="320000000">CA94 - KPTI</option>
+                <option value="C574|SKU" data-target="450000000">C574 - SKU</option>
+                <option value="CI15|RPSU" data-target="300000000">CI15 - RPSU</option>
+                <option value="CI54|RJLB" data-target="350000000">CI54 - RJLB</option>
+                <option value="CF50|DNIA" data-target="390000000">CF50 - DNIA</option>
+                <option value="CC21|KUTN" data-target="360000000">CC21 - KUTN</option>
+                <option value="CI84|TLKW" data-target="330000000">CI84 - TLKW</option>
             </select>
         </div>
     </div>
 
+    <!-- INPUT DETAIL PER TOKO -->
     <div class="card" id="formPerToko">
         <fieldset>
             <legend>💰 REVENUE (Net Sales)</legend>
             <div class="row-group">
                 <div><label>Time Factor (%):</label><input type="text" id="revTimeFactor" value="6,66%" oninput="hitungOtomatisSingle()"></div>
-                <div><label>Actual (Rp):</label><input type="text" id="revActual" value="13.332.882" oninput="hitungOtomatisSingle()"></div>
+                <div><label>Actual (Rp):</label><input type="text" id="revActual" value="0" oninput="hitungOtomatisSingle()"></div>
             </div>
             <div class="row-group">
                 <div><label>Target MTD (Rp):</label><input type="text" id="revTargetMtd" value="453.303.178" oninput="hitungOtomatisSingle()"></div>
@@ -188,6 +189,7 @@
         <button onclick="processData('single')">Generate & Simpan Data Toko</button>
     </div>
 
+    <!-- INPUT REKAP 20 TOKO -->
     <div class="card" id="formRekapArea" style="display:none;">
         <button class="btn-orange" onclick="hitungRekapOtomatis()">⚡ Hitung Rekap Otomatis dari Data 20 Toko</button>
         
@@ -291,6 +293,30 @@
             return Math.round(num).toLocaleString('id-ID');
         }
 
+        // Mengubah target MTD otomatis saat toko dipilih
+        function gantiPilihanToko() {
+            const select = document.getElementById('selectStore');
+            const selectedOption = select.options[select.selectedIndex];
+            const targetMtd = selectedOption.getAttribute('data-target') || '0';
+            
+            document.getElementById('revTargetMtd').value = formatNum(parseInt(targetMtd, 10));
+            
+            // Kosongkan nilai Actual dan lainnya agar bersih dari data sebelumnya
+            document.getElementById('revActual').value = '0';
+            document.getElementById('fokus1_t').value = '0'; document.getElementById('fokus1_s').value = '0';
+            document.getElementById('fokus2_t').value = '0'; document.getElementById('fokus2_s').value = '0';
+            document.getElementById('fokus3_t').value = '0'; document.getElementById('fokus3_s').value = '0';
+            document.getElementById('fokus4_t').value = '0'; document.getElementById('fokus4_s').value = '0';
+            document.getElementById('memberNew').value = '0';
+            document.getElementById('memberStruk').value = '0';
+            document.getElementById('totalStruk').value = '0';
+            document.getElementById('cat1').value = '0';
+            document.getElementById('cat2').value = '0';
+            document.getElementById('feeBase').value = '0';
+
+            hitungOtomatisSingle();
+        }
+
         function hitungOtomatisSingle() {
             const tglVal = document.getElementById('periode').value;
             let hariKe = 2;
@@ -303,15 +329,12 @@
             const targetMtd = parseNum(document.getElementById('revTargetMtd').value);
             const actual = parseNum(document.getElementById('revActual').value);
 
-            // Perhitungan Target Time Factor sesuai proporsi hari/tanggal
             const multiplierTf = (tfPersenInput / 100) * hariKe;
             const targetTf = Math.round(targetMtd * multiplierTf);
 
-            // Pencapaian
             const achMtd = targetMtd > 0 ? ((actual / targetMtd) * 100).toFixed(1).replace('.', ',') + '%' : '0%';
             const achTf = targetTf > 0 ? ((actual / targetTf) * 100).toFixed(1).replace('.', ',') + '%' : '0%';
             
-            // GAP sesuai format contoh Anda (Target MTD - Actual, dan Target TF - Actual)
             const gapTarget = targetMtd - actual;
             const gapTf = targetTf - actual;
 
@@ -552,4 +575,49 @@
                        `2. TELUR : ${getVal('rcat2')}\n` +
                        `======================\n` +
                        `*E-COMMERCE*\n` +
-                       `1. \tFEE
+                       `1. \tFEE BASE (RP)\t : ${getVal('rFeeBase')}\n` +
+                       `Terimakasih`;
+            }
+
+            document.getElementById('outputResult').innerText = text;
+
+            document.getElementById('loadingStatus').style.display = 'block';
+
+            const payload = {
+                jenisLaporan: jenisLaporan,
+                kodeToko: kodeToko,
+                namaToko: namaToko,
+                periode: periode,
+                shiftInfo: shiftInfo,
+                hasilText: text
+            };
+
+            fetch(WEB_APP_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            })
+            .then(() => {
+                document.getElementById('loadingStatus').style.display = 'none';
+                alert("Report berhasil digenerate dan data otomatis tersimpan aman di Cloud Google Sheets!");
+            })
+            .catch((error) => {
+                document.getElementById('loadingStatus').style.display = 'none';
+                alert("Gagal mengirim ke cloud: " + error);
+            });
+        }
+
+        function copyResult() {
+            const text = document.getElementById('outputResult').innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                alert('Teks format WhatsApp berhasil disalin!');
+            });
+        }
+
+        window.onload = function() {
+            gantiPilihanToko(); // Set target awal sesuai toko pertama
+        };
+    </script>
+</body>
+</html>
