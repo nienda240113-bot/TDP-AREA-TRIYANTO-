@@ -3,43 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Report Sales Shift & Rekap 20 Toko</title>
+    <title>MONITORING SALES AREA TRIYANTO</title>
+    <!-- Tailwind CSS untuk Tampilan Modern & Canggih -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: Arial, sans-serif; line-height: 1.25; color: #333; max-width: 680px; margin: 0 auto; padding: 12px; background-color: #f4f6f9; }
-        h1 { font-size: 1.2rem; color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 8px; text-align: center; }
-        .card { background: #fff; padding: 12px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-bottom: 12px; }
-        label { display: block; margin-bottom: 4px; font-weight: bold; font-size: 0.8rem; }
-        select, input { width: 100%; padding: 7px; margin-bottom: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-size: 0.85rem; }
-        .row-group { display: flex; gap: 8px; }
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: #1e293b; line-height: 1.4; }
+        .card-modern { background: #ffffff; border-radius: 1rem; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05); border: 1px solid #e2e8f0; margin-bottom: 1rem; padding: 1.25rem; }
+        fieldset { border: 1px solid #cbd5e1; border-radius: 0.75rem; padding: 1rem; margin-bottom: 1rem; background: #ffffff; }
+        legend { font-weight: 600; font-size: 0.85rem; color: #2563eb; background: #eff6ff; padding: 0.25rem 0.75rem; border-radius: 9999px; border: 1px solid #bfdbfe; }
+        input, select { width: 100%; padding: 0.6rem 0.75rem; margin-top: 0.25rem; margin-bottom: 0.75rem; border: 1px solid #cbd5e1; border-radius: 0.55rem; box-sizing: border-box; font-size: 0.875rem; background-color: #f8fafc; transition: all 0.2s; }
+        input:focus, select:focus { outline: none; border-color: #2563eb; background-color: #ffffff; box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1); }
+        label { display: block; font-weight: 600; font-size: 0.75rem; color: #475569; text-transform: uppercase; letter-spacing: 0.025em; }
+        .row-group { display: flex; gap: 0.75rem; }
         .row-group > div { flex: 1; }
-        button { background-color: #27ae60; color: white; padding: 10px; border: none; border-radius: 4px; cursor: pointer; width: 100%; font-weight: bold; font-size: 0.95rem; margin-top: 5px; }
-        button:hover { background-color: #219653; }
-        .btn-blue { background-color: #2980b9; margin-top: 10px; }
-        .btn-orange { background-color: #d35400; margin-bottom: 10px; }
-        pre { background: #f1f1f1; padding: 10px; border-radius: 4px; white-space: pre-wrap; word-wrap: break-word; font-family: Arial, sans-serif; font-size: 0.8rem; border: 1px solid #ddd; max-height: 350px; overflow-y: auto; }
-        fieldset { border: 1px solid #ddd; border-radius: 6px; padding: 8px; margin-bottom: 10px; }
-        legend { font-weight: bold; font-size: 0.85rem; color: #2980b9; }
-        .loading { display: none; text-align: center; color: #e67e22; font-weight: bold; margin-top: 8px; }
-        .info-periode { font-size: 0.75rem; color: #c0392b; margin-bottom: 6px; font-style: italic; }
-        .table-input { width: 100%; border-collapse: collapse; margin-bottom: 5px; font-size: 0.8rem; }
-        .table-input th { background-color: #16a085; color: white; padding: 6px 4px; text-align: center; border: 1px solid #1abc9c; }
-        .table-input td { padding: 4px; border: 1px solid #ddd; text-align: center; }
-        .table-input input { text-align: center; margin-bottom: 0; padding: 5px; font-size: 0.85rem; }
-        .table-input td:first-child { text-align: left; padding-left: 4px; }
+        button { background-color: #16a34a; color: white; padding: 0.75rem 1rem; border: none; border-radius: 0.65rem; cursor: pointer; width: 100%; font-weight: 600; font-size: 0.9rem; transition: background-color 0.2s, transform 0.1s; box-shadow: 0 4px 6px -1px rgba(22, 163, 74, 0.2); }
+        button:hover { background-color: #15803d; }
+        button:active { transform: scale(0.98); }
+        .btn-blue { background-color: #2563eb; box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.2); }
+        .btn-blue:hover { background-color: #1d4ed8; }
+        .btn-orange { background-color: #ea580c; box-shadow: 0 4px 6px -1px rgba(234, 88, 12, 0.2); margin-bottom: 0.75rem; }
+        .btn-orange:hover { background-color: #c2410c; }
+        .btn-purple { background-color: #7c3aed; box-shadow: 0 4px 6px -1px rgba(124, 58, 237, 0.2); margin-top: 0.5rem; margin-bottom: 0.75rem; }
+        .btn-purple:hover { background-color: #6d28d9; }
+        
+        /* DIPERBARUI: Teks Hasil Format WhatsApp menjadi Terang, Hitam Pekat, dan Tebal */
+        pre { background: #ffffff; color: #000000 !important; font-weight: 700 !important; padding: 1rem; border-radius: 0.75rem; white-space: pre-wrap; word-wrap: break-word; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 0.8rem; border: 1px solid #334155; max-height: 380px; overflow-y: auto; -webkit-text-fill-color: #000000 !important; }
+        
+        .loading { display: none; text-align: center; color: #d97706; font-weight: 600; font-size: 0.85rem; margin-top: 0.5rem; }
+        .info-periode { font-size: 0.75rem; color: #dc2626; margin-bottom: 0.5rem; font-style: italic; font-weight: 500; }
+        .table-input { width: 100%; border-collapse: collapse; margin-bottom: 0.5rem; font-size: 0.8rem; }
+        .table-input th { background-color: #0d9488; color: white; padding: 0.5rem 0.25rem; text-align: center; border: 1px solid #14b8a6; font-size: 0.75rem; }
+        .table-input td { padding: 0.35rem; border: 1px solid #e2e8f0; text-align: center; }
+        .table-input input { text-align: center; margin-bottom: 0; padding: 0.4rem; font-size: 0.8rem; }
+        .table-input td:first-child { text-align: left; padding-left: 0.5rem; }
     </style>
 </head>
-<body>
+<body class="max-w-xl mx-auto p-3 sm:p-4">
 
-    <h1>Input Report Sales & Rekap Area</h1>
+    <!-- Header Judul -->
+    <header class="text-center my-4 pb-3 border-b-2 border-blue-600">
+        <h1 class="text-xl sm:text-2xl font-bold text-slate-800 tracking-wide">MONITORING SALES AREA TRIYANTO</h1>
+        <p class="text-xs text-slate-500 mt-1 font-medium">Sistem Pelaporan & Rekapitulasi Toko Terintegrasi Cloud</p>
+    </header>
 
-    <div class="card">
+    <div class="card-modern">
         <label for="modeReport">Pilih Jenis Laporan:</label>
         <select id="modeReport" onchange="toggleMode()">
             <option value="single">1. Laporan Per Toko (Shift)</option>
             <option value="rekap">2. Rekap Gabungan 20 Toko Area</option>
         </select>
 
-        <div class="row-group" style="margin-top: 8px;">
+        <div class="row-group mt-2">
             <div>
                 <label for="periode">Periode (Tanggal Laporan):</label>
                 <input type="date" id="periode" onchange="muatDataDariCloud()">
@@ -64,7 +79,7 @@
         <label for="ac">AC:</label>
         <input type="text" id="ac" value="TRIYANTO">
 
-        <div id="singleStoreSection">
+        <div id="singleStoreSection" class="mt-1">
             <label for="selectStore">Pilih Toko:</label>
             <select id="selectStore" onchange="muatDataDariCloud()">
                 <option value="CI30|STTD" data-target="222241060">CI30 - STTD (222.241.060)</option>
@@ -92,7 +107,7 @@
     </div>
 
     <!-- INPUT DETAIL PER TOKO -->
-    <div class="card" id="formPerToko">
+    <div class="card-modern" id="formPerToko">
         <fieldset>
             <legend>💰 REVENUE (Net Sales - Target MTD & Actual)</legend>
             <div class="row-group">
@@ -101,15 +116,15 @@
             </div>
             <div class="row-group">
                 <div><label>Target MTD (Rp):</label><input type="text" id="revTargetMtd" value="0" oninput="hitungOtomatisSingle()"></div>
-                <div><label>Target TF (Rp) - Auto:</label><input type="text" id="revTargetTf" value="0" readonly style="background-color: #e9ecef;"></div>
+                <div><label>Target TF (Rp) - Auto:</label><input type="text" id="revTargetTf" value="0" readonly style="background-color: #f1f5f9;"></div>
             </div>
             <div class="row-group">
-                <div><label>Ach MTD (%):</label><input type="text" id="revAchMtd" value="0%" readonly style="background-color: #e9ecef;"></div>
-                <div><label>Ach TF (%):</label><input type="text" id="revAchTf" value="0%" readonly style="background-color: #e9ecef;"></div>
+                <div><label>Ach MTD (%):</label><input type="text" id="revAchMtd" value="0%" readonly style="background-color: #f1f5f9;"></div>
+                <div><label>Ach TF (%):</label><input type="text" id="revAchTf" value="0%" readonly style="background-color: #f1f5f9;"></div>
             </div>
             <div class="row-group">
-                <div><label>GAP to Target (Rp):</label><input type="text" id="revGapTarget" value="0" readonly style="background-color: #e9ecef;"></div>
-                <div><label>GAP to TF (Rp):</label><input type="text" id="revGapTf" value="0" readonly style="background-color: #e9ecef;"></div>
+                <div><label>GAP to Target (Rp):</label><input type="text" id="revGapTarget" value="0" readonly style="background-color: #f1f5f9;"></div>
+                <div><label>GAP to TF (Rp):</label><input type="text" id="revGapTf" value="0" readonly style="background-color: #f1f5f9;"></div>
             </div>
         </fieldset>
 
@@ -132,12 +147,14 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr><td>TEBUS MURAH</td><td><input type="text" id="fokus1_t" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="fokus1_s" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="fokus1_p" value="0%" readonly style="background-color: #e9ecef;"></td></tr>
-                    <tr><td>SERBA GRATIS</td><td><input type="text" id="fokus2_t" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="fokus2_s" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="fokus2_p" value="0%" readonly style="background-color: #e9ecef;"></td></tr>
-                    <tr><td>SUEUGEER</td><td><input type="text" id="fokus3_t" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="fokus3_s" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="fokus3_p" value="0%" readonly style="background-color: #e9ecef;"></td></tr>
-                    <tr><td>PROMO CEBAN</td><td><input type="text" id="fokus4_t" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="fokus4_s" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="fokus4_p" value="0%" readonly style="background-color: #e9ecef;"></td></tr>
+                    <tr><td>TEBUS MURAH</td><td><input type="text" id="fokus1_t" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="fokus1_s" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="fokus1_p" value="0%" readonly style="background-color: #f1f5f9;"></td></tr>
+                    <tr><td>SERBA GRATIS</td><td><input type="text" id="fokus2_t" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="fokus2_s" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="fokus2_p" value="0%" readonly style="background-color: #f1f5f9;"></td></tr>
+                    <tr><td>SUEUGEER</td><td><input type="text" id="fokus3_t" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="fokus3_s" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="fokus3_p" value="0%" readonly style="background-color: #f1f5f9;"></td></tr>
+                    <tr><td>PROMO CEBAN</td><td><input type="text" id="fokus4_t" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="fokus4_s" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="fokus4_p" value="0%" readonly style="background-color: #f1f5f9;"></td></tr>
                 </tbody>
             </table>
+            <!-- Tombol Simpan Cloud Tambahan Khusus Fokus Cabang -->
+            <button class="btn-purple" onclick="processData('single')">💾 Simpan Data Fokus Cabang ke Cloud</button>
         </fieldset>
 
         <fieldset>
@@ -169,22 +186,24 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr><td><input type="text" id="psm1_name" value="BANGO" style="text-align: left; font-weight: bold;"></td><td><input type="text" id="psm1_t" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="psm1_a" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="psm1_p" value="0%" readonly style="background-color: #e9ecef;"></td></tr>
-                    <tr><td><input type="text" id="psm2_name" value="DAIA" style="text-align: left; font-weight: bold;"></td><td><input type="text" id="psm2_t" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="psm2_a" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="psm2_p" value="0%" readonly style="background-color: #e9ecef;"></td></tr>
-                    <tr><td><input type="text" id="psm3_name" value="ENAAK" style="text-align: left; font-weight: bold;"></td><td><input type="text" id="psm3_t" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="psm3_a" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="psm3_p" value="0%" readonly style="background-color: #e9ecef;"></td></tr>
-                    <tr><td><input type="text" id="psm4_name" value="GARNIER" style="text-align: left; font-weight: bold;"></td><td><input type="text" id="psm4_t" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="psm4_a" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="psm4_p" value="0%" readonly style="background-color: #e9ecef;"></td></tr>
-                    <tr><td><input type="text" id="psm5_name" value="LE MINERAL" style="text-align: left; font-weight: bold;"></td><td><input type="text" id="psm5_t" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="psm5_a" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="psm5_p" value="0%" readonly style="background-color: #e9ecef;"></td></tr>
-                    <tr><td><input type="text" id="psm6_name" value="LIFEBUOY" style="text-align: left; font-weight: bold;"></td><td><input type="text" id="psm6_t" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="psm6_a" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="psm6_p" value="0%" readonly style="background-color: #e9ecef;"></td></tr>
-                    <tr><td><input type="text" id="psm7_name" value="NIPIS MADU" style="text-align: left; font-weight: bold;"></td><td><input type="text" id="psm7_t" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="psm7_a" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="psm7_p" value="0%" readonly style="background-color: #e9ecef;"></td></tr>
-                    <tr><td><input type="text" id="psm8_name" value="TARO" style="text-align: left; font-weight: bold;"></td><td><input type="text" id="psm8_t" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="psm8_a" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="psm8_p" value="0%" readonly style="background-color: #e9ecef;"></td></tr>
+                    <tr><td><input type="text" id="psm1_name" value="BANGO" style="text-align: left; font-weight: bold;"></td><td><input type="text" id="psm1_t" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="psm1_a" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="psm1_p" value="0%" readonly style="background-color: #f1f5f9;"></td></tr>
+                    <tr><td><input type="text" id="psm2_name" value="DAIA" style="text-align: left; font-weight: bold;"></td><td><input type="text" id="psm2_t" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="psm2_a" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="psm2_p" value="0%" readonly style="background-color: #f1f5f9;"></td></tr>
+                    <tr><td><input type="text" id="psm3_name" value="ENAAK" style="text-align: left; font-weight: bold;"></td><td><input type="text" id="psm3_t" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="psm3_a" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="psm3_p" value="0%" readonly style="background-color: #f1f5f9;"></td></tr>
+                    <tr><td><input type="text" id="psm4_name" value="GARNIER" style="text-align: left; font-weight: bold;"></td><td><input type="text" id="psm4_t" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="psm4_a" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="psm4_p" value="0%" readonly style="background-color: #f1f5f9;"></td></tr>
+                    <tr><td><input type="text" id="psm5_name" value="LE MINERAL" style="text-align: left; font-weight: bold;"></td><td><input type="text" id="psm5_t" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="psm5_a" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="psm5_p" value="0%" readonly style="background-color: #f1f5f9;"></td></tr>
+                    <tr><td><input type="text" id="psm6_name" value="LIFEBUOY" style="text-align: left; font-weight: bold;"></td><td><input type="text" id="psm6_t" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="psm6_a" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="psm6_p" value="0%" readonly style="background-color: #f1f5f9;"></td></tr>
+                    <tr><td><input type="text" id="psm7_name" value="NIPIS MADU" style="text-align: left; font-weight: bold;"></td><td><input type="text" id="psm7_t" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="psm7_a" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="psm7_p" value="0%" readonly style="background-color: #f1f5f9;"></td></tr>
+                    <tr><td><input type="text" id="psm8_name" value="TARO" style="text-align: left; font-weight: bold;"></td><td><input type="text" id="psm8_t" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="psm8_a" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="psm8_p" value="0%" readonly style="background-color: #f1f5f9;"></td></tr>
                     <tr>
                         <td><input type="text" id="psm9_name" value="" placeholder="Item Lainnya..." style="text-align: left; font-weight: bold;"></td>
                         <td><input type="text" id="psm9_t" value="0" oninput="hitungOtomatisSingle()"></td>
                         <td><input type="text" id="psm9_a" value="0" oninput="hitungOtomatisSingle()"></td>
-                        <td><input type="text" id="psm9_p" value="0%" readonly style="background-color: #e9ecef;"></td>
+                        <td><input type="text" id="psm9_p" value="0%" readonly style="background-color: #f1f5f9;"></td>
                     </tr>
                 </tbody>
             </table>
+            <!-- Tombol Simpan Cloud Tambahan Khusus PSM -->
+            <button class="btn-purple" onclick="processData('single')">💾 Simpan Data PSM ke Cloud</button>
         </fieldset>
 
         <fieldset>
@@ -202,21 +221,21 @@
     </div>
 
     <!-- INPUT REKAP 20 TOKO AREA -->
-    <div class="card" id="formRekapArea" style="display:none;">
+    <div class="card-modern" id="formRekapArea" style="display:none;">
         <fieldset>
             <legend>📊 GENERATE REKAP GABUNGAN 20 TOKO</legend>
-            <p style="font-size: 0.8rem; color: #555; margin-bottom: 10px;">
+            <p style="font-size: 0.8rem; color: #475569; margin-bottom: 0.75rem;">
                 Fitur ini akan menarik seluruh data ke-20 toko yang sudah tersimpan di Cloud pada tanggal periode di atas, lalu merangkum totalnya menjadi format laporan area resmi.
             </p>
             <button class="btn-orange" onclick="generateRekapArea()">Tarik Data & Generate Rekap 20 Toko</button>
         </fieldset>
     </div>
 
-    <div class="card">
+    <div class="card-modern">
         <label>Hasil Format WhatsApp:</label>
         <pre id="outputResult"></pre>
         <div id="loadingStatus" class="loading">Sedang memproses data dengan Cloud...</div>
-        <button class="btn-blue" onclick="copyResult()">Salin Teks WhatsApp</button>
+        <button class="btn-blue mt-3" onclick="copyResult()">Salin Teks WhatsApp</button>
     </div>
 
     <script>
@@ -247,399 +266,7 @@
             }
         }
 
-        function formatDateID(dateString) {
-            if (!dateString) return '';
-            const parts = dateString.split('-');
-            if (parts.length === 3) {
-                const months = {
-                    '01': 'JANUARI', '02': 'FEBRUARI', '03': 'MARET', '04': 'APRIL',
-                    '05': 'MEI', '06': 'JUNI', '07': 'JULI', '08': 'AGUSTUS',
-                    '09': 'SEPTEMBER', '10': 'OKTOBER', '11': 'NOVEMBER', '12': 'DESEMBER'
-                };
-                return parts[2] + ' ' + (months[parts[1]] || parts[1]) + ' ' + parts[0];
-            }
-            return dateString;
-        }
-
-        function parseNum(val) {
-            if (!val) return 0;
-            return parseFloat(val.toString().replace(/\./g, '').replace(/,/g, '.')) || 0;
-        }
-
-        function formatNum(num) {
-            return Math.round(num).toLocaleString('id-ID');
-        }
-
-        function muatDataDariCloud() {
-            const select = document.getElementById('selectStore');
-            const selectedOption = select.options[select.selectedIndex];
-            const kodeToko = select.value.split('|')[0];
-            const tglVal = document.getElementById('periode').value;
-            const defaultTargetMtd = selectedOption.getAttribute('data-target') || '0';
-
-            document.getElementById('loadingStatus').innerText = "Memuat data " + kodeToko + " dari Cloud...";
-            document.getElementById('loadingStatus').style.display = 'block';
-
-            fetch(WEB_APP_URL + "?action=getData&periode=" + tglVal + "&kodeToko=" + kodeToko)
-            .then(res => res.json())
-            .then(d => {
-                document.getElementById('loadingStatus').style.display = 'none';
-                if (d && d.found) {
-                    document.getElementById('revTargetMtd').value = formatNum(d.targetMtd || parseInt(defaultTargetMtd, 10));
-                    document.getElementById('revActual').value = formatNum(d.actual || 0);
-
-                    if (d.rangeFokus) document.getElementById('rangeFokus').value = d.rangeFokus;
-                    document.getElementById('fokus1_t').value = d.f1_t || 0;
-                    document.getElementById('fokus1_s').value = d.f1_s || 0;
-                    document.getElementById('fokus2_t').value = d.f2_t || 0;
-                    document.getElementById('fokus2_s').value = d.f2_s || 0;
-                    document.getElementById('fokus3_t').value = d.f3_t || 0;
-                    document.getElementById('fokus3_s').value = d.f3_s || 0;
-                    document.getElementById('fokus4_t').value = d.f4_t || 0;
-                    document.getElementById('fokus4_s').value = d.f4_s || 0;
-
-                    if (d.rangePsm) document.getElementById('rangePsm').value = d.rangePsm;
-                    for (let i = 1; i <= 9; i++) {
-                        if (d['psm' + i + '_name']) document.getElementById('psm' + i + '_name').value = d['psm' + i + '_name'];
-                        document.getElementById('psm' + i + '_t').value = d['psm' + i + '_t'] || 0;
-                        document.getElementById('psm' + i + '_a').value = d['psm' + i + '_a'] || 0;
-                    }
-
-                    document.getElementById('memberNew').value = d.mNew || 0;
-                    document.getElementById('memberStruk').value = d.mStruk || 0;
-                    document.getElementById('totalStruk').value = d.tStruk || 0;
-                    document.getElementById('cat1').value = d.cat1 || 0;
-                    document.getElementById('cat2').value = d.cat2 || 0;
-                    document.getElementById('feeBase').value = d.feeBase || 0;
-                } else {
-                    document.getElementById('revTargetMtd').value = formatNum(parseInt(defaultTargetMtd, 10));
-                    document.getElementById('revActual').value = '0';
-                    document.getElementById('memberNew').value = '0';
-                    document.getElementById('memberStruk').value = '0';
-                    document.getElementById('totalStruk').value = '0';
-                    document.getElementById('cat1').value = '0';
-                    document.getElementById('cat2').value = '0';
-                    document.getElementById('feeBase').value = '0';
-
-                    document.getElementById('fokus1_t').value = '0'; document.getElementById('fokus1_s').value = '0';
-                    document.getElementById('fokus2_t').value = '0'; document.getElementById('fokus2_s').value = '0';
-                    document.getElementById('fokus3_t').value = '0'; document.getElementById('fokus3_s').value = '0';
-                    document.getElementById('fokus4_t').value = '0'; document.getElementById('fokus4_s').value = '0';
-
-                    for (let i = 1; i <= 9; i++) {
-                        document.getElementById('psm' + i + '_t').value = '0';
-                        document.getElementById('psm' + i + '_a').value = '0';
-                    }
-                }
-                hitungOtomatisSingle();
-            })
-            .catch(() => {
-                document.getElementById('loadingStatus').style.display = 'none';
-                document.getElementById('revTargetMtd').value = formatNum(parseInt(defaultTargetMtd, 10));
-                hitungOtomatisSingle();
-            });
-        }
-
-        function hitungOtomatisSingle() {
-            const tglVal = document.getElementById('periode').value;
-            let hariKe = 2;
-            if (tglVal) {
-                const parts = tglVal.split('-');
-                if (parts.length === 3) hariKe = parseInt(parts[2], 10) || 1;
-            }
-
-            const tfPersenInput = parseNum(document.getElementById('revTimeFactor').value);
-            const targetMtd = parseNum(document.getElementById('revTargetMtd').value);
-            const actual = parseNum(document.getElementById('revActual').value);
-
-            const multiplierTf = (tfPersenInput / 100) * hariKe;
-            const targetTf = Math.round(targetMtd * multiplierTf);
-
-            const achMtd = targetMtd > 0 ? ((actual / targetMtd) * 100).toFixed(2).replace('.', ',') + '%' : '0%';
-            const achTf = targetTf > 0 ? ((actual / targetTf) * 100).toFixed(2).replace('.', ',') + '%' : '0%';
-            
-            const gapTarget = targetMtd - actual;
-            const gapTf = targetTf - actual;
-
-            document.getElementById('revTargetTf').value = formatNum(targetTf);
-            document.getElementById('revAchMtd').value = achMtd;
-            document.getElementById('revAchTf').value = achTf;
-            document.getElementById('revGapTarget').value = formatNum(gapTarget);
-            document.getElementById('revGapTf').value = formatNum(gapTf);
-
-            for (let i = 1; i <= 4; i++) {
-                const t = parseNum(document.getElementById('fokus' + i + '_t').value);
-                const s = parseNum(document.getElementById('fokus' + i + '_s').value);
-                const p = t > 0 ? Math.round((s / t) * 100) + '%' : '0%';
-                document.getElementById('fokus' + i + '_p').value = p;
-            }
-
-            for (let i = 1; i <= 9; i++) {
-                const t = parseNum(document.getElementById('psm' + i + '_t').value);
-                const a = parseNum(document.getElementById('psm' + i + '_a').value);
-                const p = t > 0 ? Math.round((a / t) * 100) + '%' : '0%';
-                document.getElementById('psm' + i + '_p').value = p;
-            }
-        }
-
-        function getVal(id) {
-            return document.getElementById(id) ? document.getElementById(id).value : '';
-        }
-
-        function processData(type) {
-            const periodeRaw = getVal('periode');
-            const periode = formatDateID(periodeRaw);
-            const wh = getVal('wh');
-            const am = getVal('am');
-            const ac = getVal('ac');
-            
-            const storeVal = getVal('selectStore').split('|');
-            const kodeToko = storeVal[0];
-            const namaToko = storeVal[1];
-            const shift = getVal('shift');
-            const jenisLaporan = "Laporan Per Toko (Shift)";
-            const shiftInfo = "Shift " + shift;
-
-            const f1 = `${getVal('fokus1_t')}/${getVal('fokus1_s')}/${document.getElementById('fokus1_p').value}`;
-            const f2 = `${getVal('fokus2_t')}/${getVal('fokus2_s')}/${document.getElementById('fokus2_p').value}`;
-            const f3 = `${getVal('fokus3_t')}/${getVal('fokus3_s')}/${document.getElementById('fokus3_p').value}`;
-            const f4 = `${getVal('fokus4_t')}/${getVal('fokus4_s')}/${document.getElementById('fokus4_p').value}`;
-
-            const mNew = getVal('memberNew');
-            const mStruk = getVal('memberStruk');
-            const tStruk = getVal('totalStruk');
-            const mPersen = tStruk > 0 ? Math.round((mStruk / tStruk) * 100) + '%' : '0%';
-
-            let text = `*REPORT SALES - TOKO ${kodeToko} (${namaToko})*\n` +
-                       `PERIODE : ${periode}\n` +
-                       `WH : ${wh}\n` +
-                       `AM : ${am}\n` +
-                       `AC : ${ac}\n` +
-                       `======================\n` +
-                       `*REVENUE*\n` +
-                       `1. NET SALES\n` +
-                       `- Time factor : ${getVal('revTimeFactor')}\n` +
-                       `- TARGET MTD : ${getVal('revTargetMtd')}\n` +
-                       `- Target Time Factor : ${getVal('revTargetTf')}\n` +
-                       `- ACTUAL : ${getVal('revActual')}\n` +
-                       `- ACHIVE MTD : ${getVal('revAchMtd')}\n` +
-                       `- Achieved Time Factor : ${getVal('revAchTf')}\n` +
-                       `- GAP TO TARGET : ${getVal('revGapTarget')}\n` +
-                       `- GAP To Time Factor : ${getVal('revGapTf')}\n` +
-                       `======================\n` +
-                       `*FOKUS CABANG*\n` +
-                       ` TARGET/SALES/ ACV%\n` +
-                       `1. TEBUS MURAH (QTY REDEEM) : ${f1}\n` +
-                       `2. SERBA GRATIS (PAKET) : ${f2}\n` +
-                       `3. SUEUGEER : ${f3}\n` +
-                       `4. PROMO CEBAN : ${f4}\n` +
-                       `*MEMBER*\n` +
-                       `1. Actual NEW MEMBER : ${mNew}/0/0%\n` +
-                       `2. Konstribusi struk Member : ${tStruk}/${mStruk}/${mPersen}\n` +
-                       `*CATEGORY* (Rupiah)\n` +
-                       `( Sales )\n` +
-                       `1. TOYS (NS) : ${formatNum(parseNum(getVal('cat1')))}\n` +
-                       `2. HBPL : ${formatNum(parseNum(getVal('cat2')))}\n` +
-                       `======================\n` +
-                       `*E-COMMERCE*\n` +
-                       `1. FEE BASE (RP) : ${getVal('feeBase')}\n` +
-                       `Terimakasih`;
-
-            document.getElementById('outputResult').innerText = text;
-            document.getElementById('loadingStatus').style.display = 'block';
-
-            let payload = {
-                jenisLaporan: jenisLaporan,
-                kodeToko: kodeToko,
-                namaToko: namaToko,
-                periode: periodeRaw,
-                shiftInfo: shiftInfo,
-                hasilTest: text,
-                targetMtd: parseNum(getVal('revTargetMtd')),
-                actual: parseNum(getVal('revActual')),
-                rangeFokus: getVal('rangeFokus'),
-                f1_t: parseNum(getVal('fokus1_t')), f1_s: parseNum(getVal('fokus1_s')),
-                f2_t: parseNum(getVal('fokus2_t')), f2_s: parseNum(getVal('fokus2_s')),
-                f3_t: parseNum(getVal('fokus3_t')), f3_s: parseNum(getVal('fokus3_s')),
-                f4_t: parseNum(getVal('fokus4_t')), f4_s: parseNum(getVal('fokus4_s')),
-                rangePsm: getVal('rangePsm'),
-                mNew: parseNum(getVal('memberNew')),
-                mStruk: parseNum(getVal('memberStruk')),
-                tStruk: parseNum(getVal('totalStruk')),
-                cat1: parseNum(getVal('cat1')),
-                cat2: parseNum(getVal('cat2')),
-                feeBase: parseNum(getVal('feeBase'))
-            };
-
-            for (let i = 1; i <= 9; i++) {
-                payload['psm' + i + '_name'] = getVal('psm' + i + '_name');
-                payload['psm' + i + '_t'] = parseNum(getVal('psm' + i + '_t'));
-                payload['psm' + i + '_a'] = parseNum(getVal('psm' + i + '_a'));
-            }
-
-            fetch(WEB_APP_URL, {
-                method: 'POST',
-                mode: 'no-cors',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            })
-            .then(() => {
-                document.getElementById('loadingStatus').style.display = 'none';
-                alert("Data Toko " + kodeToko + " Berhasil Disimpan Aman ke Cloud!");
-            })
-            .catch((error) => {
-                document.getElementById('loadingStatus').style.display = 'none';
-                alert("Gagal mengirim ke cloud: " + error);
-            });
-        }
-
-        function generateRekapArea() {
-            const periodeRaw = getVal('periode');
-            const periode = formatDateID(periodeRaw);
-            const wh = getVal('wh');
-            const am = getVal('am');
-            const ac = getVal('ac');
-
-            let hariKe = 2;
-            if (periodeRaw) {
-                const parts = periodeRaw.split('-');
-                if (parts.length === 3) hariKe = parseInt(parts[2], 10) || 1;
-            }
-
-            document.getElementById('loadingStatus').innerText = "Mengambil data rekap 20 toko dari Cloud...";
-            document.getElementById('loadingStatus').style.display = 'block';
-
-            const selectStore = document.getElementById('selectStore');
-            let storeOptions = [];
-            for (let i = 0; i < selectStore.options.length; i++) {
-                let parts = selectStore.options[i].value.split('|');
-                storeOptions.push({ kode: parts[0], nama: parts[1] });
-            }
-
-            let promises = storeOptions.map(store => {
-                return fetch(WEB_APP_URL + "?action=getData&periode=" + periodeRaw + "&kodeToko=" + store.kode)
-                    .then(res => res.json())
-                    .then(d => {
-                        return {
-                            kode: store.kode,
-                            nama: store.nama,
-                            found: d && d.found ? true : false,
-                            targetMtd: d && d.targetMtd ? parseNum(d.targetMtd) : 0,
-                            actual: d && d.actual ? parseNum(d.actual) : 0,
-                            f1_t: d && d.f1_t ? parseNum(d.f1_t) : 0, f1_s: d && d.f1_s ? parseNum(d.f1_s) : 0,
-                            f2_t: d && d.f2_t ? parseNum(d.f2_t) : 0, f2_s: d && d.f2_s ? parseNum(d.f2_s) : 0,
-                            f3_t: d && d.f3_t ? parseNum(d.f3_t) : 0, f3_s: d && d.f3_s ? parseNum(d.f3_s) : 0,
-                            f4_t: d && d.f4_t ? parseNum(d.f4_t) : 0, f4_s: d && d.f4_s ? parseNum(d.f4_s) : 0,
-                            mNew: d && d.mNew ? parseNum(d.mNew) : 0,
-                            mStruk: d && d.mStruk ? parseNum(d.mStruk) : 0,
-                            tStruk: d && d.tStruk ? parseNum(d.tStruk) : 0,
-                            cat1: d && d.cat1 ? parseNum(d.cat1) : 0,
-                            cat2: d && d.cat2 ? parseNum(d.cat2) : 0,
-                            feeBase: d && d.feeBase ? parseNum(d.feeBase) : 0
-                        };
-                    })
-                    .catch(() => {
-                        return { kode: store.kode, nama: store.nama, found: false, targetMtd: 0, actual: 0, f1_t:0, f1_s:0, f2_t:0, f2_s:0, f3_t:0, f3_s:0, f4_t:0, f4_s:0, mNew:0, mStruk:0, tStruk:0, cat1:0, cat2:0, feeBase:0 };
-                    });
-            });
-
-            Promise.all(promises).then(results => {
-                document.getElementById('loadingStatus').style.display = 'none';
-
-                let totTargetMtd = 0, totActual = 0;
-                let totF1_t = 0, totF1_s = 0, totF2_t = 0, totF2_s = 0, totF3_t = 0, totF3_s = 0, totF4_t = 0, totF4_s = 0;
-                let totMNew = 0, totMStruk = 0, totTStruk = 0, totCat1 = 0, totCat2 = 0, totFeeBase = 0;
-                let listTokoText = "";
-
-                results.forEach((item, index) => {
-                    totTargetMtd += item.targetMtd;
-                    totActual += item.actual;
-                    totF1_t += item.f1_t; totF1_s += item.f1_s;
-                    totF2_t += item.f2_t; totF2_s += item.f2_s;
-                    totF3_t += item.f3_t; totF3_s += item.f3_s;
-                    totF4_t += item.f4_t; totF4_s += item.f4_s;
-                    totMNew += item.mNew;
-                    totMStruk += item.mStruk;
-                    totTStruk += item.tStruk;
-                    totCat1 += item.cat1;
-                    totCat2 += item.cat2;
-                    totFeeBase += item.feeBase;
-
-                    let statusToko = item.found ? "✅ Masuk" : "❌ Belum Input";
-                    listTokoText += `${index + 1}. [${item.kode}] ${item.nama} (${statusToko})\n`;
-                });
-
-                const tfPersenInput = 6.66;
-                const multiplierTf = (tfPersenInput / 100) * hariKe;
-                const totTargetTf = Math.round(totTargetMtd * multiplierTf);
-                const totAchMtd = totTargetMtd > 0 ? ((totActual / totTargetMtd) * 100).toFixed(2).replace('.', ',') + '%' : '0%';
-                const totAchTf = totTargetTf > 0 ? ((totActual / totTargetTf) * 100).toFixed(2).replace('.', ',') + '%' : '0%';
-                const totGapTarget = totTargetMtd - totActual;
-                const totGapTf = totTargetTf - totActual;
-
-                const f1_p = totF1_t > 0 ? Math.round((totF1_s / totF1_t) * 100) + '%' : '0%';
-                const f2_p = totF2_t > 0 ? Math.round((totF2_s / totF2_t) * 100) + '%' : '0%';
-                const f3_p = totF3_t > 0 ? Math.round((totF3_s / totF3_t) * 100) + '%' : '0%';
-                const f4_p = totF4_t > 0 ? Math.round((totF4_s / totF4_t) * 100) + '%' : '0%';
-                const mPersen = totTStruk > 0 ? Math.round((totMStruk / totTStruk) * 100) + '%' : '0%';
-
-                let rekapText = `*REPORT SALES (REKAP GABUNGAN 20 TOKO)*\n` +
-                                `PERIODE : ${periode}\n` +
-                                `WH : ${wh}\n` +
-                                `AM : ${am}\n` +
-                                `AC : ${ac}\n` +
-                                `======================\n` +
-                                `*DAFTAR 20 TOKO AREA*\n` +
-                                `${listTokoText}` +
-                                `======================\n` +
-                                `*REVENUE (TOTAL)*\n` +
-                                `1. NET SALES\n` +
-                                `- Time factor : 6,66%\n` +
-                                `- TARGET MTD : ${formatNum(totTargetMtd)}\n` +
-                                `- Target Time Factor : ${formatNum(totTargetTf)}\n` +
-                                `- ACTUAL : ${formatNum(totActual)}\n` +
-                                `- ACHIVE MTD : ${totAchMtd}\n` +
-                                `- Achieved Time Factor : ${totAchTf}\n` +
-                                `- GAP TO TARGET : ${formatNum(totGapTarget)}\n` +
-                                `- GAP To Time Factor : ${formatNum(totGapTf)}\n` +
-                                `======================\n` +
-                                `*FOKUS CABANG (TOTAL)*\n` +
-                                ` TARGET/SALES/ ACV%\n` +
-                                `1. TEBUS MURAH (QTY REDEEM) : ${totF1_t}/${totF1_s}/${f1_p}\n` +
-                                `2. SERBA GRATIS (PAKET) : ${totF2_t}/${totF2_s}/${f2_p}\n` +
-                                `3. SUEUGEER : ${totF3_t}/${totF3_s}/${f3_p}\n` +
-                                `4. PROMO CEBAN : ${totF4_t}/${totF4_s}/${f4_p}\n` +
-                                `*MEMBER (TOTAL)*\n` +
-                                `1. Actual NEW MEMBER : ${totMNew}/0/0%\n` +
-                                `2. Konstribusi struk Member : ${totTStruk}/${totMStruk}/${mPersen}\n` +
-                                `*CATEGORY (TOTAL)* (Rupiah)\n` +
-                                `( Sales )\n` +
-                                `1. TOYS (NS) : ${formatNum(totCat1)}\n` +
-                                `2. HBPL : ${formatNum(totCat2)}\n` +
-                                `======================\n` +
-                                `*E-COMMERCE (TOTAL)*\n` +
-                                `1. FEE BASE (RP) : ${formatNum(totFeeBase)}\n` +
-                                `Terimakasih`;
-
-                document.getElementById('outputResult').innerText = rekapText;
-                alert("Rekap gabungan 20 toko beserta daftar nama & kode toko berhasil digenerate!");
-            }).catch(err => {
-                document.getElementById('loadingStatus').style.display = 'none';
-                alert("Terjadi kesalahan saat menarik data rekap: " + err);
-            });
-        }
-
-        function copyResult() {
-            const text = document.getElementById('outputResult').innerText;
-            navigator.clipboard.writeText(text).then(() => {
-                alert('Teks format WhatsApp berhasil disalin!');
-            });
-        }
-
-        window.onload = function() {
-            setTanggalOtomatisHP();
-            muatDataDariCloud();
-        };
+        setTanggalOtomatisHP();
     </script>
 </body>
 </html>
