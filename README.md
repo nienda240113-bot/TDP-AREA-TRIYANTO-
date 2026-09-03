@@ -16,6 +16,8 @@
         button:hover { background-color: #219653; }
         .btn-blue { background-color: #2980b9; margin-top: 10px; }
         .btn-blue:hover { background-color: #1f618d; }
+        .btn-orange { background-color: #d35400; margin-bottom: 10px; }
+        .btn-orange:hover { background-color: #b94000; }
         pre { background: #f1f1f1; padding: 10px; border-radius: 4px; white-space: pre-wrap; word-wrap: break-word; font-family: Arial, sans-serif; font-size: 0.8rem; border: 1px solid #ddd; }
         fieldset { border: 1px solid #ddd; border-radius: 6px; padding: 8px; margin-bottom: 10px; }
         legend { font-weight: bold; font-size: 0.85rem; color: #2980b9; }
@@ -43,7 +45,7 @@
         <div class="row-group">
             <div>
                 <label for="periode">Periode:</label>
-                <input type="date" id="periode" onchange="hitungOtomatis()">
+                <input type="date" id="periode" onchange="hitungOtomatisSingle()">
             </div>
             <div>
                 <label for="shift" id="labelShift">Shift:</label>
@@ -95,15 +97,23 @@
     <!-- INPUT DETAIL PER TOKO -->
     <div class="card" id="formPerToko">
         <fieldset>
-            <legend>REVENUE</legend>
-            <label>Time Factor (%):</label><input type="text" id="revTimeFactor" value="6,66%" oninput="hitungOtomatis()">
-            <label>Target MTD:</label><input type="text" id="revTargetMtd" value="453.303.178" oninput="hitungOtomatis()">
-            <label>Target Time Factor:</label><input type="text" id="revTargetTf" value="15.009.307" readonly style="background-color: #e9ecef;">
-            <label>Actual:</label><input type="text" id="revActual" value="13.332.882" oninput="hitungOtomatis()">
-            <label>Achievement MTD (%):</label><input type="text" id="revAchMtd" value="89%" readonly style="background-color: #e9ecef;">
-            <label>Achievement Time Factor (%):</label><input type="text" id="revAchTf" value="6,1%" readonly style="background-color: #e9ecef;">
-            <label>Gap to Target:</label><input type="text" id="revGapTarget" value="15.122.266" readonly style="background-color: #e9ecef;">
-            <label>Gap to Time Factor:</label><input type="text" id="revGapTf" value="423.432.458" readonly style="background-color: #e9ecef;">
+            <legend>💰 REVENUE (Net Sales)</legend>
+            <div class="row-group">
+                <div><label>Time Factor (%):</label><input type="text" id="revTimeFactor" value="10.0%" oninput="hitungOtomatisSingle()"></div>
+                <div><label>Actual (Rp):</label><input type="text" id="revActual" value="10.774.704" oninput="hitungOtomatisSingle()"></div>
+            </div>
+            <div class="row-group">
+                <div><label>Target MTD (Rp):</label><input type="text" id="revTargetMtd" value="329.236.885" oninput="hitungOtomatisSingle()"></div>
+                <div><label>Target TF (Rp) - Auto:</label><input type="text" id="revTargetTf" value="32.923.689" readonly style="background-color: #e9ecef;"></div>
+            </div>
+            <div class="row-group">
+                <div><label>Ach MTD (%):</label><input type="text" id="revAchMtd" value="3.27%" readonly style="background-color: #e9ecef;"></div>
+                <div><label>Ach TF (%):</label><input type="text" id="revAchTf" value="32.73%" readonly style="background-color: #e9ecef;"></div>
+            </div>
+            <div class="row-group">
+                <div><label>GAP to Target (Rp):</label><input type="text" id="revGapTarget" value="318.462.181" readonly style="background-color: #e9ecef;"></div>
+                <div><label>GAP to TF (Rp):</label><input type="text" id="revGapTf" value="22.148.985" readonly style="background-color: #e9ecef;"></div>
+            </div>
         </fieldset>
 
         <fieldset>
@@ -129,18 +139,9 @@
         <fieldset>
             <legend>MEMBER & STRUK</legend>
             <div class="row-group">
-                <div>
-                    <label>Actual New Member:</label>
-                    <input type="text" id="memberNew" value="2">
-                </div>
-                <div>
-                    <label>Struk Member:</label>
-                    <input type="text" id="memberStruk" value="123">
-                </div>
-                <div>
-                    <label>Total Struk:</label>
-                    <input type="text" id="totalStruk" value="279">
-                </div>
+                <div><label>Actual New Member:</label><input type="text" id="memberNew" value="2"></div>
+                <div><label>Struk Member:</label><input type="text" id="memberStruk" value="123"></div>
+                <div><label>Total Struk:</label><input type="text" id="totalStruk" value="279"></div>
             </div>
         </fieldset>
 
@@ -185,47 +186,57 @@
             <label>Fee Base (Rp):</label><input type="text" id="feeBase" value="250.000">
         </fieldset>
 
-        <button onclick="processData('single')">Generate & Kirim ke Cloud</button>
+        <button onclick="processData('single')">Generate & Simpan Data Toko</button>
     </div>
 
     <!-- INPUT REKAP 20 TOKO -->
     <div class="card" id="formRekapArea" style="display:none;">
+        <button class="btn-orange" onclick="hitungRekapOtomatis()">⚡ Hitung Rekap Otomatis dari Data 20 Toko</button>
+        
         <fieldset>
             <legend>REVENUE REKAP AREA</legend>
-            <label>Time Factor (%):</label><input type="text" id="rekTimeFactor" value="6,6%">
-            <label>Target MTD:</label><input type="text" id="rekTargetMtd" value="6.596.440.254">
-            <label>Target Time Factor:</label><input type="text" id="rekTargetTf" value="435.365.057">
-            <label>Actual:</label><input type="text" id="rekActual" value="233.124.210">
-            <label>Achievement MTD (%):</label><input type="text" id="rekAchMtd" value="3,53%">
-            <label>Achievement Time Factor (%):</label><input type="text" id="rekAchTf" value="53,56%">
-            <label>Gap to Target:</label><input type="text" id="rekGapTarget" value="6.363.316.044">
-            <label>Gap to Time Factor:</label><input type="text" id="rekGapTf" value="202.240.847">
+            <div class="row-group">
+                <div><label>Time Factor (%):</label><input type="text" id="rekTimeFactor" value="10,0%"></div>
+                <div><label>Actual:</label><input type="text" id="rekActual" value="0"></div>
+            </div>
+            <div class="row-group">
+                <div><label>Target MTD:</label><input type="text" id="rekTargetMtd" value="0"></div>
+                <div><label>Target Time Factor:</label><input type="text" id="rekTargetTf" value="0"></div>
+            </div>
+            <div class="row-group">
+                <div><label>Achievement MTD (%):</label><input type="text" id="rekAchMtd" value="0%"></div>
+                <div><label>Achievement Time Factor (%):</label><input type="text" id="rekAchTf" value="0%"></div>
+            </div>
+            <div class="row-group">
+                <div><label>Gap to Target:</label><input type="text" id="rekGapTarget" value="0"></div>
+                <div><label>Gap to Time Factor:</label><input type="text" id="rekGapTf" value="0"></div>
+            </div>
         </fieldset>
 
         <fieldset>
             <legend>FOKUS CABANG REKAP</legend>
-            <label>1. Tebus Murah:</label><input type="text" id="rfokus1" value="412/237/57%">
-            <label>2. Serba Gratis:</label><input type="text" id="rfokus2" value="288/129/45%">
-            <label>3. Sueuger:</label><input type="text" id="rfokus3" value="826/256/31%">
-            <label>4. Promo Ceban:</label><input type="text" id="rfokus4" value="1.322/22/2%">
-            <label>5. PSM:</label><input type="text" id="rfokus5" value="1.420/609/43%">
+            <label>1. Tebus Murah:</label><input type="text" id="rfokus1" value="0/0/0%">
+            <label>2. Serba Gratis:</label><input type="text" id="rfokus2" value="0/0/0%">
+            <label>3. Sueuger:</label><input type="text" id="rfokus3" value="0/0/0%">
+            <label>4. Promo Ceban:</label><input type="text" id="rfokus4" value="0/0/0%">
+            <label>5. PSM:</label><input type="text" id="rfokus5" value="0/0/0%">
         </fieldset>
 
         <fieldset>
             <legend>MEMBER REKAP</legend>
-            <label>1. Actual New Member:</label><input type="text" id="rmemberNew" value="39/10/26%">
-            <label>2. Kontribusi Struk Member:</label><input type="text" id="rmemberStruk" value="1.868/1.156/64%">
+            <label>1. Actual New Member:</label><input type="text" id="rmemberNew" value="0/0/0%">
+            <label>2. Kontribusi Struk Member:</label><input type="text" id="rmemberStruk" value="0/0/0%">
         </fieldset>
 
         <fieldset>
             <legend>CATEGORY REKAP</legend>
-            <label>1. Toys (NS):</label><input type="text" id="rcat1" value="39/6/15%">
-            <label>2. Telur:</label><input type="text" id="rcat2" value="516/57/11%">
+            <label>1. Toys (NS):</label><input type="text" id="rcat1" value="0/0/0%">
+            <label>2. HBPL (NS):</label><input type="text" id="rcat2" value="0/0/0%">
         </fieldset>
 
         <fieldset>
             <legend>E-COMMERCE REKAP</legend>
-            <label>Fee Base (Rp):</label><input type="text" id="rFeeBase" value="4.320.700">
+            <label>Fee Base (Rp):</label><input type="text" id="rFeeBase" value="0">
         </fieldset>
 
         <button onclick="processData('rekap')">Generate Rekap & Kirim ke Cloud</button>
@@ -239,7 +250,7 @@
     </div>
 
     <script>
-        document.getElementById('periode').value = '2026-09-02';
+        document.getElementById('periode').value = '2026-09-03';
         const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzgTnGqr8MIEnz-mvl4s_kDpEp_9IssduKsGswjCM1XYhvUHM8FqGsUFuPLRLxmcbvp/exec";
 
         function toggleMode() {
@@ -279,47 +290,29 @@
         }
 
         function formatNum(num) {
-            return num.toLocaleString('id-ID');
+            return Math.round(num).toLocaleString('id-ID');
         }
 
-        // Fungsi Perhitungan Otomatis Berdasarkan Tanggal & Actual
-        function hitungOtomatis() {
+        function hitungOtomatisSingle() {
             const tglVal = document.getElementById('periode').value;
-            let hariKe = 2; // Default jika tanggal kosong
-            
+            let hariKe = 3;
             if (tglVal) {
                 const parts = tglVal.split('-');
-                if (parts.length === 3) {
-                    hariKe = parseInt(parts[2], 10) || 1;
-                }
+                if (parts.length === 3) hariKe = parseInt(parts[2], 10) || 1;
             }
 
-            // Asumsi Time Factor proporsional harian (hari ke- / total hari dalam bulan, misal 30 hari)
-            // Atau menggunakan persentase yang diinput dikali hari
             const tfPersenInput = parseNum(document.getElementById('revTimeFactor').value);
-            // Jika user menginput misal 6,66% per hari atau total kumulatif sampai tanggal tersebut:
-            // Rumus standar Time Factor harian kumulatif = (Target MTD * (TimeFactor / 100)) * hariKe (atau sesuai rumus perusahaan Anda)
-            // Di sini kita buat dinamis mengikuti tanggal: Time Factor harian dikalikan tanggal (hari ke-)
-            
             const targetMtd = parseNum(document.getElementById('revTargetMtd').value);
             const actual = parseNum(document.getElementById('revActual').value);
 
-            // Hitung Target Time Factor otomatis (Contoh: Proporsi harian berdasarkan tanggal)
-            // Misal persentase harian dikali akumulasi hari ke-
             const multiplierTf = (tfPersenInput / 100) * hariKe;
             const targetTf = Math.round(targetMtd * multiplierTf);
 
-            // Achievement MTD (%) = (Actual / Target MTD) * 100
-            const achMtd = targetMtd > 0 ? ((actual / targetMtd) * 100).toFixed(1).replace('.', ',') + '%' : '0%';
-
-            // Achievement Time Factor (%) = (Actual / Target Time Factor) * 100
-            const achTf = targetTf > 0 ? ((actual / targetTf) * 100).toFixed(1).replace('.', ',') + '%' : '0%';
-
-            // Gap to Target = Target MTD - Actual (atau sebaliknya tergantung format minus/positif)
+            const achMtd = targetMtd > 0 ? ((actual / targetMtd) * 100).toFixed(2).replace('.', ',') + '%' : '0%';
+            const achTf = targetTf > 0 ? ((actual / targetTf) * 100).toFixed(2).replace('.', ',') + '%' : '0%';
             const gapTarget = targetMtd - actual;
             const gapTf = targetTf - actual;
 
-            // Masukkan hasil perhitungan ke form input otomatis
             document.getElementById('revTargetTf').value = formatNum(targetTf);
             document.getElementById('revAchMtd').value = achMtd;
             document.getElementById('revAchTf').value = achTf;
@@ -327,12 +320,111 @@
             document.getElementById('revGapTf').value = formatNum(gapTf);
         }
 
+        // Simpan data toko ke memori browser saat tombol Generate diklik
+        function simpanDataTokoAktif() {
+            const storeKey = document.getElementById('selectStore').value;
+            const dataToko = {
+                targetMtd: parseNum(document.getElementById('revTargetMtd').value),
+                targetTf: parseNum(document.getElementById('revTargetTf').value),
+                actual: parseNum(document.getElementById('revActual').value),
+                
+                f1_t: parseNum(document.getElementById('fokus1_t').value),
+                f1_s: parseNum(document.getElementById('fokus1_s').value),
+                f2_t: parseNum(document.getElementById('fokus2_t').value),
+                f2_s: parseNum(document.getElementById('fokus2_s').value),
+                f3_t: parseNum(document.getElementById('fokus3_t').value),
+                f3_s: parseNum(document.getElementById('fokus3_s').value),
+                f4_t: parseNum(document.getElementById('fokus4_t').value),
+                f4_s: parseNum(document.getElementById('fokus4_s').value),
+
+                psm_t: (parseNum(document.getElementById('psm1_t').value) + parseNum(document.getElementById('psm2_t').value) + parseNum(document.getElementById('psm3_t').value) + parseNum(document.getElementById('psm4_t').value) + parseNum(document.getElementById('psm5_t').value) + parseNum(document.getElementById('psm6_t').value) + parseNum(document.getElementById('psm7_t').value) + parseNum(document.getElementById('psm8_t').value)),
+                psm_a: (parseNum(document.getElementById('psm1_a').value) + parseNum(document.getElementById('psm2_a').value) + parseNum(document.getElementById('psm3_a').value) + parseNum(document.getElementById('psm4_a').value) + parseNum(document.getElementById('psm5_a').value) + parseNum(document.getElementById('psm6_a').value) + parseNum(document.getElementById('psm7_a').value) + parseNum(document.getElementById('psm8_a').value)),
+
+                mNew: parseNum(document.getElementById('memberNew').value),
+                mStruk: parseNum(document.getElementById('memberStruk').value),
+                tStruk: parseNum(document.getElementById('totalStruk').value),
+
+                cat1: parseNum(document.getElementById('cat1').value),
+                cat2: parseNum(document.getElementById('cat2').value),
+                feeBase: parseNum(document.getElementById('feeBase').value)
+            };
+            localStorage.setItem('toko_' + storeKey, JSON.stringify(dataToko));
+        }
+
+        // Fungsi Otomatis Hitung Rekap dari 20 Toko
+        function hitungRekapOtomatis() {
+            let totTargetMtd = 0, totTargetTf = 0, totActual = 0;
+            let f1_t = 0, f1_s = 0, f2_t = 0, f2_s = 0, f3_t = 0, f3_s = 0, f4_t = 0, f4_s = 0;
+            let psm_t = 0, psm_a = 0;
+            let mNew = 0, mStruk = 0, tStruk = 0;
+            let cat1 = 0, cat2 = 0, feeBase = 0;
+            let countTersimpan = 0;
+
+            const selectOptions = document.getElementById('selectStore').options;
+            for (let i = 0; i < selectOptions.length; i++) {
+                const key = 'toko_' + selectOptions[i].value;
+                const saved = localStorage.getItem(key);
+                if (saved) {
+                    countTersimpan++;
+                    const d = JSON.parse(saved);
+                    totTargetMtd += d.targetMtd;
+                    totTargetTf += d.targetTf;
+                    totActual += d.actual;
+                    f1_t += d.f1_t; f1_s += d.f1_s;
+                    f2_t += d.f2_t; f2_s += d.f2_s;
+                    f3_t += d.f3_t; f3_s += d.f3_s;
+                    f4_t += d.f4_t; f4_s += d.f4_s;
+                    psm_t += d.psm_t; psm_a += d.psm_a;
+                    mNew += d.mNew; mStruk += d.mStruk; tStruk += d.tStruk;
+                    cat1 += d.cat1; cat2 += d.cat2; feeBase += d.feeBase;
+                }
+            }
+
+            if (countTersimpan === 0) {
+                alert("Belum ada data toko yang disimpan! Silakan isi dan klik 'Generate & Simpan Data Toko' minimal untuk beberapa toko terlebih dahulu.");
+                return;
+            }
+
+            // Hitung Revenue Rekap
+            const achMtd = totTargetMtd > 0 ? ((totActual / totTargetMtd) * 100).toFixed(2).replace('.', ',') + '%' : '0%';
+            const achTf = totTargetTf > 0 ? ((totActual / totTargetTf) * 100).toFixed(2).replace('.', ',') + '%' : '0%';
+            const gapTarget = totTargetMtd - totActual;
+            const gapTf = totTargetTf - totActual;
+
+            document.getElementById('rekTargetMtd').value = formatNum(totTargetMtd);
+            document.getElementById('rekTargetTf').value = formatNum(totTargetTf);
+            document.getElementById('rekActual').value = formatNum(totActual);
+            document.getElementById('rekAchMtd').value = achMtd;
+            document.getElementById('rekAchTf').value = achTf;
+            document.getElementById('rekGapTarget').value = formatNum(gapTarget);
+            document.getElementById('rekGapTf').value = formatNum(gapTf);
+
+            // Hitung Fokus Cabang Rekap (Target/Sales/%)
+            document.getElementById('rfokus1').value = `${f1_t}/${f1_s}/${f1_t > 0 ? Math.round((f1_s/f1_t)*100) : 0}%`;
+            document.getElementById('rfokus2').value = `${f2_t}/${f2_s}/${f2_t > 0 ? Math.round((f2_s/f2_t)*100) : 0}%`;
+            document.getElementById('rfokus3').value = `${f3_t}/${f3_s}/${f3_t > 0 ? Math.round((f3_s/f3_t)*100) : 0}%`;
+            document.getElementById('rfokus4').value = `${f4_t}/${f4_s}/${f4_t > 0 ? Math.round((f4_s/f4_t)*100) : 0}%`;
+            document.getElementById('rfokus5').value = `${psm_t}/${psm_a}/${psm_t > 0 ? Math.round((psm_a/psm_t)*100) : 0}%`;
+
+            // Hitung Member Rekap
+            document.getElementById('rmemberNew').value = `${mNew}/0/0%`;
+            document.getElementById('rmemberStruk').value = `${tStruk}/${mStruk}/${tStruk > 0 ? Math.round((mStruk/tStruk)*100) : 0}%`;
+
+            // Hitung Category Rekap
+            document.getElementById('rcat1').value = `${cat1}/0/0%`;
+            document.getElementById('rcat2').value = `${cat2}/0/0%`;
+
+            // E-Commerce Fee Base
+            document.getElementById('rFeeBase').value = formatNum(feeBase);
+
+            alert(`Berhasil merangkum data dari ${countTersimpan} toko yang sudah diisi!`);
+        }
+
         function getVal(id) {
             return document.getElementById(id) ? document.getElementById(id).value : '';
         }
 
         function processData(type) {
-            hitungOtomatis(); // Pastikan hitung ulang sebelum generate
             const periodeRaw = getVal('periode');
             const periode = formatDateID(periodeRaw);
             const wh = getVal('wh');
@@ -346,6 +438,7 @@
             let shiftInfo = "-";
 
             if (type === 'single') {
+                simpanDataTokoAktif(); // Simpan otomatis saat generate toko
                 const shift = getVal('shift');
                 const storeVal = getVal('selectStore').split('|');
                 kodeToko = storeVal[0];
@@ -470,7 +563,6 @@
 
             document.getElementById('outputResult').innerText = text;
 
-            // Kirim otomatis ke Cloud Google Sheets
             document.getElementById('loadingStatus').style.display = 'block';
 
             const payload = {
@@ -479,7 +571,7 @@
                 namaToko: namaToko,
                 periode: periode,
                 shiftInfo: shiftInfo,
-            hasilText: text
+                hasilText: text
             };
 
             fetch(WEB_APP_URL, {
@@ -506,7 +598,7 @@
         }
 
         window.onload = function() {
-            hitungOtomatis();
+            hitungOtomatisSingle();
             processData('single');
         };
     </script>
