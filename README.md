@@ -3,43 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Report Sales Shift & Rekap 20 Toko</title>
+    <title>MONITORING SALES AREA TRIYANTO</title>
+    <!-- Tailwind CSS untuk Tampilan Modern & Canggih -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: Arial, sans-serif; line-height: 1.25; color: #333; max-width: 680px; margin: 0 auto; padding: 12px; background-color: #f4f6f9; }
-        h1 { font-size: 1.2rem; color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 8px; text-align: center; }
-        .card { background: #fff; padding: 12px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-bottom: 12px; }
-        label { display: block; margin-bottom: 4px; font-weight: bold; font-size: 0.8rem; }
-        select, input { width: 100%; padding: 7px; margin-bottom: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-size: 0.85rem; }
-        .row-group { display: flex; gap: 8px; }
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: #1e293b; line-height: 1.4; }
+        .card-modern { background: #ffffff; border-radius: 1rem; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05); border: 1px solid #e2e8f0; margin-bottom: 1rem; padding: 1.25rem; }
+        fieldset { border: 1px solid #cbd5e1; border-radius: 0.75rem; padding: 1rem; margin-bottom: 1rem; background: #ffffff; }
+        legend { font-weight: 600; font-size: 0.85rem; color: #2563eb; background: #eff6ff; padding: 0.25rem 0.75rem; border-radius: 9999px; border: 1px solid #bfdbfe; }
+        input, select { width: 100%; padding: 0.6rem 0.75rem; margin-top: 0.25rem; margin-bottom: 0.75rem; border: 1px solid #cbd5e1; border-radius: 0.55rem; box-sizing: border-box; font-size: 0.875rem; background-color: #f8fafc; transition: all 0.2s; }
+        input:focus, select:focus { outline: none; border-color: #2563eb; background-color: #ffffff; box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1); }
+        label { display: block; font-weight: 600; font-size: 0.75rem; color: #475569; text-transform: uppercase; letter-spacing: 0.025em; }
+        .row-group { display: flex; gap: 0.75rem; }
         .row-group > div { flex: 1; }
-        button { background-color: #27ae60; color: white; padding: 10px; border: none; border-radius: 4px; cursor: pointer; width: 100%; font-weight: bold; font-size: 0.95rem; margin-top: 5px; }
-        button:hover { background-color: #219653; }
-        .btn-blue { background-color: #2980b9; margin-top: 10px; }
-        .btn-orange { background-color: #d35400; margin-bottom: 10px; }
-        pre { background: #f1f1f1; padding: 10px; border-radius: 4px; white-space: pre-wrap; word-wrap: break-word; font-family: Arial, sans-serif; font-size: 0.8rem; border: 1px solid #ddd; max-height: 350px; overflow-y: auto; }
-        fieldset { border: 1px solid #ddd; border-radius: 6px; padding: 8px; margin-bottom: 10px; }
-        legend { font-weight: bold; font-size: 0.85rem; color: #2980b9; }
-        .loading { display: none; text-align: center; color: #e67e22; font-weight: bold; margin-top: 8px; }
-        .info-periode { font-size: 0.75rem; color: #c0392b; margin-bottom: 6px; font-style: italic; }
-        .table-input { width: 100%; border-collapse: collapse; margin-bottom: 5px; font-size: 0.8rem; }
-        .table-input th { background-color: #16a085; color: white; padding: 6px 4px; text-align: center; border: 1px solid #1abc9c; }
-        .table-input td { padding: 4px; border: 1px solid #ddd; text-align: center; }
-        .table-input input { text-align: center; margin-bottom: 0; padding: 5px; font-size: 0.85rem; }
-        .table-input td:first-child { text-align: left; padding-left: 4px; }
+        button { background-color: #16a34a; color: white; padding: 0.75rem 1rem; border: none; border-radius: 0.65rem; cursor: pointer; width: 100%; font-weight: 600; font-size: 0.9rem; transition: background-color 0.2s, transform 0.1s; box-shadow: 0 4px 6px -1px rgba(22, 163, 74, 0.2); }
+        button:hover { background-color: #15803d; }
+        button:active { transform: scale(0.98); }
+        .btn-blue { background-color: #2563eb; box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.2); }
+        .btn-blue:hover { background-color: #1d4ed8; }
+        .btn-orange { background-color: #ea580c; box-shadow: 0 4px 6px -1px rgba(234, 88, 12, 0.2); margin-bottom: 0.75rem; }
+        .btn-orange:hover { background-color: #c2410c; }
+        pre { background: #0f172a; color: #e2e8f0; padding: 1rem; border-radius: 0.75rem; white-space: pre-wrap; word-wrap: break-word; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 0.8rem; border: 1px solid #334155; max-height: 380px; overflow-y: auto; }
+        .loading { display: none; text-align: center; color: #d97706; font-weight: 600; font-size: 0.85rem; margin-top: 0.5rem; }
+        .info-periode { font-size: 0.75rem; color: #dc2626; margin-bottom: 0.5rem; font-style: italic; font-weight: 500; }
+        .table-input { width: 100%; border-collapse: collapse; margin-bottom: 0.5rem; font-size: 0.8rem; }
+        .table-input th { background-color: #0d9488; color: white; padding: 0.5rem 0.25rem; text-align: center; border: 1px solid #14b8a6; font-size: 0.75rem; }
+        .table-input td { padding: 0.35rem; border: 1px solid #e2e8f0; text-align: center; }
+        .table-input input { text-align: center; margin-bottom: 0; padding: 0.4rem; font-size: 0.8rem; }
+        .table-input td:first-child { text-align: left; padding-left: 0.5rem; }
     </style>
 </head>
-<body>
+<body class="max-w-xl mx-auto p-3 sm:p-4">
 
-    <h1>Input Report Sales & Rekap Area</h1>
+    <!-- Header Judul Baru -->
+    <header class="text-center my-4 pb-3 border-b-2 border-blue-600">
+        <h1 class="text-xl sm:text-2xl font-bold text-slate-800 tracking-wide">MONITORING SALES AREA TRIYANTO</h1>
+        <p class="text-xs text-slate-500 mt-1 font-medium">Sistem Pelaporan & Rekapitulasi Toko Terintegrasi Cloud</p>
+    </header>
 
-    <div class="card">
+    <div class="card-modern">
         <label for="modeReport">Pilih Jenis Laporan:</label>
         <select id="modeReport" onchange="toggleMode()">
             <option value="single">1. Laporan Per Toko (Shift)</option>
             <option value="rekap">2. Rekap Gabungan 20 Toko Area</option>
         </select>
 
-        <div class="row-group" style="margin-top: 8px;">
+        <div class="row-group mt-2">
             <div>
                 <label for="periode">Periode (Tanggal Laporan):</label>
                 <input type="date" id="periode" onchange="muatDataDariCloud()">
@@ -64,7 +74,7 @@
         <label for="ac">AC:</label>
         <input type="text" id="ac" value="TRIYANTO">
 
-        <div id="singleStoreSection">
+        <div id="singleStoreSection" class="mt-1">
             <label for="selectStore">Pilih Toko:</label>
             <select id="selectStore" onchange="muatDataDariCloud()">
                 <option value="CI30|STTD" data-target="222241060">CI30 - STTD (222.241.060)</option>
@@ -92,7 +102,7 @@
     </div>
 
     <!-- INPUT DETAIL PER TOKO -->
-    <div class="card" id="formPerToko">
+    <div class="card-modern" id="formPerToko">
         <fieldset>
             <legend>💰 REVENUE (Net Sales - Target MTD & Actual)</legend>
             <div class="row-group">
@@ -101,15 +111,15 @@
             </div>
             <div class="row-group">
                 <div><label>Target MTD (Rp):</label><input type="text" id="revTargetMtd" value="0" oninput="hitungOtomatisSingle()"></div>
-                <div><label>Target TF (Rp) - Auto:</label><input type="text" id="revTargetTf" value="0" readonly style="background-color: #e9ecef;"></div>
+                <div><label>Target TF (Rp) - Auto:</label><input type="text" id="revTargetTf" value="0" readonly style="background-color: #f1f5f9;"></div>
             </div>
             <div class="row-group">
-                <div><label>Ach MTD (%):</label><input type="text" id="revAchMtd" value="0%" readonly style="background-color: #e9ecef;"></div>
-                <div><label>Ach TF (%):</label><input type="text" id="revAchTf" value="0%" readonly style="background-color: #e9ecef;"></div>
+                <div><label>Ach MTD (%):</label><input type="text" id="revAchMtd" value="0%" readonly style="background-color: #f1f5f9;"></div>
+                <div><label>Ach TF (%):</label><input type="text" id="revAchTf" value="0%" readonly style="background-color: #f1f5f9;"></div>
             </div>
             <div class="row-group">
-                <div><label>GAP to Target (Rp):</label><input type="text" id="revGapTarget" value="0" readonly style="background-color: #e9ecef;"></div>
-                <div><label>GAP to TF (Rp):</label><input type="text" id="revGapTf" value="0" readonly style="background-color: #e9ecef;"></div>
+                <div><label>GAP to Target (Rp):</label><input type="text" id="revGapTarget" value="0" readonly style="background-color: #f1f5f9;"></div>
+                <div><label>GAP to TF (Rp):</label><input type="text" id="revGapTf" value="0" readonly style="background-color: #f1f5f9;"></div>
             </div>
         </fieldset>
 
@@ -132,10 +142,10 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr><td>TEBUS MURAH</td><td><input type="text" id="fokus1_t" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="fokus1_s" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="fokus1_p" value="0%" readonly style="background-color: #e9ecef;"></td></tr>
-                    <tr><td>SERBA GRATIS</td><td><input type="text" id="fokus2_t" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="fokus2_s" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="fokus2_p" value="0%" readonly style="background-color: #e9ecef;"></td></tr>
-                    <tr><td>SUEUGEER</td><td><input type="text" id="fokus3_t" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="fokus3_s" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="fokus3_p" value="0%" readonly style="background-color: #e9ecef;"></td></tr>
-                    <tr><td>PROMO CEBAN</td><td><input type="text" id="fokus4_t" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="fokus4_s" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="fokus4_p" value="0%" readonly style="background-color: #e9ecef;"></td></tr>
+                    <tr><td>TEBUS MURAH</td><td><input type="text" id="fokus1_t" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="fokus1_s" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="fokus1_p" value="0%" readonly style="background-color: #f1f5f9;"></td></tr>
+                    <tr><td>SERBA GRATIS</td><td><input type="text" id="fokus2_t" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="fokus2_s" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="fokus2_p" value="0%" readonly style="background-color: #f1f5f9;"></td></tr>
+                    <tr><td>SUEUGEER</td><td><input type="text" id="fokus3_t" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="fokus3_s" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="fokus3_p" value="0%" readonly style="background-color: #f1f5f9;"></td></tr>
+                    <tr><td>PROMO CEBAN</td><td><input type="text" id="fokus4_t" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="fokus4_s" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="fokus4_p" value="0%" readonly style="background-color: #f1f5f9;"></td></tr>
                 </tbody>
             </table>
         </fieldset>
@@ -169,19 +179,19 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr><td><input type="text" id="psm1_name" value="BANGO" style="text-align: left; font-weight: bold;"></td><td><input type="text" id="psm1_t" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="psm1_a" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="psm1_p" value="0%" readonly style="background-color: #e9ecef;"></td></tr>
-                    <tr><td><input type="text" id="psm2_name" value="DAIA" style="text-align: left; font-weight: bold;"></td><td><input type="text" id="psm2_t" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="psm2_a" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="psm2_p" value="0%" readonly style="background-color: #e9ecef;"></td></tr>
-                    <tr><td><input type="text" id="psm3_name" value="ENAAK" style="text-align: left; font-weight: bold;"></td><td><input type="text" id="psm3_t" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="psm3_a" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="psm3_p" value="0%" readonly style="background-color: #e9ecef;"></td></tr>
-                    <tr><td><input type="text" id="psm4_name" value="GARNIER" style="text-align: left; font-weight: bold;"></td><td><input type="text" id="psm4_t" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="psm4_a" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="psm4_p" value="0%" readonly style="background-color: #e9ecef;"></td></tr>
-                    <tr><td><input type="text" id="psm5_name" value="LE MINERAL" style="text-align: left; font-weight: bold;"></td><td><input type="text" id="psm5_t" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="psm5_a" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="psm5_p" value="0%" readonly style="background-color: #e9ecef;"></td></tr>
-                    <tr><td><input type="text" id="psm6_name" value="LIFEBUOY" style="text-align: left; font-weight: bold;"></td><td><input type="text" id="psm6_t" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="psm6_a" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="psm6_p" value="0%" readonly style="background-color: #e9ecef;"></td></tr>
-                    <tr><td><input type="text" id="psm7_name" value="NIPIS MADU" style="text-align: left; font-weight: bold;"></td><td><input type="text" id="psm7_t" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="psm7_a" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="psm7_p" value="0%" readonly style="background-color: #e9ecef;"></td></tr>
-                    <tr><td><input type="text" id="psm8_name" value="TARO" style="text-align: left; font-weight: bold;"></td><td><input type="text" id="psm8_t" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="psm8_a" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="psm8_p" value="0%" readonly style="background-color: #e9ecef;"></td></tr>
+                    <tr><td><input type="text" id="psm1_name" value="BANGO" style="text-align: left; font-weight: bold;"></td><td><input type="text" id="psm1_t" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="psm1_a" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="psm1_p" value="0%" readonly style="background-color: #f1f5f9;"></td></tr>
+                    <tr><td><input type="text" id="psm2_name" value="DAIA" style="text-align: left; font-weight: bold;"></td><td><input type="text" id="psm2_t" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="psm2_a" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="psm2_p" value="0%" readonly style="background-color: #f1f5f9;"></td></tr>
+                    <tr><td><input type="text" id="psm3_name" value="ENAAK" style="text-align: left; font-weight: bold;"></td><td><input type="text" id="psm3_t" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="psm3_a" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="psm3_p" value="0%" readonly style="background-color: #f1f5f9;"></td></tr>
+                    <tr><td><input type="text" id="psm4_name" value="GARNIER" style="text-align: left; font-weight: bold;"></td><td><input type="text" id="psm4_t" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="psm4_a" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="psm4_p" value="0%" readonly style="background-color: #f1f5f9;"></td></tr>
+                    <tr><td><input type="text" id="psm5_name" value="LE MINERAL" style="text-align: left; font-weight: bold;"></td><td><input type="text" id="psm5_t" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="psm5_a" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="psm5_p" value="0%" readonly style="background-color: #f1f5f9;"></td></tr>
+                    <tr><td><input type="text" id="psm6_name" value="LIFEBUOY" style="text-align: left; font-weight: bold;"></td><td><input type="text" id="psm6_t" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="psm6_a" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="psm6_p" value="0%" readonly style="background-color: #f1f5f9;"></td></tr>
+                    <tr><td><input type="text" id="psm7_name" value="NIPIS MADU" style="text-align: left; font-weight: bold;"></td><td><input type="text" id="psm7_t" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="psm7_a" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="psm7_p" value="0%" readonly style="background-color: #f1f5f9;"></td></tr>
+                    <tr><td><input type="text" id="psm8_name" value="TARO" style="text-align: left; font-weight: bold;"></td><td><input type="text" id="psm8_t" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="psm8_a" value="0" oninput="hitungOtomatisSingle()"></td><td><input type="text" id="psm8_p" value="0%" readonly style="background-color: #f1f5f9;"></td></tr>
                     <tr>
                         <td><input type="text" id="psm9_name" value="" placeholder="Item Lainnya..." style="text-align: left; font-weight: bold;"></td>
                         <td><input type="text" id="psm9_t" value="0" oninput="hitungOtomatisSingle()"></td>
                         <td><input type="text" id="psm9_a" value="0" oninput="hitungOtomatisSingle()"></td>
-                        <td><input type="text" id="psm9_p" value="0%" readonly style="background-color: #e9ecef;"></td>
+                        <td><input type="text" id="psm9_p" value="0%" readonly style="background-color: #f1f5f9;"></td>
                     </tr>
                 </tbody>
             </table>
@@ -202,21 +212,21 @@
     </div>
 
     <!-- INPUT REKAP 20 TOKO AREA -->
-    <div class="card" id="formRekapArea" style="display:none;">
+    <div class="card-modern" id="formRekapArea" style="display:none;">
         <fieldset>
             <legend>📊 GENERATE REKAP GABUNGAN 20 TOKO</legend>
-            <p style="font-size: 0.8rem; color: #555; margin-bottom: 10px;">
+            <p style="font-size: 0.8rem; color: #475569; margin-bottom: 0.75rem;">
                 Fitur ini akan menarik seluruh data ke-20 toko yang sudah tersimpan di Cloud pada tanggal periode di atas, lalu merangkum totalnya menjadi format laporan area resmi.
             </p>
             <button class="btn-orange" onclick="generateRekapArea()">Tarik Data & Generate Rekap 20 Toko</button>
         </fieldset>
     </div>
 
-    <div class="card">
+    <div class="card-modern">
         <label>Hasil Format WhatsApp:</label>
         <pre id="outputResult"></pre>
         <div id="loadingStatus" class="loading">Sedang memproses data dengan Cloud...</div>
-        <button class="btn-blue" onclick="copyResult()">Salin Teks WhatsApp</button>
+        <button class="btn-blue mt-3" onclick="copyResult()">Salin Teks WhatsApp</button>
     </div>
 
     <script>
