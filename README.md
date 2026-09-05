@@ -257,7 +257,7 @@
     </div>
 
     <script>
-        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzgTnGqr8MIEnz-mvl4s_kDpEp_9IssduKsGswjCM1XYhvUHM8FqGsUFuPLRLxmcbvp/exec";
+        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwUPlJnPcClGwFrhk29A-1zgtIsN1d_dxrnyOhXFPSe57yhEfscL0BLK30gt5elFY-S/exec";
 
         function setTanggalOtomatisHP() {
             const today = new Date();
